@@ -1,0 +1,6 @@
+services:
+  markdown.commands:
+    class: Drupal\markdown\Commands\MarkdownCommands
+    arguments: [ '@file_system', '@logger.channel.markdown']
+    tags:
+      - { name: drush.command }

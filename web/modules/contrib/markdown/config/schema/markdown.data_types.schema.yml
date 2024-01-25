@@ -1,0 +1,129 @@
+# Render Strategy.
+markdown.render_strategy:
+  type: mapping
+  label: 'Render Strategy'
+  mapping:
+    type:
+      type: string
+      label: 'Type'
+    custom_allowed_html:
+      type: string
+      label: 'Custom Allowed HTML'
+    plugins:
+      type: sequence
+      label: 'Allowed HTML Plugins'
+      sequence:
+        type: boolean
+        label: 'Allowed HTML Plugin'
+markdown.render_strategy.*:
+  type: markdown.render_strategy
+
+# Markdown Extension.
+markdown.extension_settings:
+  type: mapping
+  label: 'Markdown Extension Settings'
+markdown.extension_settings.*:
+  type: markdown.extension_settings
+markdown.extension:
+  type: mapping
+  label: 'Markdown Extension'
+  mapping:
+    id:
+      type: string
+      label: 'Identifier'
+    enabled:
+      type: boolean
+      label: 'Enabled'
+    weight:
+      type: integer
+      label: 'Weight'
+    settings:
+      type: markdown.extension_settings.[%parent.id]
+      constraints:
+        Callback:
+          callback: [\Drupal\markdown\Plugin\Markdown\BaseExtension, validateSettings]
+
+# Markdown Mention
+markdown.mention:
+  type: mapping
+  label: 'Mention'
+  mapping:
+    map:
+      type: string
+      label: 'Map'
+      constraints:
+        PrimitiveType: {}
+    entity_type_id:
+      type: string
+      label: 'Entity Type ID'
+      constraints:
+        PrimitiveType: {}
+    entity_label:
+      type: boolean
+      label: 'Entity Label'
+      constraints:
+        PrimitiveType: {}
+    keep_symbol:
+      type: boolean
+      label: 'Key Symbol'
+      constraints:
+        PrimitiveType: {}
+    url:
+      type: string
+      label: 'URL'
+      constraints:
+        PrimitiveType: {}
+    url_title:
+      type: boolean
+      label: 'URL Title'
+      constraints:
+        PrimitiveType: {}
+    url_title_levels:
+      type: integer
+      label: 'URL Title Levels'
+      constraints:
+        PrimitiveType: {}
+
+# Markdown Parser.
+markdown.parser_settings:
+  type: mapping
+  label: 'Markdown Parser Settings'
+markdown.parser_settings.*:
+  type: markdown.parser_settings
+markdown.parser:
+  type: config_object
+  label: 'Markdown Parser'
+  mapping:
+    dependencies:
+      type: config_dependencies
+    id:
+      type: string
+      label: 'Identifier'
+    enabled:
+      type: boolean
+      label: 'Enabled'
+    weight:
+      type: integer
+      label: 'Weight'
+    render_strategy:
+      type: markdown.render_strategy.[%parent.id]
+    settings:
+      type: markdown.parser_settings.[%parent.id]
+      constraints:
+        Callback:
+          callback: [\Drupal\markdown\Plugin\Markdown\BaseParser, validateSettings]
+    extensions:
+      type: sequence
+      label: 'Markdown Extensions'
+      sequence:
+        type: markdown.extension
+markdown.parser.*:
+  type: markdown.parser
+
+# Markdown Settings.
+markdown.settings:
+  type: config_object
+  label: 'Markdown Settings'
+  mapping:
+    default_parser:
+      type: string

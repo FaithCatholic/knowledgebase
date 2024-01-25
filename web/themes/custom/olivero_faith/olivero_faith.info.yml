@@ -1,0 +1,24 @@
+name: FAITH Olivero
+type: theme
+base theme: olivero
+description: Olivero sub theme for FC
+package: Custom
+core: 9.x
+core_version_requirement: ^9 || ^10
+libraries:
+  - olivero_faith/global-styling
+# Keep main Olivero regions to ease update.
+regions:
+  header: Header
+  primary_menu: 'Primary menu'
+  secondary_menu: 'Secondary menu'
+  hero: 'Hero (full width)'
+  highlighted: Highlighted
+  breadcrumb: Breadcrumb
+  social: Social Bar
+  content_above: Content Above
+  content: Content
+  sidebar: 'Sidebar'
+  content_below: 'Content Below'
+  footer_top: 'Footer Top'
+  footer_bottom: 'Footer Bottom'

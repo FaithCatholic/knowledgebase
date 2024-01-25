@@ -1,0 +1,88 @@
+{#
+/**
+ * @file
+ * Default theme implementation for displaying an installable library.
+ *
+ * Variables:
+ * - attributes: HTML attributes to be added to the element.
+ * - id: The libary identifier.
+ * - installed_library: The installed InstallableLibrary annotated plugin
+ *   definition.
+ * - isBundled: Flag indicating if this library is bundled.
+ * - isMultiple: Flag indicating if this library is just one of many that
+ *   could be used.
+ * - isPreferred: Flag indicating if this is the preferred library.
+ * - label: The human readable label of the library.
+ * - latestVersion: The latest version of the library.
+ * - library: The InstallableLibrary annotated plugin definition.
+ * - plugin: The InstallablePluginInterface instance.
+ * - preferred_library: The preferred InstallableLibrary annotated plugin
+ *   definition.
+ * - status: The raw machine key of the current status of the library.
+ * - statusTitle: The human reable label of the current status of the library.
+ * - version: The currently installed version.
+ *
+ * @see markdown_preprocess_installable_library()
+ *
+ * @ingroup themeable
+ *
+ * @todo Move upstream to https://www.drupal.org/project/installable_plugins.
+ */
+#}
+{% set classes = [
+  'installable-library',
+  id ? 'installable-library--' ~ id|clean_class,
+  status ?'installable-library--' ~ status|clean_class,
+  isMultiple ? 'installable-library--multiple',
+  isPreferred ? 'installable-library--preferred',
+] %}
+<span{{ attributes.addClass(classes) }}>
+  <span class="installable-library-status{{ library.isInstalled ? ' installable-library-status--installed' : '' }}" title="{{ statusTitle }}"></span>
+  <span class="installable-library-content">
+    <span>
+      <strong>{{ label }}</strong>
+    </span>
+    {% if library.version %}
+      {% if preferredLibrary and library.id != preferredLibrary.id %}
+        {% set preferredLatestVersion = preferredLibrary.getLatestVersion %}
+        <span><em>
+          {{ 'Replaced with'|t }}:
+          {{ preferredLibrary.getVersionLink(preferredLatestVersion, (preferredLibrary.label ?: preferredLibrary.id) ~ ':' ~ preferredLatestVersion) }}
+        </em></span>
+      {% elseif latestVersion and latestVersion != library.version %}
+        <span><em>
+          {{ 'Latest'|t }}:
+          {{ library.getVersionLink(latestVersion) ?: latestVersion }}
+          {% if library.getNewerVersions|length == 1 %}
+              (1 release behind)
+          {% else %}
+              ({{ library.getNewerVersions|length }} releases behind)
+          {% endif %}
+        </em></span>
+      {% endif %}
+    {% elseif library.getInstallCommand %}
+      <span>
+        <kbd class="installable-library-command">
+          {{ library.getInstallCommand }}
+        </kbd>
+      </span>
+    {% endif %}
+    {% if library.requirementViolations %}
+      <ul class="installable-library-violations">
+          {% for violation in library.requirementViolations %}
+            <li>{{ violation }}</li>
+          {% endfor %}
+        </ul>
+    {% endif %}
+    {% if libary and preferredLibrary and preferredLibrary.id != library.id %}
+      <span>
+        <em>
+          {{ 'Upgrade to'|t }}: {{ preferredLibrary.getLink ?: (preferredLibrary.label ?: preferredLibrary.id) }}
+        </em>
+      </span>
+    {% endif %}
+    {% if library.hasRequestFailure %}
+      <span><small><em>*{{ 'Unable to retrieve info, <a href=":url" target="_blank">check logs</a>'|t({':url': path('dblog.overview', [], {query: {type: ['markdown']}})}) }}.</em></small></span>
+    {% endif %}
+  </span>
+</span>

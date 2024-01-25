@@ -1,0 +1,13 @@
+name: 'Markdown'
+type: module
+description: 'Provides APIs and services to parse Markdown, a simple plain-text syntax, into valid HTML.'
+package: 'Markdown'
+core_version_requirement: ^9.1 || ^10
+configure: markdown.overview
+dependencies:
+  - drupal:filter
+
+# Information added by Drupal.org packaging script on 2024-01-08
+version: '3.0.1'
+project: 'markdown'
+datestamp: 1704727860

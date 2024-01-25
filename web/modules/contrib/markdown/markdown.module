@@ -1,0 +1,355 @@
+<?php
+
+/**
+ * @file
+ * Markdown module.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\Core\Render\Element;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\markdown\Markdown;
+use Drupal\markdown\Plugin\Markdown\ExtensionInterface;
+use Drupal\markdown\Util\FilterFormatAwareInterface;
+
+/**
+ * Implements hook_config_schema_info_alter().
+ */
+function markdown_config_schema_info_alter(&$definitions) {
+  $definitions['filter']['mapping']['filterFormat'] = [
+    'type' => 'string',
+    'label' => 'Format',
+  ];
+}
+
+/**
+ * Implements hook_element_info_alter().
+ * @noinspection PhpUnused
+ * @noinspection PhpDocSignatureInspection
+ */
+function markdown_element_info_alter(array &$info) {
+  $info['text_format']['#process'][] = '\\Drupal\\markdown\\Plugin\\Filter\\FilterMarkdown::processTextFormat';
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_load().
+ * @noinspection PhpUnused
+ * @noinspection PhpDocSignatureInspection
+ */
+function markdown_filter_format_load($entities) {
+  // Because core doesn't provide any association between filter formats and
+  // their filters, it must be done here manually when filter format has loaded.
+  /** @var \Drupal\filter\Entity\FilterFormat $format */
+  foreach ($entities as $format) {
+    // Store the current filter format in static cache to prevent recursion.
+    // @see \Drupal\markdown\Plugin\Filter\FilterMarkdown::setConfiguration()
+    $currentFilterFormat = &drupal_static(__FUNCTION__);
+    $currentFilterFormat = $format;
+    /* @var \Drupal\filter\Plugin\FilterInterface $filter */
+    foreach ($format->filters() as $id => $filter) {
+      if ($filter instanceof FilterFormatAwareInterface) {
+        $configuration = $filter->getConfiguration();
+        $configuration['format'] = $format;
+        $format->setFilterConfig($filter->getPluginId(), $configuration);
+      }
+    }
+  }
+  drupal_static_reset(__FUNCTION__);
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ * @noinspection PhpUnused
+ * @noinspection PhpDocSignatureInspection
+ * @noinspection PhpUnusedParameterInspection
+ */
+function markdown_form_alter(&$form, FormStateInterface $form_state, $formId) {
+  // Ignore non-filter-format forms.
+  if (!in_array($formId, ['filter_format_add_form', 'filter_format_edit_form'], TRUE)) {
+    return;
+  }
+
+  static $compatibleFilters;
+  if (!isset($compatibleFilters)) {
+    /** @var \Drupal\filter\FilterPluginManager $filterManager */
+    $filterManager = \Drupal::service('plugin.manager.filter');
+    $compatibleFilters = array_fill_keys(array_keys($filterManager->getDefinitions()), TRUE);
+    \Drupal::moduleHandler()->alter('markdown_compatible_filters', $compatibleFilters);
+    $compatibleFilters = array_keys(array_filter($compatibleFilters));
+  }
+  foreach (Element::children($form['filters']['status']) as $name) {
+    if (!in_array($name, $compatibleFilters, TRUE)) {
+      $form['filters']['status']['markdown']['#states']['enabled']['[name="filters[' . $name . '][status]"]'] = ['checked' => FALSE];
+      $form['filters']['status'][$name]['#states']['enabled']['[name="filters[markdown][status]"]'] = ['checked' => FALSE];
+      if (!isset($form['filters']['status'][$name]['#description'])) {
+        $form['filters']['status'][$name]['#description'] = '';
+      }
+      $form['filters']['status'][$name]['#description'] .= t('Note: not compatible with the Markdown filter.');
+    }
+  }
+}
+
+/**
+ * Implements hook_help().
+ *
+ * @noinspection PhpUnused
+ * @noinspection PhpDocSignatureInspection
+ * @noinspection PhpUnusedParameterInspection
+ * @noinspection PhpInconsistentReturnPointsInspection
+ */
+function markdown_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.markdown':
+      return Markdown::create()->loadFile(__DIR__ . '/README.md');
+  }
+}
+
+/**
+ * Implements hook_markdown_compatible_filters_alter().
+ * @noinspection PhpUnused
+ * @noinspection PhpDocSignatureInspection
+ */
+function markdown_markdown_compatible_filters_alter(array &$compatibleFilters) {
+  $compatibleFilters['filter_autop'] = FALSE;
+  $compatibleFilters['filter_html'] = FALSE;
+  $compatibleFilters['filter_htmlcorrector'] = FALSE;
+  $compatibleFilters['filter_html_escape'] = FALSE;
+  $compatibleFilters['filter_url'] = FALSE;
+}
+
+/**
+ * Implements hook_migration_plugins_alter().
+ * @noinspection PhpUnused
+ * @noinspection PhpDocSignatureInspection
+ */
+function markdown_migration_plugins_alter(array &$migrations) {
+  if (isset($migrations['d7_filter_format'])) {
+    $migration = &$migrations['d7_filter_format'];
+
+    // Add mapping from filter_markdown to markdown for D7 migrations.
+    $migration['process']['filters']['process']['id']['map']['filter_markdown'] = 'markdown';
+
+    // Copied from https://www.drupal.org/project/migmag.
+    // @see \Drupal\migmag\Utility\MigMagMigrationUtility::getAssociativeMigrationProcess()
+    $get_associative_migration_process = function($process_pipeline): array {
+      if (is_string($process_pipeline)) {
+        return [['plugin' => 'get', 'source' => $process_pipeline]];
+      }
+      elseif (array_key_exists('plugin', $process_pipeline)) {
+        $process_pipeline = [$process_pipeline];
+      }
+
+      return $process_pipeline;
+    };
+
+    // We have to generate settings for the markdown filter.
+    $filter_plugin_settings_processes = $get_associative_migration_process($migrations['d7_filter_format']['process']['filters']['process']['settings']);
+    $filter_plugin_settings_processes[] = [
+      'plugin' => 'markdown_settings_generator',
+    ];
+    $migrations['d7_filter_format']['process']['filters']['process']['settings'] = $filter_plugin_settings_processes;
+
+    // markdown_settings_generator needs to know the other filters that
+    // enabled in order to generate valid settings.
+    $migrations['d7_filter_format']['process']['filters']['include_source'] = TRUE;
+    $migrations['d7_filter_format']['process']['filters']['source_key'] = 'source_format';
+  }
+}
+
+/**
+ * Implements hook_modules_installed().
+ * @noinspection PhpUnused
+ * @noinspection PhpDocSignatureInspection
+ */
+function markdown_modules_installed($modules) {
+  // Immediately return if not installing the markdown module.
+  if (!in_array('markdown', $modules, TRUE)) {
+    return;
+  }
+
+  // Save the first found parser as the default global parser.
+  /** @var \Drupal\markdown\PluginManager\ParserManagerInterface $parserManager */
+  $parserManager = \Drupal::service('plugin.manager.markdown.parser');
+  if ($parserId = current(array_keys($parserManager->installedDefinitions()))) {
+    \Drupal::configFactory()->getEditable('markdown.settings')->set('default_parser', $parserId)->save();
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function markdown_preprocess_installable_library(&$variables) {
+  /** @var \Drupal\markdown\Plugin\Markdown\InstallablePluginInterface $plugin */
+  $plugin = $variables['plugin'];
+  $variables['installedLibrary'] = $plugin->getInstalledLibrary();
+  $variables['preferredLibrary'] = $preferredLibrary = $plugin->getPreferredLibrary();
+
+  /** @var \Drupal\markdown\Annotation\InstallableLibrary|null $library */
+  $library = $variables['library'] ?? NULL;
+  $lib = $library ?: $preferredLibrary;
+
+  $variables['id'] = $lib ? $lib->getId() : '';
+  $variables['version'] = $lib ? ($lib->getVersionLink() ?: ($lib->versionExtra ?: $lib->version)) : NULL;
+  $variables['latestVersion'] = $lib ? $lib->getLatestVersion() : NULL;
+
+  $variables['status'] = $lib ? $lib->getStatus() : NULL;
+  $variables['statusTitle'] = $lib ? $lib->getStatus(TRUE) : NULL;
+
+  $variables['isMultiple'] = $multiple = count($plugin->getPluginDefinition()->libraries) > 1;
+  $variables['isBundled'] = $plugin instanceof ExtensionInterface && $plugin->isBundled();
+  $variables['isPreferred'] = $multiple && $library->preferred;
+
+  if (!$lib) {
+    $variables['label'] = t('Library is missing');
+    return;
+  }
+  
+  $label = ($lib->customLabel ?: $lib->label ?: $lib->getId());
+  if ($lib->version) {
+    $label .= ':' . ($lib->versionExtra ?: $lib->version);
+  }
+  if ($variables['isBundled']) {
+    $label .= ' (' . t('bundled') . ')';
+  }
+  if ($variables['isPreferred'] && !$plugin->isInstalled()) {
+    $label .= ' (' . t('preferred') . ')';
+  }
+  $variables['label'] = $lib->getVersionLink($lib->version, $label);
+}
+
+/**
+ * Implements hook_theme().
+ */
+function markdown_theme($existing, $type, $theme, $path) {
+  $hooks['installable_library'] = [
+    'variables' => [
+      'id' => NULL,
+      'installed_library' => NULL,
+      'isBundled' => NULL,
+      'isMultiple' => NULL,
+      'isPreferred' => NULL,
+      'label' => NULL,
+      'latestVersion' => NULL,
+      'library' => NULL,
+      'plugin' => NULL,
+      'preferred_library' => NULL,
+      'status' => NULL,
+      'statusTitle' => NULL,
+      'version' => NULL,
+    ],
+  ];
+  return $hooks;
+}
+
+/**
+ * Implements hook_token_info_alter().
+ * @noinspection PhpUnused
+ * @noinspection PhpDocSignatureInspection
+ */
+function markdown_token_info_alter(&$data) {
+  // Supply the various "current-request" based tokens.
+  // @todo Remove once provided by core.
+  // @see https://www.drupal.org/project/drupal/issues/3136361
+  if (!isset($data['types']['current-request'])) {
+    $data['types']['current-request'] = [
+      'name' => t('Current Request'),
+      'description' => t('Tokens related to the current request.'),
+    ];
+  }
+  if (!isset($data['tokens']['current-request'])) {
+    $currentRequest['base-path'] = [
+      'name' => t('Base Path'),
+      'description' => t('The current request base path, if any (e.g. /drupal).'),
+    ];
+    $currentRequest['fragment'] = [
+      'name' => t('Fragment'),
+      'description' => t('The current request fragment, if any (e.g. #fragment).'),
+    ];
+    $currentRequest['host'] = [
+      'name' => t('Host'),
+      'description' => t('The current request host name (example.com).'),
+    ];
+    $currentRequest['password'] = [
+      'name' => t('Password'),
+      'description' => t('The current request password, if any.'),
+    ];
+    $currentRequest['path'] = [
+      'name' => t('Path'),
+      'description' => t('The current request path, relative to base path, if any (e.g. /path).'),
+    ];
+    $currentRequest['port'] = [
+      'name' => t('Port'),
+      'description' => t('The current request port (e.g. 443).'),
+    ];
+    $currentRequest['query'] = [
+      'name' => t('Query'),
+      'description' => t('The current request query string, if any (e.g. ?query=string).'),
+    ];
+    $currentRequest['scheme'] = [
+      'name' => t('Scheme'),
+      'description' => t('The current request scheme (http, https, etc.).'),
+    ];
+    $currentRequest['uri'] = [
+      'name' => t('URI'),
+      'description' => t('The current request original URI.'),
+    ];
+    $currentRequest['user'] = [
+      'name' => t('User'),
+      'description' => t('The current request user, if any.'),
+    ];
+    $data['tokens']['current-request'] = $currentRequest;
+  }
+}
+
+/**
+ * Implements hook_tokens().
+ * @noinspection PhpUnused
+ * @noinspection PhpDocSignatureInspection
+ */
+function markdown_tokens($type, $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata) {
+  $replacements = [];
+
+  // Supply the various "current-request" based tokens.
+  // @todo Remove once provided by core.
+  // @see https://www.drupal.org/project/drupal/issues/3136361
+  if ($type === 'current-request') {
+    $request = \Drupal::request();
+    foreach ($tokens as $name => $original) {
+      switch ($name) {
+        case 'base-path':
+          $replacements[$original] = $request->getBasePath();
+          break;
+        case 'fragment':
+          $replacements[$original] = parse_url($request->getRequestUri(), PHP_URL_FRAGMENT);
+          break;
+        case 'host':
+          $replacements[$original] = $request->getHost();
+          break;
+        case 'password':
+          $replacements[$original] = $request->getPassword();
+          break;
+        case 'path':
+          $replacements[$original] = $request->getPathInfo();
+          break;
+        case 'port':
+          $replacements[$original] = $request->getPort();
+          break;
+        case 'query':
+          $replacements[$original] = $request->getQueryString();
+          break;
+        case 'scheme':
+          $replacements[$original] = $request->getScheme();
+          break;
+        case 'user':
+          $replacements[$original] = $request->getUser();
+          break;
+        case 'uri':
+          $replacements[$original] = $request->getRequestUri();
+          break;
+      }
+    }
+  }
+
+  return $replacements;
+}

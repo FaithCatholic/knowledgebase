@@ -1,0 +1,7 @@
+# Drupal dev Olivero sub theme library.
+global-styling:
+  js:
+    js/theme.js: {}
+  css:
+    base:
+      css/theme.css: {}

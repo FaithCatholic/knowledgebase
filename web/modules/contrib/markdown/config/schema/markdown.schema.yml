@@ -1,0 +1,421 @@
+# Filter settings.
+filter_settings.markdown:
+  type: markdown.parser
+  mapping:
+    override:
+      type: boolean
+      label: 'Override'
+
+# Parser Settings: CommonMark.
+markdown.parser_settings.commonmark:
+  type: markdown.parser_settings
+  label: 'CommonMark Settings'
+  mapping:
+    allow_unsafe_links:
+      type: boolean
+      label: 'Allow Unsafe Links'
+      constraints:
+        PrimitiveType: {}
+    enable_em:
+      type: boolean
+      label: 'Enable Emphasis'
+      constraints:
+        PrimitiveType: {}
+    enable_strong:
+      type: boolean
+      label: 'Enable Strong'
+      constraints:
+        PrimitiveType: {}
+    html_input:
+      type: string
+      label: 'HTML Input'
+      constraints:
+        PrimitiveType: {}
+    max_nesting_level:
+      type: integer
+      label: 'Maximum Nesting Level'
+      constraints:
+        PrimitiveType: {}
+    renderer:
+      type: mapping
+      label: 'Renderer'
+      mapping:
+        block_separator:
+          type: string
+          label: 'Block Separator'
+          constraints:
+            PrimitiveType: {}
+        inner_separator:
+          type: string
+          label: 'Inner Separator'
+          constraints:
+            PrimitiveType: {}
+        soft_break:
+          type: string
+          label: 'Soft Break'
+          constraints:
+            PrimitiveType: {}
+    unordered_list_markers:
+      type: sequence
+      label: 'Unordered List Markers'
+      sequence:
+        type: string
+        label: 'Marker'
+        constraints:
+          PrimitiveType: {}
+    use_asterisk:
+      type: boolean
+      label: 'Use Asterisk'
+      constraints:
+        PrimitiveType: {}
+    use_underscore:
+      type: boolean
+      label: 'Use Underscore'
+      constraints:
+        PrimitiveType: {}
+
+# Parser Settings: CommonMark GFM.
+markdown.parser_settings.commonmark-gfm:
+  type: markdown.parser_settings.commonmark
+  label: 'CommonMark GFM Settings'
+
+# Parser Settings: Parsedown.
+markdown.parser_settings.parsedown:
+  type: markdown.parser_settings
+  label: 'Parsedown Settings'
+  mapping:
+    breaks_enabled:
+      type: boolean
+      label: 'Breaks Enabled'
+      constraints:
+        PrimitiveType: {}
+    markup_escaped:
+      type: boolean
+      label: 'Markup Escaped'
+      constraints:
+        PrimitiveType: {}
+    safe_mode:
+      type: boolean
+      label: 'Safe Mode'
+      constraints:
+        PrimitiveType: {}
+    strict_mode:
+      type: boolean
+      label: 'Strict Mode'
+      constraints:
+        PrimitiveType: {}
+    urls_linked:
+      type: boolean
+      label: 'URLs Linked'
+      constraints:
+        PrimitiveType: {}
+
+# Parser Settings: Parsedown Extra.
+markdown.parser_settings.parsedown-extra:
+  type: markdown.parser_settings.parsedown
+  label: 'Parsedown Extra Settings'
+
+# Parser Settings: PHP Markdown.
+markdown.parser_settings.php-markdown:
+  type: markdown.parser_settings
+  label: 'PHP Markdown Settings'
+  mapping:
+    empty_element_suffix:
+      type: string
+      label: 'Empty Element Suffix'
+      constraints:
+        PrimitiveType: {}
+    enhanced_ordered_list:
+      type: boolean
+      label: 'Enhanced Ordered List'
+      constraints:
+        PrimitiveType: {}
+    hard_wrap:
+      type: boolean
+      label: 'Hard Wrap'
+      constraints:
+        PrimitiveType: {}
+    no_entities:
+      type: boolean
+      label: 'No Entities'
+      constraints:
+        PrimitiveType: {}
+    no_markup:
+      type: boolean
+      label: 'No Markup'
+      constraints:
+        PrimitiveType: {}
+    predef_titles:
+      type: sequence
+      label: 'Predefined Titles'
+      sequence:
+        type: string
+        label: 'Predefined Title'
+        constraints:
+          PrimitiveType: {}
+    predef_urls:
+      type: sequence
+      label: 'Predefined URLs'
+      sequence:
+        type: string
+        label: 'Predefined URL'
+        constraints:
+          PrimitiveType: {}
+    tab_width:
+      type: integer
+      label: 'Tab Width'
+      constraints:
+        PrimitiveType: {}
+        Range:
+          min: 4
+          max: 32
+
+# Parser Settings: PHP Markdown Extra.
+markdown.parser_settings.php-markdown-extra:
+  type: markdown.parser_settings.php-markdown
+  label: 'PHP Markdown Extra Settings'
+  mapping:
+    code_attr_on_pre:
+      type: boolean
+      label: 'Code Attributes on <pre>'
+      constraints:
+        PrimitiveType: {}
+    code_class_prefix:
+      type: string
+      label: 'Code Class Prefix'
+      constraints:
+        PrimitiveType: {}
+    fn_backlink_class:
+      type: string
+      label: 'Footnote Backlink Class'
+      constraints:
+        PrimitiveType: {}
+    fn_backlink_html:
+      type: string
+      label: 'Footnote Backlink HTML'
+      constraints:
+        PrimitiveType: {}
+    fn_backlink_label:
+      type: string
+      label: 'Footnote Backlink Label'
+      constraints:
+        PrimitiveType: {}
+    fn_backlink_title:
+      type: string
+      label: 'Footnote Backlink Title'
+      constraints:
+        PrimitiveType: {}
+    fn_id_prefix:
+      type: string
+      label: 'Footnote ID Prefix'
+      constraints:
+        PrimitiveType: {}
+    fn_link_class:
+      type: string
+      label: 'Footnote Link Class'
+      constraints:
+        PrimitiveType: {}
+    fn_link_title:
+      type: string
+      label: 'Footnote Link Title'
+      constraints:
+        PrimitiveType: {}
+    hashtag_protection:
+      type: boolean
+      label: 'Hashtag Protection'
+      constraints:
+        PrimitiveType: {}
+    omit_footnotes:
+      type: boolean
+      label: 'Omit Footnotes'
+      constraints:
+        PrimitiveType: {}
+    predef_abbr:
+      type: sequence
+      label: 'Predefined Abbreviations'
+      sequence:
+        type: string
+        label: 'Predefined Abbreviation'
+        constraints:
+          PrimitiveType: {}
+    table_align_class_tmpl:
+      type: string
+      label: 'Table Align Class Template'
+      constraints:
+        PrimitiveType: {}
+
+# Extension Settings: CommonMark Mention.
+markdown.extension_settings.commonmark-mention:
+  type: markdown.extension_settings
+  label: 'Mention'
+  mapping:
+    at:
+      type: markdown.mention
+    hash:
+      type: markdown.mention
+
+# Extension Settings: CommonMark Emoji.
+markdown.extension_settings.commonmark-ext-emoji:
+  type: markdown.extension_settings
+  label: 'Emoji'
+  mapping:
+    github_api_token:
+      type: string
+      label: 'GitHub API Token'
+      constraints:
+        PrimitiveType: {}
+
+# Extension Settings: CommonMark External Links.
+markdown.extension_settings.commonmark-external-links:
+  type: markdown.extension_settings
+  label: 'Enhanced Links'
+  mapping:
+    html_class:
+      type: string
+      label: 'HTML Class'
+      constraints:
+        PrimitiveType: {}
+    internal_hosts:
+      type: sequence
+      label: 'Internal Hosts'
+      sequence:
+        type: string
+        label: 'Internal Host'
+        constraints:
+          PrimitiveType: {}
+    nofollow:
+      type: string
+      label: 'No Follow'
+      constraints:
+        PrimitiveType: {}
+    noopener:
+      type: string
+      label: 'No Opener'
+      constraints:
+        PrimitiveType: {}
+    noreferrer:
+      type: string
+      label: 'No Referrer'
+      constraints:
+        PrimitiveType: {}
+    open_in_new_window:
+      type: boolean
+      label: 'Open In New Window'
+      constraints:
+        PrimitiveType: {}
+
+# Extension Settings: CommonMark Heading Permalink.
+markdown.extension_settings.commonmark-heading-permalink:
+  type: markdown.extension_settings
+  label: 'Heading Permalinks'
+  mapping:
+    html_class:
+      type: string
+      label: 'HTML Class'
+      constraints:
+        PrimitiveType: {}
+    id_prefix:
+      type: string
+      label: 'ID Prefix'
+      constraints:
+        PrimitiveType: {}
+    inner_contents:
+      type: string
+      label: 'Inner Contents'
+      constraints:
+        PrimitiveType: {}
+    insert:
+      type: string
+      label: 'Insert'
+      constraints:
+        PrimitiveType: {}
+    title:
+      type: string
+      label: 'Title'
+      constraints:
+        PrimitiveType: {}
+
+# Extension Settings: CommonMark Smart Punctuation.
+markdown.extension_settings.commonmark-smart-punctuation:
+  type: markdown.extension_settings
+  label: 'Smart Punctuation'
+  mapping:
+    double_quote_opener:
+      type: string
+      label: 'Double Quote Opener'
+      constraints:
+        PrimitiveType: {}
+        Length:
+          min: 1
+          max: 1
+    double_quote_closer:
+      type: string
+      label: 'Double Quote Closer'
+      constraints:
+        PrimitiveType: {}
+        Length:
+          min: 1
+          max: 1
+    single_quote_opener:
+      type: string
+      label: 'Single Quote Opener'
+      constraints:
+        PrimitiveType: {}
+        Length:
+          min: 1
+          max: 1
+    single_quote_closer:
+      type: string
+      label: 'Single Quote Closer'
+      constraints:
+        PrimitiveType: {}
+        Length:
+          min: 1
+          max: 1
+
+# Extension Settings: CommonMark Table of Contents.
+markdown.extension_settings.commonmark-table-of-contents:
+  type: markdown.extension_settings
+  label: 'Table Of Contents'
+  mapping:
+    html_class:
+      type: string
+      label: 'HTML Class'
+      constraints:
+        PrimitiveType: {}
+    max_heading_level:
+      type: integer
+      label: 'Maximum Heading Level'
+      constraints:
+        PrimitiveType: {}
+        Range:
+          min: 1
+          max: 6
+    min_heading_level:
+      type: integer
+      label: 'Minimum Heading Level'
+      constraints:
+        PrimitiveType: {}
+        Range:
+          min: 1
+          max: 6
+    normalize:
+      type: string
+      label: 'Normalize'
+      constraints:
+        PrimitiveType: {}
+    placeholder:
+      type: string
+      label: 'Placeholder'
+      constraints:
+        PrimitiveType: {}
+    position:
+      type: string
+      label: 'Position'
+      constraints:
+        PrimitiveType: {}
+    style:
+      type: string
+      label: 'Style'
+      constraints:
+        PrimitiveType: {}

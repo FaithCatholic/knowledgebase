@@ -1,0 +1,182 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the markdown module.
+ */
+
+use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Core\Link;
+use Drupal\Core\Render\Markup;
+use Drupal\Core\Url;
+use Drupal\markdown\Plugin\Markdown\ParserInterface;
+use Drupal\markdown\PluginManager\ParserManager;
+
+/**
+ * Implements hook_requirements().
+ *
+ * {@inheritdoc}
+ *
+ * Note: this is currently being ignored in Drush >=9 <=9.7.2.
+ *
+ * @see https://github.com/drush-ops/drush/pull/4337
+ * @noinspection PhpInappropriateInheritDocUsageInspection
+ * @noinspection PhpUnused
+ */
+function markdown_requirements($phase) {
+  // Indicate that any subsequent code invoked is because of this hook.
+  // This assists in special use-casing to avoid errors when the module isn't
+  // yet installed.
+  global $_markdown_requirements;
+  $_markdown_requirements = $phase;
+
+  $translation = \Drupal::translation();
+
+  $requirements = [];
+
+  /** @var \Drupal\Core\Render\RendererInterface $renderer */
+  $renderer = \Drupal::service('renderer');
+
+  // Load the Markdown Parser Plugin Manager service, if it exists.
+  if (\Drupal::hasService('plugin.manager.markdown.parser')) {
+    $parserManager = \Drupal::service('plugin.manager.markdown.parser');
+  }
+  // Otherwise, in the event that markdown isn't yet installed, register this
+  // module's path in the autoloader and container namespaces. This will allow
+  // the service to be manually constructed to discover installed parsers.
+  else {
+    $src = __DIR__ . '/src';
+    /** @var \Composer\Autoload\ClassLoader $classLoader */
+    $classLoader = \Drupal::service('class_loader');
+    $classLoader->addPsr4('Drupal\\markdown\\', [$src]);
+
+    /** @var \ArrayObject $containerNamespaces */
+    $containerNamespaces = \Drupal::service('container.namespaces');
+    if (!$containerNamespaces->offsetExists('Drupal\\markdown')) {
+      $containerNamespaces->offsetSet('Drupal\\markdown', str_replace(\Drupal::root() . '/', '', $src));
+    }
+
+    // Add services that are not available yet, but are required by the classes
+    // above. The container rebuild after module installation should reset these
+    // to what is defined in markdown.services.yml.
+    if (!\Drupal::hasService('logger.channel.markdown')) {
+      $markdownLogger = \Drupal::service('logger.factory')->get('markdown');
+      \Drupal::getContainer()->set('logger.channel.markdown', $markdownLogger);
+    }
+    if (!\Drupal::hasService('cache.markdown')) {
+      $markdownCache = \Drupal::service('cache_factory')->get('markdown');
+      \Drupal::getContainer()->set('cache.markdown', $markdownCache);
+    }
+
+    $parserManager = ParserManager::create();
+  }
+
+  // Reset parser plugin cache.
+  $parserManager->clearCachedDefinitions();
+
+  $configurations = [];
+  foreach (array_keys($parserManager->getDefinitions(FALSE)) as $parserId) {
+    $configurations[$parserId] = \Drupal::config("markdown.parser.$parserId")->get() ?: [];
+  }
+
+  // Retrieve all available parsers.
+  $parsers = $parserManager->all($configurations);
+
+  // Retrieve all installed parsers.
+  $installed = $parserManager->installed($configurations);
+
+  // Retrieve all enabled parsers.
+  $enabled = $parserManager->enabled($configurations);
+
+  // Install.
+  if ($phase === 'install' && !$installed) {
+    $cli = php_sapi_name() === 'cli';
+    $items = array_map(function (ParserInterface $parser) use ($cli, $translation) {
+      $definition = $parser->getPluginDefinition();
+      if ($definition->requirementViolations) {
+        $reason = implode(', ', $definition->requirementViolations);
+      }
+      else {
+        $reason = $translation->translate('Not Installed');
+      }
+      $url = $parser->getUrl();
+      $urlString = $url ? $url->toString() : NULL;
+      $urlLink = !$cli && $url ? Link::fromTextAndUrl($url->toString(), $url)->toString() : $urlString;
+      return new FormattableMarkup($urlLink ? '@label: @reason (@url)' : '@label: @reason', [
+        '@label' => $parser->getLabel(),
+        '@reason' => $reason,
+        '@url' => $urlLink,
+      ]);
+    }, $parsers);
+    if ($cli) {
+      $items = new FormattableMarkup("\n  - @items", [
+        '@items' => implode("\n  - ", $items),
+      ]);
+    }
+    else {
+      $list = [
+        '#theme' => 'item_list__markdown_parsers',
+        '#items' => $items,
+      ];
+      $items = $renderer->renderPlain($list);
+    }
+    $requirements['markdown'] = [
+      'description' => $translation->translate("Markdown cannot be installed because there are no parsers currently installed. Please install at least one parser via Composer to enable this module:\n@parsers", [
+        '@parsers' => $items,
+      ]),
+      'severity' => REQUIREMENT_ERROR,
+    ];
+  }
+  // Runtime.
+  elseif ($phase === 'runtime') {
+    $requirements['markdown'] = [
+      'title' => Markup::create('Markdown<a id="markdown"></a>'),
+      'description' => $translation->translate('Visit the <a href=":markdown_overview" target="_blank">Markdown Overview</a> page for more details.', [
+        ':markdown_overview' => Url::fromRoute('markdown.overview')->toString(),
+      ]),
+    ];
+
+    if (!$installed) {
+      $requirements['markdown']['severity'] = REQUIREMENT_ERROR;
+      $requirements['markdown']['value'] = $translation->translate('You must install at least one parser via Composer for the Markdown module to function properly.');
+    }
+    elseif (!$enabled) {
+      $requirements['markdown']['severity'] = REQUIREMENT_ERROR;
+      $requirements['markdown']['value'] = $translation->translate('You must enable at least one parser for the Markdown module to function properly.');
+    }
+    else {
+      $severity = REQUIREMENT_OK;
+      $statuses = [];
+      foreach ($installed as $parserId => $parser) {
+        $library = $parser->getInstalledLibrary();
+        $status = (string) $library->getStatus();
+        if (!isset($statuses[$status])) {
+          $statuses[$status] = 0;
+        }
+        $statuses[$status] += 1;
+        if ($library->deprecated || $library->hasRequestFailure()) {
+          if ($severity < REQUIREMENT_ERROR) {
+            $severity = REQUIREMENT_ERROR;
+          }
+        }
+        elseif ($status !== (string) t('Up to date')) {
+          if ($severity < REQUIREMENT_WARNING) {
+            $severity = REQUIREMENT_WARNING;
+          }
+        }
+      }
+
+      $value = '';
+      foreach ($statuses as $status => $count) {
+        $value .= $translation->formatPlural($count, '1 %status parser', '@count %status parsers', [
+          '%status' => $status,
+        ]);
+      }
+
+      $requirements['markdown']['severity'] = $severity;
+      $requirements['markdown']['value'] = Markup::create($value);
+    }
+  }
+
+  return $requirements;
+}

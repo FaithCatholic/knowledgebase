@@ -1,0 +1,48 @@
+services:
+  cache.markdown:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    factory: cache_factory:get
+    arguments: [markdown]
+    tags:
+      - { name: cache.bin, default_backend: cache.backend.chainedfast }
+
+  logger.channel.markdown:
+    parent: logger.channel_base
+    arguments: ['markdown']
+
+  markdown:
+    class: Drupal\markdown\Markdown
+    arguments: ['@cache.markdown', '@config.factory', '@file_system', '@http_client', '@plugin.manager.markdown.parser']
+
+  markdown_plugin_manager:
+    abstract: true
+    arguments: ['@container.namespaces', '@cache.discovery', '@config.factory', '@logger.channel.markdown', '@module_handler']
+    calls:
+      - [setContainer, ['@service_container']]
+    tags:
+      - { name: plugin_manager_cache_clear }
+
+  paramconverter.markdown:
+    class: Drupal\markdown\ParamConverter\MarkdownParamConverter
+    arguments: ['@config.factory', '@plugin.manager.markdown.parser', '@plugin.manager.markdown.extension', '@plugin.manager.markdown.allowed_html']
+    tags:
+      - { name: paramconverter, priority: 10 }
+
+  plugin.manager.markdown.extension:
+    parent: markdown_plugin_manager
+    class: Drupal\markdown\PluginManager\ExtensionManager
+
+  plugin.manager.markdown.parser:
+    parent: markdown_plugin_manager
+    class: Drupal\markdown\PluginManager\ParserManager
+
+  plugin.manager.markdown.allowed_html:
+    parent: markdown_plugin_manager
+    class: Drupal\markdown\PluginManager\AllowedHtmlManager
+    arguments: ['@plugin.manager.filter', '@theme_handler', '@theme.manager', '@plugin.manager.markdown.parser', '@plugin.manager.markdown.extension']
+
+  twig.extension.markdown:
+    class: Drupal\markdown\Twig\Extension
+    arguments: ['@markdown']
+    tags:
+      - { name: twig.extension }

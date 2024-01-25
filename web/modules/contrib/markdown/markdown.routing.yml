@@ -1,0 +1,52 @@
+markdown.overview:
+  path: '/admin/config/content/markdown'
+  defaults:
+    _form: Drupal\markdown\Form\OverviewForm
+    _title: 'Markdown'
+  options:
+    _admin_route: TRUE
+  requirements:
+    _permission: 'administer markdown'
+
+markdown.parser.edit:
+  path: '/admin/config/content/markdown/{parser}'
+  defaults:
+    _form: Drupal\markdown\Form\ParserConfigurationForm
+    _title: 'Configure'
+  options:
+    _admin_route: TRUE
+    parameters:
+      parser:
+        type: markdown:parser
+  requirements:
+    _permission: 'administer markdown'
+    parser: '[\w_-]+'
+
+markdown.parser.operation:
+  path: '/admin/config/content/markdown/{parser}/operation/{operation}'
+  defaults:
+    _controller: Drupal\markdown\Form\ParserOperationForm::executeOperation
+    _title: 'Operation'
+  options:
+    _admin_route: TRUE
+    parameters:
+      parser:
+        type: markdown:parser
+  requirements:
+    _csrf_token: 'TRUE'
+    _permission: 'administer markdown'
+    parser: '[\w_-]+'
+
+markdown.parser.confirm_operation:
+  path: '/admin/config/content/markdown/{parser}/confirm-operation/{operation}'
+  defaults:
+    _form: Drupal\markdown\Form\ParserOperationForm
+    _title: 'Confirm Parser Operation'
+  options:
+    _admin_route: TRUE
+    parameters:
+      parser:
+        type: markdown:parser
+  requirements:
+    _permission: 'administer markdown'
+    parser: '[\w_-]+'

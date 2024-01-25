@@ -1,0 +1,8 @@
+# The services of the project.
+#
+# Each service listed will be deployed
+# to power your Platform.sh project.
+
+dbmysql:
+    type: oracle-mysql:5.7
+    disk: 3072

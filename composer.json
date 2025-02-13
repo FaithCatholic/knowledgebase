@@ -12,27 +12,127 @@
         {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
+        },
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "mermaid-js/mermaid",
+                "version": "10.8.0",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/mermaid-js/mermaid/archive/refs/tags/v10.8.0.zip",
+                    "type": "zip"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "appolodev/vanilla-icon-picker",
+                "version": "1.3.0",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/AppoloDev/vanilla-icon-picker/archive/refs/tags/1.3.0.zip",
+                    "type": "zip"
+                }
+            }
         }
     ],
     "require": {
+        "appolodev/vanilla-icon-picker": "1.3.0",
         "composer/installers": "^2.0",
+        "cweagans/composer-patches": "^1.7",
+        "drupal/address": "^2.0",
         "drupal/admin_toolbar": "^3.4",
+        "drupal/allowed_formats": "^3.0",
+        "drupal/anchor_link": "^3.0",
+        "drupal/asset_injector": "^2.19",
+        "drupal/auto_anchors": "@beta",
+        "drupal/better_exposed_filters": "^6.0",
+        "drupal/blazy": "^2.22",
+        "drupal/block_class": "^2.0",
+        "drupal/bootstrap": "^3.29",
+        "drupal/color_field": "^3.0",
+        "drupal/colorbox": "^2.0",
         "drupal/core-composer-scaffold": "^10.1",
         "drupal/core-project-message": "^10.1",
         "drupal/core-recommended": "^10.1",
+        "drupal/crop": "^2.3",
         "drupal/ctools": "^4.0",
         "drupal/devel": "^5.1",
+        "drupal/editor_advanced_link": "^2.2",
+        "drupal/entity_browser_enhanced": "^2.0",
+        "drupal/entity_embed": "^1.5",
+        "drupal/entity_reference_revisions": "^1.11",
+        "drupal/exclude_node_title": "^1.4",
+        "drupal/extlink": "^1.7",
+        "drupal/field_group": "^3.4",
+        "drupal/fieldblock": "^2.2",
+        "drupal/file_details": "^1.14",
+        "drupal/focal_point": "^2.0",
+        "drupal/fontawesome": "^2.26",
+        "drupal/geofield": "^1.57",
+        "drupal/google_tag": "^2.0",
+        "drupal/image_widget_crop": "^2.4",
+        "drupal/imagick": "^1.10",
+        "drupal/improve_line_breaks_filter": "^1.5",
+        "drupal/inline_entity_form": "^3.0@RC",
+        "drupal/linked_field": "^1.5",
+        "drupal/linkit": "^6.1",
         "drupal/markdown": "^3.0",
-        "drupal/upgrade_status": "^4.3",
+        "drupal/media_entity_browser": "^2.0@alpha",
+        "drupal/media_thumbnails": "^1.0@beta",
+        "drupal/menu_block": "^1.10",
+        "drupal/menu_link_attributes": "^1.3",
+        "drupal/mermaid_diagram_field": "^1.0",
+        "drupal/metatag": "^2.0",
+        "drupal/module_filter": "^4.1",
+        "drupal/nodeaccess": "^2.0@alpha",
+        "drupal/paragraphs": "^1.17",
+        "drupal/paragraphs_viewmode": "^1.1",
+        "drupal/pathauto": "^1.12",
+        "drupal/redirect": "^1.9",
+        "drupal/rules": "^3.0@alpha",
+        "drupal/scheduler": "^2.0",
+        "drupal/schema_metatag": "^3.0",
+        "drupal/search_api": "^1.31",
+        "drupal/search_api_solr": "^4.3",
+        "drupal/seckit": "^2.0",
+        "drupal/simple_sitemap": "^4.1",
+        "drupal/smtp": "^1.2",
+        "drupal/social_api": "^4.0",
+        "drupal/social_auth": "^4.1",
+        "drupal/social_auth_google": "^4.0",
+        "drupal/svg_image": "^3.0",
+        "drupal/tac_lite": "^1.7",
+        "drupal/viewfield": "^3.0@beta",
+        "drupal/views_bootstrap": "5.3.1",
+        "drupal/views_bulk_edit": "^2.9",
+        "drupal/views_bulk_operations": "^4.2",
+        "drupal/views_data_export": "^1.4",
+        "drupal/views_field_view": "^1.0@beta",
+        "drupal/we_megamenu": "^1.16",
+        "drupal/workbench_access": "^2.0",
         "drush/drush": "^12.4",
+        "faithcatholic/faith_genesis_core": "^4.0",
+        "faithcatholic/faith_genesis_theme": "^4.0",
+        "gravitymedia/ghostscript": "^2.3",
         "league/commonmark": "^1.0",
+        "mermaid-js/mermaid": "10.8.0",
         "michelf/php-markdown": "^2.0",
-        "platformsh/config-reader": "^2.4"
+        "npm-asset/fonticonpicker--fonticonpicker": "^3.1",
+        "oomphinc/composer-installers-extender": "^2.0",
+        "platformsh/config-reader": "^2.4",
+        "wikimedia/composer-merge-plugin": "^2.1"
     },
     "conflict": {
         "drupal/drupal": "*"
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true,
     "config": {
         "allow-plugins": {
@@ -40,9 +140,48 @@
             "drupal/core-composer-scaffold": true,
             "drupal/core-project-message": true,
             "phpstan/extension-installer": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "cweagans/composer-patches": true,
+            "wikimedia/composer-merge-plugin": true,
+            "oomphinc/composer-installers-extender": true
         },
         "sort-packages": true
+    },
+    "autoload": {
+        "classmap": [
+            "scripts/composer/ScriptHandler.php"
+        ]
+    },
+    "scripts": {
+        "pre-install-cmd": [
+            "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
+        ],
+        "pre-update-cmd": [
+            "DrupalProject\\composer\\ScriptHandler::checkComposerVersion"
+        ],
+        "post-install-cmd": [
+            "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
+        ],
+        "post-update-cmd": [
+            "DrupalProject\\composer\\ScriptHandler::createRequiredFiles"
+        ],
+        "genesis-subtheme": [
+            "DrupalProject\\composer\\SubthemeHandler::createSubtheme"
+        ],
+        "genesis-setup": [
+            "npm install --prefix ./web/themes/contrib/faith_genesis_theme",
+            "npm run genesis-setup --prefix ./web/themes/contrib/faith_genesis_theme"
+        ],
+        "genesis-update": [
+            "npm run genesis-setup --prefix ./web/themes/contrib/faith_genesis_theme"
+        ],
+        "project-setup": [
+            "npm install --prefix ./web/themes/custom/archstl_schools_theme",
+            "npm run project-setup --prefix ./web/themes/custom/archstl_schools_theme"
+        ],
+        "project-update": [
+            "npm run project-setup --prefix ./web/themes/custom/archstl_schools_theme"
+        ]
     },
     "extra": {
         "drupal-scaffold": {
@@ -50,12 +189,22 @@
                 "web-root": "web/"
             }
         },
+        "merge-plugin": {
+            "include": [
+                "web/modules/contrib/anchor_link/composer.libraries.json"
+            ]
+        },
+        "installer-types": [
+            "npm-asset"
+        ],
         "installer-paths": {
             "web/core": [
                 "type:drupal-core"
             ],
             "web/libraries/{$name}": [
-                "type:drupal-library"
+                "type:drupal-library",
+                "type:npm-asset",
+                "vendor:npm-asset"
             ],
             "web/modules/contrib/{$name}": [
                 "type:drupal-module"
@@ -78,6 +227,24 @@
             "web/themes/custom/{$name}": [
                 "type:drupal-custom-theme"
             ]
+        },
+        "patches": {
+            "drupal/core": {
+                "Reprovision default media thumbnails when not found at icon_base_uri":
+                "https://www.drupal.org/files/issues/2023-11-06/3060509-53.patch"
+            },
+            "drupal/markdown": {
+                "SubformState incorrect interface error":
+                "https://git.drupalcode.org/project/markdown/-/merge_requests/29.diff"
+            },
+            "drupal/tac_lite": {
+                "Creation of dynamic property $uid is deprecated":
+                "https://www.drupal.org/files/issues/2023-09-27/tac_lite-dynamic_property-3390089.patch"
+            },
+            "drupal/we_megamenu": {
+                "Check for empty col_config and col_content":
+                "https://www.drupal.org/files/issues/2023-08-22/we_megamenu-3225104-5.patch"
+            }
         },
         "drupal-core-project-message": {
             "include-keys": [

@@ -235,7 +235,9 @@
             },
             "drupal/markdown": {
                 "SubformState incorrect interface error":
-                "https://git.drupalcode.org/project/markdown/-/merge_requests/29.diff"
+                "https://git.drupalcode.org/project/markdown/-/merge_requests/29.diff",
+                "fix logging error that breaks drush 13":
+                "./patches/markdown.patch"
             },
             "drupal/tac_lite": {
                 "Creation of dynamic property $uid is deprecated":

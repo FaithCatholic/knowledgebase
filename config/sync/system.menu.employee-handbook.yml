@@ -1,0 +1,8 @@
+uuid: b141e788-03ef-4982-afbd-b4b8f41fd9c7
+langcode: en
+status: true
+dependencies: {  }
+id: employee-handbook
+label: 'Employee Handbook'
+description: ''
+locked: false

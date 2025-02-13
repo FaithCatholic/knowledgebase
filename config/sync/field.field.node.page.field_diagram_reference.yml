@@ -1,0 +1,29 @@
+uuid: 08b8e784-e26b-4f18-80b9-a70e5e9f1c87
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_diagram_reference
+    - node.type.diagram
+    - node.type.page
+id: node.page.field_diagram_reference
+field_name: field_diagram_reference
+entity_type: node
+bundle: page
+label: Diagram
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      diagram: diagram
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

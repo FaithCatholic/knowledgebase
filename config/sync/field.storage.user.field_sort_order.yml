@@ -1,0 +1,20 @@
+uuid: c9122b84-a76a-4ce8-8cea-3311fe85f638
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: user.field_sort_order
+field_name: field_sort_order
+entity_type: user
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

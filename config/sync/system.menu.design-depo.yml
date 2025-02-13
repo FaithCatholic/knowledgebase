@@ -1,0 +1,8 @@
+uuid: e10ea0c6-d83f-42b9-830a-5f95b26f0d74
+langcode: en
+status: true
+dependencies: {  }
+id: design-depo
+label: 'Design Depo'
+description: 'Design department things...'
+locked: false

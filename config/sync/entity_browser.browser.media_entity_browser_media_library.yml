@@ -1,0 +1,64 @@
+uuid: 81049825-97cc-443c-bac0-ebb8807b604e
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.media_entity_browser_media_library
+  module:
+    - entity_browser_entity_form
+    - views
+_core:
+  default_config_hash: cVce1wq8rNNcosWnMLyjsjNUGYhJ9bVMZ-whh77pIdo
+name: media_entity_browser_media_library
+label: 'Media Entity Browser (Media Library)'
+display: modal
+display_configuration:
+  width: '1070'
+  height: '500'
+  link_text: 'Select media'
+  auto_open: true
+selection_display: no_display
+selection_display_configuration: {  }
+widget_selector: tabs
+widget_selector_configuration: {  }
+widgets:
+  552cfb05-063f-47a9-81d1-e1260fc8a402:
+    id: view
+    uuid: 552cfb05-063f-47a9-81d1-e1260fc8a402
+    label: 'Choose existing file/image'
+    weight: -10
+    settings:
+      submit_text: 'Select media'
+      auto_select: false
+      view: media_entity_browser_media_library
+      view_display: media_browser_all
+  7e4422b4-dbe9-40f6-9b74-e2bf31b98ae8:
+    id: entity_form
+    uuid: 7e4422b4-dbe9-40f6-9b74-e2bf31b98ae8
+    label: 'Upload new image'
+    weight: -9
+    settings:
+      submit_text: 'Save image'
+      entity_type: media
+      bundle: image
+      form_mode: media_library
+  d7eb81bc-caa2-491a-8b11-6909f99b1643:
+    id: entity_form
+    uuid: d7eb81bc-caa2-491a-8b11-6909f99b1643
+    label: 'Upload new private file'
+    weight: -8
+    settings:
+      submit_text: 'Save file'
+      entity_type: media
+      bundle: private_file
+      form_mode: default
+  44077cb7-a487-42dc-b843-bd3ec006ea02:
+    id: entity_form
+    uuid: 44077cb7-a487-42dc-b843-bd3ec006ea02
+    label: 'Upload new public file'
+    weight: 4
+    settings:
+      submit_text: 'Save file'
+      entity_type: media
+      bundle: document
+      form_mode: default

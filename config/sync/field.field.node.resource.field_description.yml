@@ -1,0 +1,25 @@
+uuid: 022588fe-a777-4609-9402-ee651b45dc62
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_description
+    - node.type.resource
+  module:
+    - text
+id: node.resource.field_description
+field_name: field_description
+entity_type: node
+bundle: resource
+label: Description
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: '<p><strong>Who uses this app:</strong></p><p><strong>How to request access to app:</strong></p>'
+    format: full_html
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

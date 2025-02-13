@@ -1,0 +1,23 @@
+uuid: afd902b4-162b-445d-bae8-b1e0e8062ae1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_sort_weight
+    - node.type.resource
+id: node.resource.field_sort_weight
+field_name: field_sort_weight
+entity_type: node
+bundle: resource
+label: 'Sort Weight'
+description: 'Use this to change display order in lists and grids'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

@@ -1,0 +1,23 @@
+uuid: 6e207dbd-e000-4685-b889-b4a178504b2b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_number_of_seats
+    - node.type.resource
+id: node.resource.field_number_of_seats
+field_name: field_number_of_seats
+entity_type: node
+bundle: resource
+label: 'Number of Seats'
+description: 'Number of Seats/Licenses'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

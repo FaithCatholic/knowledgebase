@@ -1,0 +1,19 @@
+uuid: 13c93397-0c6d-40f0-9ebb-87574ce5e3b3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_path
+    - taxonomy.vocabulary.section
+id: taxonomy_term.section.field_path
+field_name: field_path
+entity_type: taxonomy_term
+bundle: section
+label: Path
+description: 'This will be used to set the first part of the URL path for a page'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

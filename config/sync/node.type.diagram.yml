@@ -1,0 +1,17 @@
+uuid: ad2b5c0a-705e-4dcc-a1c7-46936cb7b72e
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: Diagram
+type: diagram
+description: ''
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: false

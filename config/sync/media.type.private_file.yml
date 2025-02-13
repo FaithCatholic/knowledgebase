@@ -1,0 +1,15 @@
+uuid: 42cda839-b958-4afc-a3f5-c22021aaa3aa
+langcode: en
+status: true
+dependencies: {  }
+id: private_file
+label: 'Private File'
+description: 'Files that are private and accessible only to logged in users. Included in site search index, but not publicly indexed by search engines.'
+source: file
+queue_thumbnail_downloads: true
+new_revision: false
+source_configuration:
+  source_field: field_private_file
+field_map:
+  name: name
+  mimetype: field_private_file

@@ -1,0 +1,29 @@
+uuid: 8176a2cb-fef5-438e-9b18-f9ad04c434f4
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.staff_directory
+  module:
+    - system
+    - views
+  theme:
+    - faith_genesis_theme
+id: faith_genesis_theme_views_block__staff_directory_block_3
+theme: faith_genesis_theme
+region: content
+weight: -5
+provider: null
+plugin: 'views_block:staff_directory-block_3'
+settings:
+  id: 'views_block:staff_directory-block_3'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /mass-times-trustees

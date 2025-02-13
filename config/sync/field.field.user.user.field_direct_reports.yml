@@ -1,0 +1,30 @@
+uuid: 1ef7e5b0-daaa-4612-a33a-1918fdfdf149
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_direct_reports
+  module:
+    - user
+id: user.user.field_direct_reports
+field_name: field_direct_reports
+entity_type: user
+bundle: user
+label: 'Direct Reports'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    filter:
+      type: _none
+    include_anonymous: true
+field_type: entity_reference

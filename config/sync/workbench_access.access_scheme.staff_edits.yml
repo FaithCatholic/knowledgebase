@@ -1,0 +1,19 @@
+uuid: fe269d4a-f0dc-44cc-9d3f-dd7b857dc686
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.user.user.field_department
+    - taxonomy.vocabulary.faith_departments
+id: staff_edits
+plural_label: 'Staff Edits'
+label: 'Staff Edits'
+scheme: taxonomy
+scheme_settings:
+  vocabularies:
+    - faith_departments
+  fields:
+    -
+      entity_type: user
+      bundle: user
+      field: field_department

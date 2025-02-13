@@ -1,0 +1,8 @@
+uuid: bd2623d2-6af5-4a10-82da-2c3714d95a65
+langcode: en
+status: true
+dependencies: {  }
+name: 'Management Levels'
+vid: management_levels
+description: ''
+weight: 0

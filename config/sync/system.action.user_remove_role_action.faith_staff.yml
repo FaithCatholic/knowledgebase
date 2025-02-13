@@ -1,0 +1,14 @@
+uuid: f7b2d568-9314-4dfc-bf32-9d1e961344d1
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.faith_staff
+  module:
+    - user
+id: user_remove_role_action.faith_staff
+label: 'Remove the FAITH Staff role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: faith_staff

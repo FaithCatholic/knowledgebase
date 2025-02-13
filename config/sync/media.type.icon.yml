@@ -1,0 +1,16 @@
+uuid: 38bf3245-0902-4a7b-8bfa-3af29bc5c121
+langcode: en
+status: true
+dependencies:
+  module:
+    - fontawesome_media
+id: icon
+label: Icon
+description: ''
+source: font_awesome_icon
+queue_thumbnail_downloads: false
+new_revision: false
+source_configuration:
+  source_field: field_media_font_awesome_icon
+field_map:
+  title: name

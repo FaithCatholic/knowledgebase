@@ -1,0 +1,29 @@
+uuid: 8e09ecfb-4a4e-4c44-b9e9-ec251155aab4
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.employee-handbook
+  module:
+    - system
+  theme:
+    - faith_genesis_theme
+id: faith_genesis_theme_employeehandbook
+theme: faith_genesis_theme
+region: sidebar_second
+weight: -8
+provider: null
+plugin: 'system_menu_block:employee-handbook'
+settings:
+  id: 'system_menu_block:employee-handbook'
+  label: 'Employee Handbook'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/handbook/*'

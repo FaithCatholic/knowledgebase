@@ -1,0 +1,19 @@
+uuid: 490a350a-d9aa-4f7c-bc97-d71be766aa77
+langcode: en
+status: true
+dependencies:
+  module:
+    - mermaid_diagram_field
+    - node
+id: node.field_diagram
+field_name: field_diagram
+entity_type: node
+type: mermaid_diagram
+settings: {  }
+module: mermaid_diagram_field
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,29 @@
+uuid: dd073189-b977-49e3-8f59-2983065b256f
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.staff_directory
+  module:
+    - system
+    - views
+  theme:
+    - faith_genesis_theme
+id: faith_genesis_theme_views_block__staff_directory_block_4
+theme: faith_genesis_theme
+region: content
+weight: 0
+provider: null
+plugin: 'views_block:staff_directory-block_4'
+settings:
+  id: 'views_block:staff_directory-block_4'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /corporate/management-directory

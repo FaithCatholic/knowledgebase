@@ -1,0 +1,22 @@
+uuid: 787a2c33-19b1-4f9e-8e69-a349c5578627
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.diagram
+id: node.diagram.promote
+field_name: promote
+entity_type: node
+bundle: diagram
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

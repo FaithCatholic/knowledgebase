@@ -1,0 +1,19 @@
+uuid: ce99acd1-8cf9-466f-8920-3dc9993e2775
+langcode: en
+status: true
+dependencies:
+  module:
+    - link
+    - node
+id: node.field_app_link_android
+field_name: field_app_link_android
+entity_type: node
+type: link
+settings: {  }
+module: link
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,28 @@
+uuid: 6bc5d43b-e941-4214-8fc5-5db883309116
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_form_mode.media.media_library
+    - field.field.media.unlisted_file.field_unlisted_file
+    - media.type.unlisted_file
+  module:
+    - field_layout
+    - layout_discovery
+third_party_settings:
+  field_layout:
+    id: layout_onecol
+    settings:
+      label: ''
+id: media.unlisted_file.media_library
+targetEntityType: media
+bundle: unlisted_file
+mode: media_library
+content: {  }
+hidden:
+  created: true
+  field_unlisted_file: true
+  name: true
+  path: true
+  status: true
+  uid: true

@@ -1,0 +1,126 @@
+uuid: 18be79db-665d-4923-aabb-566aeb7e2046
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.resource.field_admins
+    - field.field.node.resource.field_app_link_android
+    - field.field.node.resource.field_app_link_ios
+    - field.field.node.resource.field_billing_cycle
+    - field.field.node.resource.field_cost_per_seat
+    - field.field.node.resource.field_description
+    - field.field.node.resource.field_icon
+    - field.field.node.resource.field_image
+    - field.field.node.resource.field_link
+    - field.field.node.resource.field_monthly_cost
+    - field.field.node.resource.field_number_of_seats
+    - field.field.node.resource.field_renewal_month
+    - field.field.node.resource.field_section
+    - field.field.node.resource.field_short_description
+    - field.field.node.resource.field_sort_weight
+    - field.field.node.resource.field_tags
+    - field.field.node.resource.field_type
+    - field.field.node.resource.field_users
+    - image.style.wide
+    - node.type.resource
+  module:
+    - field_layout
+    - layout_discovery
+    - link
+    - svg_image
+    - text
+    - user
+third_party_settings:
+  field_layout:
+    id: layout_onecol
+    settings:
+      label: ''
+id: node.resource.default
+targetEntityType: node
+bundle: resource
+mode: default
+content:
+  field_app_link_android:
+    type: link
+    label: inline
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_app_link_ios:
+    type: link
+    label: inline
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_image:
+    type: image
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: wide
+      image_loading:
+        attribute: lazy
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_link:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_tags:
+    type: entity_reference_label
+    label: inline
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 6
+    region: content
+hidden:
+  field_admins: true
+  field_billing_cycle: true
+  field_cost_per_seat: true
+  field_icon: true
+  field_monthly_cost: true
+  field_number_of_seats: true
+  field_renewal_month: true
+  field_section: true
+  field_short_description: true
+  field_sort_weight: true
+  field_type: true
+  field_users: true

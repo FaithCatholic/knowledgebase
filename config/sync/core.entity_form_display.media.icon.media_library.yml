@@ -1,0 +1,28 @@
+uuid: a3ed31c8-fa11-4dcb-9c75-419b2f6d2039
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_form_mode.media.media_library
+    - field.field.media.icon.field_media_font_awesome_icon
+    - media.type.icon
+  module:
+    - field_layout
+    - layout_discovery
+third_party_settings:
+  field_layout:
+    id: layout_onecol
+    settings:
+      label: ''
+id: media.icon.media_library
+targetEntityType: media
+bundle: icon
+mode: media_library
+content: {  }
+hidden:
+  created: true
+  field_media_font_awesome_icon: true
+  name: true
+  path: true
+  status: true
+  uid: true

@@ -1,0 +1,23 @@
+uuid: c83f832a-7887-4a54-828f-f8b5d35daea7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_cost_per_seat
+    - node.type.resource
+id: node.resource.field_cost_per_seat
+field_name: field_cost_per_seat
+entity_type: node
+bundle: resource
+label: 'Cost per seat'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

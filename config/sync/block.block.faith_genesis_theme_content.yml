@@ -1,0 +1,22 @@
+uuid: 592a7874-b644-4de6-b6be-ab8c846d0da5
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - faith_genesis_theme
+_core:
+  default_config_hash: erQSEZF2XUjNmgTl0uNRBzmg18ZGXwUcw2FhApoeuHk
+id: faith_genesis_theme_content
+theme: faith_genesis_theme
+region: content
+weight: -12
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: 'Main page content'
+  label_display: '0'
+  provider: system
+visibility: {  }

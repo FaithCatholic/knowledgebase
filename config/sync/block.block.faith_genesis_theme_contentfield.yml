@@ -1,0 +1,44 @@
+uuid: b7f547df-19c0-4bf8-84c9-0f804a5c4f8c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_section
+  module:
+    - block_class
+    - fieldblock
+    - system
+    - user
+  theme:
+    - faith_genesis_theme
+third_party_settings:
+  block_class:
+    classes: h3
+id: faith_genesis_theme_contentfield
+theme: faith_genesis_theme
+region: sidebar_second
+weight: -12
+provider: null
+plugin: 'fieldblock:node'
+settings:
+  id: 'fieldblock:node'
+  label: Section
+  label_display: '0'
+  provider: fieldblock
+  label_from_field: false
+  field_name: field_section
+  formatter_id: entity_reference_label
+  formatter_settings:
+    link: false
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      authenticated: authenticated
+  request_path:
+    id: request_path
+    negate: true
+    pages: "<front>\r\n/corporate/staff-directory\r\n/corporate/staff-list\r\n/corporate/strengths"

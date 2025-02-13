@@ -21,6 +21,7 @@ runtime:
         - sodium
         - apcu
         - blackfire
+        - imagick
 
 # The relationships of the application with services or other applications.
 #
@@ -78,16 +79,16 @@ hooks:
     # No services are available but the disk is writeable.
     build: |
         # Exit the hook on any failure
-        # set -e
+        set -e
 
         # Install the version specified in the .nvmrc file
-        # n auto
+        n auto
 
         # Reset the location hash to recognize the newly installed version
-        # hash -r          
+        hash -r          
 
         # Build custom theme
-        # composer project-setup
+        composer genesis-setup
 
 
 # The configuration of app when it is exposed to the web.

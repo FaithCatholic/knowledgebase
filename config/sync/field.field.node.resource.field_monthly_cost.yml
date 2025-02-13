@@ -1,0 +1,23 @@
+uuid: 3f3d1fb0-fb6a-4c24-86d1-9f2692071662
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_monthly_cost
+    - node.type.resource
+id: node.resource.field_monthly_cost
+field_name: field_monthly_cost
+entity_type: node
+bundle: resource
+label: 'Monthly Cost'
+description: 'Total monthly cost'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

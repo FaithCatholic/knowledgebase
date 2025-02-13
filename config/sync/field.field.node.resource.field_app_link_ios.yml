@@ -1,0 +1,23 @@
+uuid: c7b9f477-a84c-4623-a71a-8abf5815a52e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_app_link_ios
+    - node.type.resource
+  module:
+    - link
+id: node.resource.field_app_link_ios
+field_name: field_app_link_ios
+entity_type: node
+bundle: resource
+label: 'App Link iOS'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 0
+  link_type: 16
+field_type: link

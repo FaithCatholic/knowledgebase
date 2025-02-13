@@ -7453,16 +7453,16 @@
         },
         {
             "name": "faithcatholic/faith_genesis_theme",
-            "version": "v4.0",
+            "version": "v4.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FaithCatholic/faith_genesis_theme.git",
-                "reference": "14c14fb91b24b77c3e771abed3b56efaadabd913"
+                "reference": "e02a6d12ea19f49f4df5ba91ed75006a6ca1509e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FaithCatholic/faith_genesis_theme/zipball/14c14fb91b24b77c3e771abed3b56efaadabd913",
-                "reference": "14c14fb91b24b77c3e771abed3b56efaadabd913",
+                "url": "https://api.github.com/repos/FaithCatholic/faith_genesis_theme/zipball/e02a6d12ea19f49f4df5ba91ed75006a6ca1509e",
+                "reference": "e02a6d12ea19f49f4df5ba91ed75006a6ca1509e",
                 "shasum": ""
             },
             "type": "drupal-theme",
@@ -7479,7 +7479,7 @@
                 "issues": "https://www.drupal.org/project/issues/faith_genesis_theme",
                 "source": "http://cgit.drupalcode.org/faith_genesis_theme"
             },
-            "time": "2024-01-24T15:36:16+00:00"
+            "time": "2025-02-12T14:13:34+00:00"
         },
         {
             "name": "grasmash/expander",
@@ -13001,7 +13001,7 @@
     },
     "prefer-stable": true,
     "prefer-lowest": false,
-    "platform": [],
-    "platform-dev": [],
+    "platform": {},
+    "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }

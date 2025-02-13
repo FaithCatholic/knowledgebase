@@ -1,0 +1,22 @@
+uuid: 00bf8989-d48f-4c48-ad1a-40d60be10de6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_board_member
+  module:
+    - user
+id: user.user.field_board_member
+field_name: field_board_member
+entity_type: user
+bundle: user
+label: 'Board Member'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

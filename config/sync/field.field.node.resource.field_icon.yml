@@ -1,0 +1,21 @@
+uuid: 12a488fa-1f65-4556-828e-821beda3a9cb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_icon
+    - node.type.resource
+  module:
+    - fontawesome
+id: node.resource.field_icon
+field_name: field_icon
+entity_type: node
+bundle: resource
+label: Icon
+description: 'To add custom icons - 1. Add icons to the kit on font awesome.com 2. Enter kit before the custom name e.g. fa-kit fa-faith'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: fontawesome_icon

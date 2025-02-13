@@ -1,0 +1,29 @@
+uuid: 7caf91b7-9cd3-4b22-b4e5-5ed8e7de59b5
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.strengths
+  module:
+    - system
+    - views
+  theme:
+    - faith_genesis_theme
+id: faith_genesis_theme_views_block__strengths_block_1
+theme: faith_genesis_theme
+region: content
+weight: -10
+provider: null
+plugin: 'views_block:strengths-block_1'
+settings:
+  id: 'views_block:strengths-block_1'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /corporate/strengths

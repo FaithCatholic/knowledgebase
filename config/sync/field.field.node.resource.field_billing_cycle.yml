@@ -1,0 +1,19 @@
+uuid: 5d2a9332-a167-4e19-92e4-41c8601fac39
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_billing_cycle
+    - node.type.resource
+id: node.resource.field_billing_cycle
+field_name: field_billing_cycle
+entity_type: node
+bundle: resource
+label: 'Billing cycle'
+description: 'Monthly, Annual, etc'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

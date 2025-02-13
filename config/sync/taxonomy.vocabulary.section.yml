@@ -1,0 +1,8 @@
+uuid: cdc5a1b6-9f9e-4669-9d3a-39a3e09a9e8d
+langcode: en
+status: true
+dependencies: {  }
+name: Section
+vid: section
+description: ''
+weight: 0

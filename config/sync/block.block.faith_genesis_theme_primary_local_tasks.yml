@@ -1,0 +1,22 @@
+uuid: 70d29688-4669-46ca-ae23-d90f3ba7e7e3
+langcode: en
+status: true
+dependencies:
+  theme:
+    - faith_genesis_theme
+_core:
+  default_config_hash: nGE3EoPQQaQCuqTUtZgw0-KIzmrqdKDzdNQf2JyPUt4
+id: faith_genesis_theme_primary_local_tasks
+theme: faith_genesis_theme
+region: highlighted
+weight: -8
+provider: null
+plugin: local_tasks_block
+settings:
+  id: local_tasks_block
+  label: 'Primary tabs'
+  label_display: '0'
+  provider: core
+  primary: true
+  secondary: false
+visibility: {  }

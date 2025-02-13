@@ -1,0 +1,38 @@
+uuid: 9fb97806-646a-4bdf-b0a0-e1df74b76731
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.full
+    - entity_browser.browser.media_entity_browser_media_library
+    - media.type.audio
+    - media.type.document
+    - media.type.image
+    - media.type.private_file
+    - media.type.remote_video
+    - media.type.unlisted_file
+    - media.type.video
+  module:
+    - entity_embed
+    - media
+label: Media
+id: media
+type_id: entity
+type_settings:
+  entity_type: media
+  bundles:
+    - audio
+    - image
+    - private_file
+    - document
+    - remote_video
+    - unlisted_file
+    - video
+  display_plugins:
+    - 'entity_reference:media_thumbnail'
+    - 'view_mode:media.full'
+  entity_browser: media_entity_browser_media_library
+  entity_browser_settings:
+    display_review: true
+icon: {  }
+icon_uuid: null

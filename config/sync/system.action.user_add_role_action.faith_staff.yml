@@ -1,0 +1,14 @@
+uuid: 9e7db212-b7ec-4318-b4e8-936e8c305b2e
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.faith_staff
+  module:
+    - user
+id: user_add_role_action.faith_staff
+label: 'Add the FAITH Staff role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: faith_staff

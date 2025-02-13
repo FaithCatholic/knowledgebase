@@ -1,0 +1,27 @@
+uuid: fc1c29f2-6d6e-4d4e-baec-905c5745aa7c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.field_private_file
+    - media.type.private_file
+  module:
+    - file
+id: media.private_file.field_private_file
+field_name: field_private_file
+entity_type: media
+bundle: private_file
+label: File
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: '[date:custom:Y]-[date:custom:m]'
+  file_extensions: 'txt doc docx pdf'
+  max_filesize: ''
+  description_field: true
+field_type: file

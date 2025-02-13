@@ -1,0 +1,31 @@
+uuid: 9d9b1b96-1f4c-41c0-8802-d62c37eb4506
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.diagram.field_diagram
+    - node.type.diagram
+  module:
+    - field_layout
+    - layout_discovery
+    - mermaid_diagram_field
+    - user
+third_party_settings:
+  field_layout:
+    id: layout_onecol
+    settings:
+      label: ''
+id: node.diagram.default
+targetEntityType: node
+bundle: diagram
+mode: default
+content:
+  field_diagram:
+    type: mermaid_diagram_formatter
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  links: true

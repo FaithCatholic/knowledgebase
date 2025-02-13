@@ -1,0 +1,27 @@
+uuid: 282e0887-d15f-40cd-9eb8-bc342692b002
+langcode: en
+status: true
+dependencies:
+  module:
+    - fieldblock
+  theme:
+    - faith_genesis_theme
+id: faith_genesis_theme_contentfield_4
+theme: faith_genesis_theme
+region: content
+weight: -4
+provider: null
+plugin: 'fieldblock:node'
+settings:
+  id: 'fieldblock:node'
+  label: Revised
+  label_display: visible
+  provider: fieldblock
+  label_from_field: false
+  field_name: changed
+  formatter_id: timestamp_ago
+  formatter_settings:
+    future_format: '@interval hence'
+    past_format: '@interval ago'
+    granularity: 2
+visibility: {  }

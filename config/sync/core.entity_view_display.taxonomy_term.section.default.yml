@@ -1,0 +1,15 @@
+uuid: 26ab5960-5a77-49de-a582-b38707362637
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.section.field_path
+    - taxonomy.vocabulary.section
+id: taxonomy_term.section.default
+targetEntityType: taxonomy_term
+bundle: section
+mode: default
+content: {  }
+hidden:
+  description: true
+  field_path: true

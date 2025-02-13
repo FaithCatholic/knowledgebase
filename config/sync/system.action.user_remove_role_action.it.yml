@@ -1,0 +1,14 @@
+uuid: c9da8c05-9251-42b9-a111-f411ffcec32a
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.it
+  module:
+    - user
+id: user_remove_role_action.it
+label: 'Remove the IT role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: it

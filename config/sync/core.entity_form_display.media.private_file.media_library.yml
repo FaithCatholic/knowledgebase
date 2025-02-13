@@ -1,0 +1,28 @@
+uuid: 0d3721ed-98fc-4cf6-a7b1-1cb55e6e26ad
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_form_mode.media.media_library
+    - field.field.media.private_file.field_private_file
+    - media.type.private_file
+  module:
+    - field_layout
+    - layout_discovery
+third_party_settings:
+  field_layout:
+    id: layout_onecol
+    settings:
+      label: ''
+id: media.private_file.media_library
+targetEntityType: media
+bundle: private_file
+mode: media_library
+content: {  }
+hidden:
+  created: true
+  field_private_file: true
+  name: true
+  path: true
+  status: true
+  uid: true

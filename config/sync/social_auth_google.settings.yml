@@ -1,0 +1,5 @@
+client_id: $google-oauth-id
+client_secret: $google-oauth-secret
+scopes: ''
+endpoints: ''
+restricted_domain: ''

@@ -1,0 +1,33 @@
+uuid: 4dfee78f-a5e7-423d-8787-3c724bf4e863
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.account
+  module:
+    - system
+    - user
+  theme:
+    - faith_genesis_theme
+id: faith_genesis_theme_useraccountmenu_2
+theme: faith_genesis_theme
+region: top_bar
+weight: -7
+provider: null
+plugin: 'system_menu_block:account'
+settings:
+  id: 'system_menu_block:account'
+  label: 'User account menu'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      authenticated: authenticated

@@ -1,0 +1,22 @@
+uuid: 3e13f2f4-412b-4ac0-9e8b-973c646aeac8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_mass_times_trustee
+  module:
+    - user
+id: user.user.field_mass_times_trustee
+field_name: field_mass_times_trustee
+entity_type: user
+bundle: user
+label: 'Mass Times Trustee'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

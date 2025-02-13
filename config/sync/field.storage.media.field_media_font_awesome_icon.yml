@@ -1,0 +1,19 @@
+uuid: be198e94-e886-4b03-aa94-34dc62e78c92
+langcode: en
+status: true
+dependencies:
+  module:
+    - fontawesome
+    - media
+id: media.field_media_font_awesome_icon
+field_name: field_media_font_awesome_icon
+entity_type: media
+type: fontawesome_icon
+settings: {  }
+module: fontawesome
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

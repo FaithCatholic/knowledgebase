@@ -1,0 +1,82 @@
+uuid: ee3a9faf-3c02-41ad-a6cc-7bee72fc3d4f
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.resource.field_admins
+    - field.field.node.resource.field_app_link_android
+    - field.field.node.resource.field_app_link_ios
+    - field.field.node.resource.field_billing_cycle
+    - field.field.node.resource.field_cost_per_seat
+    - field.field.node.resource.field_description
+    - field.field.node.resource.field_icon
+    - field.field.node.resource.field_image
+    - field.field.node.resource.field_link
+    - field.field.node.resource.field_monthly_cost
+    - field.field.node.resource.field_number_of_seats
+    - field.field.node.resource.field_renewal_month
+    - field.field.node.resource.field_section
+    - field.field.node.resource.field_short_description
+    - field.field.node.resource.field_sort_weight
+    - field.field.node.resource.field_tags
+    - field.field.node.resource.field_type
+    - field.field.node.resource.field_users
+    - image.style.medium
+    - node.type.resource
+  module:
+    - field_layout
+    - layout_discovery
+    - svg_image
+    - user
+third_party_settings:
+  field_layout:
+    id: layout_onecol
+    settings:
+      label: ''
+id: node.resource.teaser
+targetEntityType: node
+bundle: resource
+mode: teaser
+content:
+  field_image:
+    type: image
+    label: hidden
+    settings:
+      image_link: content
+      image_style: medium
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+    weight: -1
+    region: content
+  field_tags:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_admins: true
+  field_app_link_android: true
+  field_app_link_ios: true
+  field_billing_cycle: true
+  field_cost_per_seat: true
+  field_description: true
+  field_icon: true
+  field_link: true
+  field_monthly_cost: true
+  field_number_of_seats: true
+  field_renewal_month: true
+  field_section: true
+  field_short_description: true
+  field_sort_weight: true
+  field_type: true
+  field_users: true

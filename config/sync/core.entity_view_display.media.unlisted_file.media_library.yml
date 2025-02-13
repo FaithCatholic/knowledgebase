@@ -1,0 +1,39 @@
+uuid: 71f4a43b-5ad3-446b-b55b-c2b1059895b9
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.media_library
+    - field.field.media.unlisted_file.field_unlisted_file
+    - image.style.medium
+    - media.type.unlisted_file
+  module:
+    - field_layout
+    - image
+    - layout_discovery
+third_party_settings:
+  field_layout:
+    id: layout_onecol
+    settings:
+      label: ''
+id: media.unlisted_file.media_library
+targetEntityType: media
+bundle: unlisted_file
+mode: media_library
+content:
+  thumbnail:
+    type: image
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: medium
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  field_unlisted_file: true
+  name: true
+  uid: true

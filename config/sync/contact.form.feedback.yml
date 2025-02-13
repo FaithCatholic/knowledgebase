@@ -1,0 +1,14 @@
+uuid: 07fbca29-3dc4-4220-8b86-f0adaf48ac05
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: vymHlgJy26BuI5GGj9-IXjwR3dRC5C0tij4BpWJnoqw
+id: feedback
+label: 'Website feedback'
+recipients:
+  - techsupport@faithcatholic.com
+reply: ''
+weight: 0
+message: 'Your message has been sent.'
+redirect: ''

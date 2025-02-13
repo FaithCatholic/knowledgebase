@@ -1,0 +1,14 @@
+uuid: 98bf4793-61b8-40ab-8d3d-93d0d8f8ac75
+langcode: en
+status: true
+dependencies: {  }
+id: unlisted_file
+label: 'Unlisted File'
+description: 'A public file that is not indexed by search engines or the internal site search.'
+source: file
+queue_thumbnail_downloads: false
+new_revision: false
+source_configuration:
+  source_field: field_unlisted_file
+field_map:
+  name: name

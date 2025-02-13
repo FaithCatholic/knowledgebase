@@ -1,0 +1,21 @@
+uuid: c02ea1fd-8b7e-4ebd-9c5b-837bf7011985
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_diagram
+    - node.type.diagram
+  module:
+    - mermaid_diagram_field
+id: node.diagram.field_diagram
+field_name: field_diagram
+entity_type: node
+bundle: diagram
+label: Diagram
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: mermaid_diagram

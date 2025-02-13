@@ -1,0 +1,18 @@
+uuid: 21a75982-7e14-49ef-bdb2-90e58e56ed7f
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: user.field_corporate_officer
+field_name: field_corporate_officer
+entity_type: user
+type: boolean
+settings: {  }
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

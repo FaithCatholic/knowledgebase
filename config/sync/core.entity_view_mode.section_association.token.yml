@@ -1,0 +1,11 @@
+uuid: 72872581-f59b-4e99-8278-3ec5f63b7d15
+langcode: en
+status: true
+dependencies:
+  module:
+    - workbench_access
+id: section_association.token
+label: Token
+description: ''
+targetEntityType: section_association
+cache: true

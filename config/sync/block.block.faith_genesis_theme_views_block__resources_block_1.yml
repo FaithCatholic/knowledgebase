@@ -1,0 +1,29 @@
+uuid: b6069594-a240-4605-9773-16fadbc3aedc
+langcode: en
+status: false
+dependencies:
+  config:
+    - views.view.resources
+  module:
+    - system
+    - views
+  theme:
+    - faith_genesis_theme
+id: faith_genesis_theme_views_block__resources_block_1
+theme: faith_genesis_theme
+region: sidebar_second
+weight: -7
+provider: null
+plugin: 'views_block:resources-block_1'
+settings:
+  id: 'views_block:resources-block_1'
+  label: ''
+  label_display: visible
+  provider: views
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '<front>'

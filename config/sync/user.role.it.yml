@@ -1,0 +1,30 @@
+uuid: 51b29e30-a387-43e1-b314-488c50386cec
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.full_html
+    - node.type.article
+    - node.type.page
+  module:
+    - exclude_node_title
+    - filter
+    - nodeaccess
+    - path
+    - search
+    - system
+id: it
+label: IT
+weight: 8
+is_admin: null
+permissions:
+  - 'access administration pages'
+  - 'create url aliases'
+  - 'grant node permissions'
+  - 'link to any page'
+  - 'nodeaccess grant article permissions'
+  - 'nodeaccess grant page permissions'
+  - 'use advanced search'
+  - 'use exclude node title'
+  - 'use text format full_html'
+  - 'view the administration theme'

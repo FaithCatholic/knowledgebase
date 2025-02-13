@@ -1,0 +1,29 @@
+uuid: 6ac96fa4-5047-4e37-ab48-2ac8257073ae
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_admins
+    - node.type.resource
+id: node.resource.field_admins
+field_name: field_admins
+entity_type: node
+bundle: resource
+label: Admins
+description: 'Users who are admins for this resource'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    filter:
+      type: _none
+    include_anonymous: false
+field_type: entity_reference

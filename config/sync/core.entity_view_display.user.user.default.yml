@@ -1,0 +1,128 @@
+uuid: cc04bd48-3e1e-4f3d-b319-54759bbd9b9f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.user.user.field_board_member
+    - field.field.user.user.field_corporate_officer
+    - field.field.user.user.field_department
+    - field.field.user.user.field_direct_reports
+    - field.field.user.user.field_full_name
+    - field.field.user.user.field_hide
+    - field.field.user.user.field_job_title
+    - field.field.user.user.field_management
+    - field.field.user.user.field_management_level
+    - field.field.user.user.field_mass_times_trustee
+    - field.field.user.user.field_mobile_phone
+    - field.field.user.user.field_office_phone
+    - field.field.user.user.field_sort_order
+    - field.field.user.user.field_strengths
+    - field.field.user.user.field_supervisor
+    - field.field.user.user.user_picture
+    - image.style.thumbnail
+  module:
+    - field_layout
+    - layout_discovery
+    - svg_image
+    - telephone
+    - user
+third_party_settings:
+  field_layout:
+    id: layout_onecol
+    settings:
+      label: ''
+_core:
+  default_config_hash: mZLyuWM9CQx2ZJVqFGSbzgFnHzudVbHBYmdU256A5Wk
+id: user.user.default
+targetEntityType: user
+bundle: user
+mode: default
+content:
+  field_department:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_direct_reports:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_full_name:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_job_title:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_mobile_phone:
+    type: telephone_link
+    label: inline
+    settings:
+      title: ''
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  field_office_phone:
+    type: telephone_link
+    label: inline
+    settings:
+      title: ''
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  field_strengths:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 8
+    region: content
+  field_supervisor:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  user_picture:
+    type: image
+    label: hidden
+    settings:
+      image_link: content
+      image_style: thumbnail
+      image_loading:
+        attribute: lazy
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  field_board_member: true
+  field_corporate_officer: true
+  field_hide: true
+  field_management: true
+  field_management_level: true
+  field_mass_times_trustee: true
+  field_sort_order: true
+  member_for: true

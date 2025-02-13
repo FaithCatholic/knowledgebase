@@ -121,7 +121,7 @@
         "drush/drush": "^13",
         "faithcatholic/faith_genesis_theme": "^4.0",
         "gravitymedia/ghostscript": "^2.3",
-        "league/commonmark": "^1.0",
+        "league/commonmark": "^2.0",
         "mermaid-js/mermaid": "10.8.0",
         "michelf/php-markdown": "^2.0",
         "npm-asset/fonticonpicker--fonticonpicker": "^3.1",

@@ -18,7 +18,8 @@ if ($platformsh->hasRelationship('database')) {
     'password' => $creds['password'],
     'host' => $creds['host'],
     'port' => $creds['port'],
-    'pdo' => [PDO::MYSQL_ATTR_COMPRESS => !empty($creds['query']['compression'])]
+    'pdo' => [PDO::MYSQL_ATTR_COMPRESS => !empty($creds['query']['compression'])],
+    'isolation_level' => 'READ COMMITTED',
   ];
 }
 

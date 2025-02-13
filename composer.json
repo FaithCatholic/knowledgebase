@@ -109,6 +109,7 @@
         "drupal/social_auth_google": "^4.0",
         "drupal/svg_image": "^3.0",
         "drupal/tac_lite": "^1.7",
+        "drupal/upgrade_status": "^4.3",
         "drupal/viewfield": "^3.0@beta",
         "drupal/views_bootstrap": "5.3.1",
         "drupal/views_bulk_edit": "^2.9",

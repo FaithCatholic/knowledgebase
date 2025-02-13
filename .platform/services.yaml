@@ -4,5 +4,5 @@
 # to power your Platform.sh project.
 
 dbmysql:
-    type: oracle-mysql:5.7
+    type: oracle-mysql:8.0
     disk: 3072

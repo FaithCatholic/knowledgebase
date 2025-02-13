@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9c5bf8f97dc611918f5a62ad576c5d06",
+    "content-hash": "323f4e9294f3853b8a3b455935e013d0",
     "packages": [
         {
             "name": "appolodev/vanilla-icon-picker",
@@ -2119,17 +2119,17 @@
         },
         {
             "name": "drupal/block_class",
-            "version": "2.0.12",
+            "version": "4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/block_class.git",
-                "reference": "2.0.12"
+                "reference": "4.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/block_class-2.0.12.zip",
-                "reference": "2.0.12",
-                "shasum": "cc3945f8038bcc9bb48eff897df332aa952d62e6"
+                "url": "https://ftp.drupal.org/files/projects/block_class-4.0.0.zip",
+                "reference": "4.0.0",
+                "shasum": "4ed97a78db9b52f28e46d377947fecfb3a8c9580"
             },
             "require": {
                 "drupal/core": "^9 || ^10 || ^11"
@@ -2137,8 +2137,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.0.12",
-                    "datestamp": "1723243074",
+                    "version": "4.0.0",
+                    "datestamp": "1730640283",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3624,20 +3624,20 @@
         },
         {
             "name": "drupal/field_group",
-            "version": "3.6.0",
+            "version": "4.0.0-alpha1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/field_group.git",
-                "reference": "8.x-3.6"
+                "reference": "4.0.0-alpha1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/field_group-8.x-3.6.zip",
-                "reference": "8.x-3.6",
-                "shasum": "427c0a65dc1936e69e60c120776056cfe5b43e86"
+                "url": "https://ftp.drupal.org/files/projects/field_group-4.0.0-alpha1.zip",
+                "reference": "4.0.0-alpha1",
+                "shasum": "0f1fbc8043a654af5b055f1b95ad9597c474ce83"
             },
             "require": {
-                "drupal/core": "^9.2 || ^10 || ^11"
+                "drupal/core": "^10.3 || ^11"
             },
             "require-dev": {
                 "drupal/jquery_ui_accordion": "*"
@@ -3645,11 +3645,11 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-3.6",
-                    "datestamp": "1722672510",
+                    "version": "4.0.0-alpha1",
+                    "datestamp": "1725972443",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -4123,17 +4123,17 @@
         },
         {
             "name": "drupal/imagick",
-            "version": "1.12.0",
+            "version": "2.0.0-alpha1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/imagick.git",
-                "reference": "8.x-1.12"
+                "reference": "2.0.0-alpha1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/imagick-8.x-1.12.zip",
-                "reference": "8.x-1.12",
-                "shasum": "504d384fc340c45d40c03c79df111d49ef27b7dd"
+                "url": "https://ftp.drupal.org/files/projects/imagick-2.0.0-alpha1.zip",
+                "reference": "2.0.0-alpha1",
+                "shasum": "b86a1942642cec1e54bb90e18994b82701fbd85f"
             },
             "require": {
                 "drupal/core": "^10.2 || ^11"
@@ -4141,11 +4141,11 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.12",
-                    "datestamp": "1728541715",
+                    "version": "2.0.0-alpha1",
+                    "datestamp": "1739278616",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -5013,36 +5013,35 @@
         },
         {
             "name": "drupal/media_entity_browser",
-            "version": "2.0.0",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/media_entity_browser.git",
-                "reference": "8.x-2.0"
+                "reference": "3.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/media_entity_browser-8.x-2.0.zip",
-                "reference": "8.x-2.0",
-                "shasum": "368fe469804c16fc347e2a5edbad73fc35c9786c"
+                "url": "https://ftp.drupal.org/files/projects/media_entity_browser-3.0.0.zip",
+                "reference": "3.0.0",
+                "shasum": "d40c9fcb97c35bb6c40a80edc7c9b8242ab02d6d"
             },
             "require": {
-                "drupal/core": "^8 || ^9 || ^10",
+                "drupal/core": "^10.2 || ^11",
+                "drupal/entity_browser": "^2.11",
+                "drupal/entity_browser_entity_form": "*",
+                "drupal/inline_entity_form": "^3.0@RC"
+            },
+            "require-dev": {
+                "drupal/ctools": "^4.1",
                 "drupal/entity_browser": "*",
                 "drupal/entity_browser_entity_form": "*",
                 "drupal/inline_entity_form": "*"
             },
-            "require-dev": {
-                "drupal/ctools": "*",
-                "drupal/entity_browser": "^2",
-                "drupal/entity_browser_entity_form": "^2",
-                "drupal/inline_entity_form": "^1",
-                "drupal/video_embed_field": "^2"
-            },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-2.0",
-                    "datestamp": "1716243514",
+                    "version": "3.0.0",
+                    "datestamp": "1736138985",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -5085,23 +5084,27 @@
             ],
             "description": "This module provides an Entity Browser for Media.",
             "homepage": "https://www.drupal.org/project/media_entity_browser",
+            "keywords": [
+                "Drupal"
+            ],
             "support": {
-                "source": "https://git.drupalcode.org/project/media_entity_browser"
+                "source": "https://git.drupalcode.org/project/media_entity_browser",
+                "issues": "https://www.drupal.org/project/issues/media_entity_browser"
             }
         },
         {
             "name": "drupal/media_thumbnails",
-            "version": "1.0.0-beta3",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/media_thumbnails.git",
-                "reference": "8.x-1.0-beta3"
+                "reference": "2.0.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/media_thumbnails-8.x-1.0-beta3.zip",
-                "reference": "8.x-1.0-beta3",
-                "shasum": "e37f26545c101a15601c09f6bc34430e2f45a656"
+                "url": "https://ftp.drupal.org/files/projects/media_thumbnails-2.0.0.zip",
+                "reference": "2.0.0",
+                "shasum": "bf8fed213de635be2b90c8a355a22aa7d8fb8b91"
             },
             "require": {
                 "drupal/core": "^8 || ^9 || ^10 || ^11"
@@ -5109,11 +5112,11 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.0-beta3",
-                    "datestamp": "1726479922",
+                    "version": "2.0.0",
+                    "datestamp": "1727345523",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Beta releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 }
             },
@@ -6353,17 +6356,17 @@
         },
         {
             "name": "drupal/social_api",
-            "version": "4.0.2",
+            "version": "4.1.0-beta1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/social_api.git",
-                "reference": "4.0.2"
+                "reference": "4.1.0-beta1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/social_api-4.0.2.zip",
-                "reference": "4.0.2",
-                "shasum": "8da084f0262080b2dfbbaa0ffb72cc386c6221dc"
+                "url": "https://ftp.drupal.org/files/projects/social_api-4.1.0-beta1.zip",
+                "reference": "4.1.0-beta1",
+                "shasum": "5efd4bccd5b48fefab859f01d371a77bbba7f4fc"
             },
             "require": {
                 "drupal/core": "^9.5 || ^10 || ^11",
@@ -6377,11 +6380,11 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "4.0.2",
-                    "datestamp": "1725453406",
+                    "version": "4.1.0-beta1",
+                    "datestamp": "1731628262",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -6430,21 +6433,21 @@
         },
         {
             "name": "drupal/social_auth",
-            "version": "4.1.2",
+            "version": "4.2.0-beta2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/social_auth.git",
-                "reference": "4.1.2"
+                "reference": "4.2.0-beta2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/social_auth-4.1.2.zip",
-                "reference": "4.1.2",
-                "shasum": "84dca21b4bce83ef9a1e6887d507f15829f9b6bc"
+                "url": "https://ftp.drupal.org/files/projects/social_auth-4.2.0-beta2.zip",
+                "reference": "4.2.0-beta2",
+                "shasum": "c7679bdcd6aee882f6ccb01e6248d1d86065ee23"
             },
             "require": {
                 "drupal/core": "^9.5 || ^10 || ^11",
-                "drupal/social_api": "^4.0",
+                "drupal/social_api": "^4.1",
                 "php": ">=8.1"
             },
             "require-dev": {
@@ -6454,11 +6457,11 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "4.1.2",
-                    "datestamp": "1731637091",
+                    "version": "4.2.0-beta2",
+                    "datestamp": "1731701496",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -6873,29 +6876,29 @@
         },
         {
             "name": "drupal/views_bootstrap",
-            "version": "5.3.1",
+            "version": "5.5.0-rc3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/views_bootstrap.git",
-                "reference": "5.3.1"
+                "reference": "5.5.0-rc3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/views_bootstrap-5.3.1.zip",
-                "reference": "5.3.1",
-                "shasum": "ca41abc907618005fb4d9ea97d4c2c87405c8ccc"
+                "url": "https://ftp.drupal.org/files/projects/views_bootstrap-5.5.0-rc3.zip",
+                "reference": "5.5.0-rc3",
+                "shasum": "c50177c4b8ec56640ed99d0533774233d0583518"
             },
             "require": {
-                "drupal/core": "^8 || ^9 || ^10"
+                "drupal/core": "^9 || ^10 || ^11"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "5.3.1",
-                    "datestamp": "1725843378",
+                    "version": "5.5.0-rc3",
+                    "datestamp": "1728259899",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "RC releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -6905,36 +6908,30 @@
             ],
             "authors": [
                 {
-                    "name": "Dmitry Demenchuk",
-                    "homepage": "https://www.drupal.org/u/mrded",
-                    "role": "Maintainer"
+                    "name": "aburrows",
+                    "homepage": "https://www.drupal.org/user/577844"
                 },
                 {
-                    "name": "Alex Burrows",
-                    "homepage": "https://www.drupal.org/u/aburrows",
-                    "role": "Maintainer"
+                    "name": "ericpugh",
+                    "homepage": "https://www.drupal.org/user/130084"
                 },
                 {
-                    "name": "Eric Pugh",
-                    "homepage": "https://www.drupal.org/u/ericpugh",
-                    "role": "Maintainer"
+                    "name": "ikeigenwijs",
+                    "homepage": "https://www.drupal.org/user/583238"
                 },
                 {
-                    "name": "Bart Verheyde",
-                    "homepage": "https://www.drupal.org/u/ikeigenwijs",
-                    "role": "Maintainer"
+                    "name": "mrded",
+                    "homepage": "https://www.drupal.org/user/556088"
                 },
                 {
-                    "name": "Shelane French",
-                    "homepage": "https://www.drupal.org/u/shelane",
-                    "role": "Maintainer"
+                    "name": "shelane",
+                    "homepage": "https://www.drupal.org/user/2674989"
                 }
             ],
-            "description": "Integrate the Bootstrap framework with Views.",
+            "description": "Allows for different styles to be used in views to work with Bootstrap 5 components.",
             "homepage": "https://www.drupal.org/project/views_bootstrap",
             "support": {
-                "source": "https://git.drupalcode.org/project/views_bootstrap",
-                "issues": "https://www.drupal.org/project/issues/views_bootstrap"
+                "source": "https://git.drupalcode.org/project/views_bootstrap"
             }
         },
         {
@@ -13417,7 +13414,6 @@
     "stability-flags": {
         "drupal/auto_anchors": 10,
         "drupal/inline_entity_form": 5,
-        "drupal/media_thumbnails": 10,
         "drupal/nodeaccess": 15,
         "drupal/rules": 15,
         "drupal/viewfield": 10,

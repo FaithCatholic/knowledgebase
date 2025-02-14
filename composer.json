@@ -117,6 +117,7 @@
         "drupal/social_auth": "^4.2",
         "drupal/social_auth_google": "^4.0",
         "drupal/svg_image": "^3.0",
+        "drupal/toc_filter": "^2.3",
         "drupal/upgrade_status": "^4.3",
         "drupal/viewfield": "^3.0@beta",
         "drupal/views_bootstrap": "^5.5",

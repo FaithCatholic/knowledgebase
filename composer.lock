@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "75eebb7e0dc3a030baa49f71830870db",
+    "content-hash": "9268c1e2b9de27f7392378e7e6fafc14",
     "packages": [
         {
             "name": "appolodev/vanilla-icon-picker",
@@ -7259,6 +7259,117 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/svg_image",
                 "issues": "https://www.drupal.org/project/issues/svg_image"
+            }
+        },
+        {
+            "name": "drupal/toc_api",
+            "version": "1.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/toc_api.git",
+                "reference": "8.x-1.7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/toc_api-8.x-1.7.zip",
+                "reference": "8.x-1.7",
+                "shasum": "a6695fae12d6db5c4ca8f9f5ac73a3919039bc52"
+            },
+            "require": {
+                "drupal/core": "^9.4 || ^10.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.7",
+                    "datestamp": "1738812755",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Jacob Rockowitz (jrockowitz)",
+                    "homepage": "https://www.drupal.org/u/jrockowitz",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "vladimiraus",
+                    "homepage": "https://www.drupal.org/user/673120"
+                }
+            ],
+            "description": "API for building a a hierarchical table of contents from header tags.",
+            "homepage": "https://drupal.org/project/toc_api",
+            "keywords": [
+                "Drupal"
+            ],
+            "support": {
+                "source": "http://cgit.drupalcode.org/toc_api",
+                "issues": "https://drupal.org/project/issues/toc_api"
+            }
+        },
+        {
+            "name": "drupal/toc_filter",
+            "version": "2.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/toc_filter.git",
+                "reference": "8.x-2.3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/toc_filter-8.x-2.3.zip",
+                "reference": "8.x-2.3",
+                "shasum": "d3147abcbca696ec05934a69d521b891b35e6209"
+            },
+            "require": {
+                "drupal/core": "^9.2 || ^10 || ^11",
+                "drupal/toc_api": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-2.3",
+                    "datestamp": "1726109770",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Jacob Rockowitz (jrockowitz)",
+                    "homepage": "https://www.drupal.org/u/jrockowitz",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "vladimiraus",
+                    "homepage": "https://www.drupal.org/user/673120"
+                },
+                {
+                    "name": "yukare",
+                    "homepage": "https://www.drupal.org/user/889254"
+                }
+            ],
+            "description": "Converts header tags into a hierarchical table of contents.",
+            "homepage": "https://drupal.org/project/toc_filter",
+            "keywords": [
+                "Drupal"
+            ],
+            "support": {
+                "source": "http://cgit.drupalcode.org/toc_filter",
+                "issues": "https://drupal.org/project/issues/toc_filter"
             }
         },
         {

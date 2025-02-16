@@ -131,7 +131,11 @@ web:
                     scripts: false
                 '^/sites/[^/]+/settings.*?\.php$':
                     scripts: false
-
+        "/slides":
+            root: "web/slides"
+            scripts: false
+            allow: true
+            expires: 1h
         # The files directory has its own special configuration rules.
         '/sites/default/files':
             # Allow access to all files in the public files directory.

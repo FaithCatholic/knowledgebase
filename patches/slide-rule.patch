@@ -1,0 +1,14 @@
+diff --git a/web/.htaccess b/web/.htaccess
+index 4031da47..63874623 100644
+--- a/web/.htaccess
++++ b/web/.htaccess
+@@ -112,7 +112,8 @@ AddEncoding gzip svgz
+   # If your site is running in a VirtualDocumentRoot at http://example.com/,
+   # uncomment the following line:
+   # RewriteBase /
+-
++  RewriteCond %{REQUEST_URI} ^/slides/ [NC]
++  RewriteRule .* - [L]
+   # Redirect common PHP files to their new locations.
+   RewriteCond %{REQUEST_URI} ^(.*)?/(install\.php) [OR]
+   RewriteCond %{REQUEST_URI} ^(.*)?/(rebuild\.php)

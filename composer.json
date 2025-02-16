@@ -200,6 +200,9 @@
             "php ./scripts/clone-script.php",
             "npm install --prefix ./web/slides",
             "npm run build --prefix ./web/slides"
+        ],
+        "post-drupal-scaffold-cmd": [
+            "patch -p1 <./patches/slide-rule.patch"
         ]
     },
     "extra": {

@@ -18,6 +18,10 @@
             "url": "https://asset-packagist.org"
         },
         {
+            "url": "https://github.com/mikejon-es/slides.git",
+            "type": "git"
+        },
+        {
             "type": "package",
             "package": {
                 "name": "mermaid-js/mermaid",
@@ -191,6 +195,11 @@
         ],
         "project-update": [
             "npm run project-setup --prefix ./web/themes/custom/archstl_schools_theme"
+        ],
+        "slides-setup": [
+            "php ./scripts/clone-script.php",
+            "npm install --prefix ./web/slides",
+            "npm run build --prefix ./web/slides"
         ]
     },
     "extra": {

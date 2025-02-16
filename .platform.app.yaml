@@ -89,6 +89,7 @@ hooks:
 
         # Build custom theme
         composer genesis-setup
+        composer slides-setup
 
 
 # The configuration of app when it is exposed to the web.

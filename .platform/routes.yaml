@@ -9,10 +9,3 @@
 "https://www.{all}/":
   type: redirect
   to: "https://{all}/"
-  
-"https://{default}/slides":
-  type: upstream
-  upstream: "app:http"
-  cache:
-    enabled: true
-  passthru: "/slides/"

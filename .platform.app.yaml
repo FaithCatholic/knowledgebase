@@ -89,6 +89,7 @@ hooks:
 
         # Build custom theme
         composer genesis-setup
+        composer slides-setup
 
 
 # The configuration of app when it is exposed to the web.
@@ -130,6 +131,13 @@ web:
                     scripts: false
                 '^/sites/[^/]+/settings.*?\.php$':
                     scripts: false
+        "/slides":
+            root: "web/slides"
+            index:
+                - index.html
+            scripts: false
+            allow: true
+            expires: 1h
 
         # The files directory has its own special configuration rules.
         '/sites/default/files':

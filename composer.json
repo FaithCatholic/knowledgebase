@@ -60,7 +60,7 @@
         "drupal/auto_anchors": "@beta",
         "drupal/better_exposed_filters": "^7.0",
         "drupal/block_class": "^4.0",
-        "drupal/bootstrap": "^3.29",
+        "drupal/bootstrap": "^5.0",
         "drupal/ckeditor_abbreviation": "^5.0",
         "drupal/ckeditor_indentblock": "^1.1",
         "drupal/color_field": "^3.0",

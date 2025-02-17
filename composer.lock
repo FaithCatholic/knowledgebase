@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9268c1e2b9de27f7392378e7e6fafc14",
+    "content-hash": "2328e62dfd511bb71967a1ae6b73b405",
     "packages": [
         {
             "name": "appolodev/vanilla-icon-picker",
@@ -2367,38 +2367,31 @@
         },
         {
             "name": "drupal/bootstrap",
-            "version": "3.35.0",
+            "version": "5.0.1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/bootstrap.git",
-                "reference": "8.x-3.35"
+                "reference": "5.0.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/bootstrap-8.x-3.35.zip",
-                "reference": "8.x-3.35",
-                "shasum": "2c2e078782b6e9cce1bd0db494e20506ac79033d"
+                "url": "https://ftp.drupal.org/files/projects/bootstrap-5.0.1.zip",
+                "reference": "5.0.1",
+                "shasum": "9eae7b38545bf898bc6c7cc0cc63fb8a05afc795"
             },
             "require": {
-                "drupal/core": "^10 || ^11",
-                "drupal/jquery_ui": "^1.6.0",
-                "drupal/jquery_ui_draggable": "^2.1.0",
-                "drupal/jquery_ui_resizable": "^2.1.0"
+                "drupal/core": "^10.3 || ^11.0",
+                "twbs/bootstrap": "^5.0.0"
             },
             "type": "drupal-theme",
             "extra": {
                 "drupal": {
-                    "version": "8.x-3.35",
-                    "datestamp": "1737761612",
+                    "version": "5.0.1",
+                    "datestamp": "1726511777",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Drupal\\bootstrap\\": "src"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2407,32 +2400,27 @@
             ],
             "authors": [
                 {
-                    "name": "Fabiano Sant'Ana (wundo)",
-                    "homepage": "https://www.drupal.org/u/wundo",
-                    "role": "Maintainer"
+                    "name": "Alberto Siles",
+                    "homepage": "https://www.drupal.org/user/827704",
+                    "email": "alberto@siles.pe"
                 },
                 {
-                    "name": "Shelane French (shelane)",
-                    "homepage": "https://www.drupal.org/u/shelane",
-                    "role": "Maintainer"
+                    "name": "joseph.olstad",
+                    "homepage": "https://www.drupal.org/user/1321830"
                 },
                 {
-                    "name": "Joseph Olstad (joseph.olstad)",
-                    "homepage": "https://www.drupal.org/u/josepholstad",
-                    "role": "Maintainer"
+                    "name": "shelane",
+                    "homepage": "https://www.drupal.org/user/2674989"
                 },
                 {
                     "name": "wundo",
                     "homepage": "https://www.drupal.org/user/25523"
                 }
             ],
-            "description": "Built to use Bootstrap, a sleek, intuitive, and powerful front-end framework for faster and easier web development.",
+            "description": "Bootstrap 5 base theme.",
             "homepage": "https://www.drupal.org/project/bootstrap",
             "support": {
-                "source": "https://git.drupalcode.org/project/bootstrap",
-                "docs": "https://drupal-bootstrap.org",
-                "issues": "https://www.drupal.org/project/issues/bootstrap",
-                "slack": "https://drupal.slack.com/archives/C36LX1NK1"
+                "source": "https://git.drupalcode.org/project/bootstrap"
             }
         },
         {
@@ -5105,59 +5093,6 @@
             }
         },
         {
-            "name": "drupal/jquery_ui_draggable",
-            "version": "2.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/jquery_ui_draggable.git",
-                "reference": "2.1.0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/jquery_ui_draggable-2.1.0.zip",
-                "reference": "2.1.0",
-                "shasum": "0d014cfff20993d8051efb8f6c9093a4fe5136f3"
-            },
-            "require": {
-                "drupal/core": "^9.2 || ^10 || ^11",
-                "drupal/jquery_ui": "^1.7"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "2.1.0",
-                    "datestamp": "1717015492",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "bnjmnm",
-                    "homepage": "https://www.drupal.org/user/2369194"
-                },
-                {
-                    "name": "lauriii",
-                    "homepage": "https://www.drupal.org/user/1078742"
-                },
-                {
-                    "name": "zrpnr",
-                    "homepage": "https://www.drupal.org/user/1448368"
-                }
-            ],
-            "description": "Provides jQuery UI Draggable library.",
-            "homepage": "https://www.drupal.org/project/jquery_ui_draggable",
-            "support": {
-                "source": "https://git.drupalcode.org/project/jquery_ui_draggable"
-            }
-        },
-        {
             "name": "drupal/jquery_ui_menu",
             "version": "2.1.0",
             "source": {
@@ -5220,67 +5155,6 @@
             "homepage": "https://www.drupal.org/project/jquery_ui_menu",
             "support": {
                 "source": "https://git.drupalcode.org/project/jquery_ui_menu"
-            }
-        },
-        {
-            "name": "drupal/jquery_ui_resizable",
-            "version": "2.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/jquery_ui_resizable.git",
-                "reference": "2.1.0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/jquery_ui_resizable-2.1.0.zip",
-                "reference": "2.1.0",
-                "shasum": "f1f15c5fe01f11e5348d502e2df836d0c492f507"
-            },
-            "require": {
-                "drupal/core": "^9.2 || ^10 || ^11",
-                "drupal/jquery_ui": "^1.7"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "2.1.0",
-                    "datestamp": "1717031358",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "bnjmnm",
-                    "homepage": "https://www.drupal.org/user/2369194"
-                },
-                {
-                    "name": "lauriii",
-                    "homepage": "https://www.drupal.org/user/1078742"
-                },
-                {
-                    "name": "nod_",
-                    "homepage": "https://www.drupal.org/user/598310"
-                },
-                {
-                    "name": "phenaproxima",
-                    "homepage": "https://www.drupal.org/user/205645"
-                },
-                {
-                    "name": "zrpnr",
-                    "homepage": "https://www.drupal.org/user/1448368"
-                }
-            ],
-            "description": "Provides jQuery UI Resizable library.",
-            "homepage": "https://www.drupal.org/project/jquery_ui_resizable",
-            "support": {
-                "source": "https://git.drupalcode.org/project/jquery_ui_resizable"
             }
         },
         {
@@ -14665,6 +14539,56 @@
                 }
             ],
             "time": "2025-01-07T09:44:41+00:00"
+        },
+        {
+            "name": "twbs/bootstrap",
+            "version": "v5.3.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twbs/bootstrap.git",
+                "reference": "6e1f75f420f68e1d52733b8e407fc7c3766c9dba"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/twbs/bootstrap/zipball/6e1f75f420f68e1d52733b8e407fc7c3766c9dba",
+                "reference": "6e1f75f420f68e1d52733b8e407fc7c3766c9dba",
+                "shasum": ""
+            },
+            "replace": {
+                "twitter/bootstrap": "self.version"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mark Otto",
+                    "email": "markdotto@gmail.com"
+                },
+                {
+                    "name": "Jacob Thornton",
+                    "email": "jacobthornton@gmail.com"
+                }
+            ],
+            "description": "The most popular front-end framework for developing responsive, mobile first projects on the web.",
+            "homepage": "https://getbootstrap.com/",
+            "keywords": [
+                "JS",
+                "css",
+                "framework",
+                "front-end",
+                "mobile-first",
+                "responsive",
+                "sass",
+                "web"
+            ],
+            "support": {
+                "issues": "https://github.com/twbs/bootstrap/issues",
+                "source": "https://github.com/twbs/bootstrap/tree/v5.3.3"
+            },
+            "time": "2024-02-20T15:14:29+00:00"
         },
         {
             "name": "twig/twig",

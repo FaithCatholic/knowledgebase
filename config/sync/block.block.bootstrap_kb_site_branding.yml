@@ -1,0 +1,25 @@
+uuid: 103b45b1-f3e7-4553-9ae9-c31c686749fb
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - bootstrap_kb
+_core:
+  default_config_hash: XFg93EvZm9r-ewZ9yqjVg7O-zI64Ej3We0rNEEDk6Mo
+id: bootstrap_kb_site_branding
+theme: bootstrap_kb
+region: top_header
+weight: -7
+provider: null
+plugin: system_branding_block
+settings:
+  id: system_branding_block
+  label: 'Site branding'
+  label_display: '0'
+  provider: system
+  use_site_logo: true
+  use_site_name: true
+  use_site_slogan: false
+visibility: {  }

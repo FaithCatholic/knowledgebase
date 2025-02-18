@@ -8,13 +8,7 @@ dependencies:
     - image.style.thumbnail
     - media.type.audio
   module:
-    - field_layout
-    - image
-third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
+    - svg_image
 _core:
   default_config_hash: tcAUW1Xzq5Tjw5jomR6XKGSgfiXO7QiRAHJBF-n0akg
 id: media.audio.media_library

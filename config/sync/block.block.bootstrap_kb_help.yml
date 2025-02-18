@@ -1,0 +1,22 @@
+uuid: ea141958-3c6e-4324-b19c-5487af0d57f0
+langcode: en
+status: true
+dependencies:
+  module:
+    - help
+  theme:
+    - bootstrap_kb
+_core:
+  default_config_hash: UTqabTpgjuJXf7yczCeKCQfvavlSFkt0lAinme6ZUVU
+id: bootstrap_kb_help
+theme: bootstrap_kb
+region: highlighted
+weight: -5
+provider: null
+plugin: help_block
+settings:
+  id: help_block
+  label: Help
+  label_display: '0'
+  provider: help
+visibility: {  }

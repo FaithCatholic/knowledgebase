@@ -6,15 +6,8 @@ dependencies:
     - field.field.taxonomy_term.section.field_path
     - taxonomy.vocabulary.section
   module:
-    - field_layout
-    - layout_discovery
     - path
     - text
-third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
 id: taxonomy_term.section.default
 targetEntityType: taxonomy_term
 bundle: section

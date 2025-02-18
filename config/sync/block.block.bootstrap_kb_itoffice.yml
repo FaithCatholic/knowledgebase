@@ -1,0 +1,38 @@
+uuid: 85538dc2-7e1b-4eb4-8276-71709ea796dc
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.it-office
+  module:
+    - menu_block
+    - system
+  theme:
+    - bootstrap_kb
+id: bootstrap_kb_itoffice
+theme: bootstrap_kb
+region: header
+weight: -7
+provider: null
+plugin: 'menu_block:it-office'
+settings:
+  id: 'menu_block:it-office'
+  label: 'IT Office'
+  label_display: '0'
+  provider: menu_block
+  follow: false
+  follow_parent: child
+  label_link: false
+  label_type: block
+  level: 1
+  depth: 0
+  expand_all_items: false
+  parent: 'it-office:'
+  render_parent: false
+  suggestion: it_office
+  hide_on_nonactive: false
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/information-technology/*'

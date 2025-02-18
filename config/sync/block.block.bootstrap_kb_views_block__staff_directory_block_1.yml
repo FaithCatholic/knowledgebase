@@ -1,0 +1,29 @@
+uuid: 5b6f79b6-8cac-48fd-8949-27b50eea6da4
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.staff_directory
+  module:
+    - system
+    - views
+  theme:
+    - bootstrap_kb
+id: bootstrap_kb_views_block__staff_directory_block_1
+theme: bootstrap_kb
+region: content
+weight: 0
+provider: null
+plugin: 'views_block:staff_directory-block_1'
+settings:
+  id: 'views_block:staff_directory-block_1'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /corporate/staff-list

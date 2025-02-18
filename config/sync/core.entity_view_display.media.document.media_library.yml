@@ -8,13 +8,7 @@ dependencies:
     - image.style.thumbnail
     - media.type.document
   module:
-    - field_layout
-    - image
-third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
+    - svg_image
 _core:
   default_config_hash: YcWqjhIlo-2RZUM5ogvRsrKB7M3voF2XB3lVLwgOlLU
 id: media.document.media_library

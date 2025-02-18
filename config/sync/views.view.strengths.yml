@@ -442,6 +442,7 @@ display:
               secondary_label: 'Advanced options'
               secondary_open: false
               reset_button_always_show: true
+              autosubmit_textfield_minimum_length: 3
             filter:
               field_department_target_id:
                 plugin_id: default
@@ -449,16 +450,22 @@ display:
                   sort_options: false
                   rewrite:
                     filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
                   collapsible: false
                   is_secondary: false
+                  collapsible_disable_automatic_open: false
+                  hide_label: false
               field_strengths_target_id:
                 plugin_id: default
                 advanced:
                   placeholder_text: ''
                   rewrite:
                     filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
                   collapsible: false
                   is_secondary: false
+                  collapsible_disable_automatic_open: false
+                  hide_label: false
       access:
         type: perm
         options:

@@ -1,4 +1,4 @@
-uuid: c24eb1a3-76c4-473b-b59e-3211985c45b5
+uuid: d2c778d5-e4a4-4958-91bc-93950ef3d1f8
 langcode: en
 status: true
 dependencies:
@@ -7,11 +7,11 @@ dependencies:
   theme:
     - bootstrap
 _core:
-  default_config_hash: iggZSiUKz4mYP1YPJ8SsUfFu79HIgOTt6IDy3Up59aM
+  default_config_hash: Sq4yYlo6bDXG7m-p9Tpv2IwdvWjxwbjssiZZmpscKeo
 id: bootstrap_powered
 theme: bootstrap
-region: footer
-weight: -10
+region: footer_fifth
+weight: -7
 provider: null
 plugin: system_powered_by_block
 settings:

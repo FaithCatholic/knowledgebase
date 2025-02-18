@@ -1,0 +1,26 @@
+uuid: 87e656b4-38a2-4b20-ad80-248f444c9521
+langcode: en
+status: true
+dependencies:
+  module:
+    - search
+    - system
+  theme:
+    - bootstrap_kb
+id: bootstrap_kb_searchform
+theme: bootstrap_kb
+region: sidebar_second
+weight: -7
+provider: null
+plugin: search_form_block
+settings:
+  id: search_form_block
+  label: 'Search form'
+  label_display: '0'
+  provider: search
+  page_id: ''
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '<front>'

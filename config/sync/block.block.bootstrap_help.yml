@@ -1,4 +1,4 @@
-uuid: 23d6c6f5-6108-48ba-91bf-896c4bb1c994
+uuid: 6ccca17e-8b71-4df9-8ac6-decd193aa0ae
 langcode: en
 status: true
 dependencies:
@@ -7,11 +7,11 @@ dependencies:
   theme:
     - bootstrap
 _core:
-  default_config_hash: MhtNdV__HKRTab0ZPjkPNfYL4Ng4UPBucDLoC7Rg5Eo
+  default_config_hash: HM4YkvH5dnZLpmEKEUWWjtpeJrhdg2oXNm7zpAVyW-4
 id: bootstrap_help
 theme: bootstrap
-region: help
-weight: -30
+region: highlighted
+weight: -2
 provider: null
 plugin: help_block
 settings:

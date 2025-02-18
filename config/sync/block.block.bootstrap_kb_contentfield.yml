@@ -1,0 +1,32 @@
+uuid: b58cf7f9-009d-40e8-93a4-50063193c6fe
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_section
+  module:
+    - fieldblock
+    - system
+  theme:
+    - bootstrap_kb
+id: bootstrap_kb_contentfield
+theme: bootstrap_kb
+region: sidebar_first
+weight: -6
+provider: null
+plugin: 'fieldblock:node'
+settings:
+  id: 'fieldblock:node'
+  label: Section
+  label_display: '0'
+  provider: fieldblock
+  label_from_field: false
+  field_name: field_section
+  formatter_id: entity_reference_label
+  formatter_settings:
+    link: true
+visibility:
+  request_path:
+    id: request_path
+    negate: true
+    pages: "<front>\r\n/corporate/staff-directory\r\n/corporate/staff-list\r\n/corporate/strengths"

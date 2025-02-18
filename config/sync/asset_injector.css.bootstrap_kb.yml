@@ -1,0 +1,21 @@
+uuid: 21bdfca4-a4e2-455d-b8de-c597b110c8d5
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+id: bootstrap_kb
+label: 'Bootstrap KB'
+code: |-
+  .navbar-brand:active :hover :visited{
+  	color: $primary-shade;
+  }
+media: all
+preprocess: true
+conditions:
+  current_theme:
+    id: current_theme
+    negate: false
+    theme: bootstrap_kb
+contexts: {  }
+conditions_require_all: false

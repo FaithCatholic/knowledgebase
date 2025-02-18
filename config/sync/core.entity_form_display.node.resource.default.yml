@@ -26,18 +26,12 @@ dependencies:
   module:
     - content_moderation
     - field_group
-    - field_layout
     - fontawesome
-    - layout_discovery
     - link
     - path
     - svg_image
     - text
 third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
   field_group:
     group_details:
       children:

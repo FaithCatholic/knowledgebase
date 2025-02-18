@@ -1,0 +1,20 @@
+uuid: ffc55b7f-6396-4282-838d-50cc53267914
+langcode: en
+status: true
+dependencies:
+  theme:
+    - bootstrap_kb
+_core:
+  default_config_hash: K5pgk7441xHnjKR-HSMXjqvt214twudfp__m6ItTfCc
+id: bootstrap_kb_primary_admin_actions
+theme: bootstrap_kb
+region: content
+weight: -6
+provider: null
+plugin: local_actions_block
+settings:
+  id: local_actions_block
+  label: 'Primary admin actions'
+  label_display: '0'
+  provider: core
+visibility: {  }

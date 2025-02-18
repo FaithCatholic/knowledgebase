@@ -1,0 +1,22 @@
+uuid: ef131f7f-2af1-46f5-97f2-6beed8813957
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - bootstrap_kb
+_core:
+  default_config_hash: RAEp34TkGbNqMeRHaL2kv-yQHqD0kzkNM7EwGp5ja7s
+id: bootstrap_kb_messages
+theme: bootstrap_kb
+region: highlighted
+weight: -6
+provider: null
+plugin: system_messages_block
+settings:
+  id: system_messages_block
+  label: 'Status messages'
+  label_display: '0'
+  provider: system
+visibility: {  }

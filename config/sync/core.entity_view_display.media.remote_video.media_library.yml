@@ -8,13 +8,7 @@ dependencies:
     - image.style.medium
     - media.type.remote_video
   module:
-    - field_layout
-    - image
-third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
+    - svg_image
 _core:
   default_config_hash: PGGoP-hVkXe_S-GiJRAub4PHDu0KhMExylclrqjdJb4
 id: media.remote_video.media_library

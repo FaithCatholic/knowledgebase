@@ -1,0 +1,28 @@
+uuid: 5cce758b-0edb-46ad-9d3d-378eb2665dc7
+langcode: en
+status: true
+dependencies:
+  module:
+    - search
+    - system
+  theme:
+    - bootstrap_kb
+_core:
+  default_config_hash: eFIW16iCMbpv6mQdCwS12g3dBb8mfZPWLngMf7V_dpo
+id: bootstrap_kb_search_form_narrow
+theme: bootstrap_kb
+region: top_header_form
+weight: -6
+provider: null
+plugin: search_form_block
+settings:
+  id: search_form_block
+  label: 'Search form (narrow)'
+  label_display: '0'
+  provider: search
+  page_id: ''
+visibility:
+  request_path:
+    id: request_path
+    negate: true
+    pages: '<front>'

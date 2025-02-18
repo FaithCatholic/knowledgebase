@@ -1,0 +1,33 @@
+uuid: 11c56528-8875-490f-a6c3-1985f1e9a06c
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:6f0aa318-a25e-4e82-bdf1-e1919bba3c1b'
+  module:
+    - block_content
+    - user
+  theme:
+    - bootstrap_kb
+id: bootstrap_kb_loginmessage
+theme: bootstrap_kb
+region: content
+weight: 0
+provider: null
+plugin: 'block_content:6f0aa318-a25e-4e82-bdf1-e1919bba3c1b'
+settings:
+  id: 'block_content:6f0aa318-a25e-4e82-bdf1-e1919bba3c1b'
+  label: 'Login Message'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      anonymous: anonymous

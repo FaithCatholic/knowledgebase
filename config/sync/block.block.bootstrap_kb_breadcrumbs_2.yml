@@ -1,0 +1,20 @@
+uuid: e07810fa-a585-4b42-800e-a7ff47afab4d
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - bootstrap_kb
+id: bootstrap_kb_breadcrumbs_2
+theme: bootstrap_kb
+region: primary_menu
+weight: 0
+provider: null
+plugin: system_breadcrumb_block
+settings:
+  id: system_breadcrumb_block
+  label: Breadcrumbs
+  label_display: '0'
+  provider: system
+visibility: {  }

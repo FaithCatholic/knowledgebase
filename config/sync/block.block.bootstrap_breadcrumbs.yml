@@ -1,4 +1,4 @@
-uuid: a8b2b888-2247-452a-a9be-f0e1376729ce
+uuid: 63f235eb-fd79-47a8-9c51-9bc682b714a2
 langcode: en
 status: true
 dependencies:
@@ -7,11 +7,11 @@ dependencies:
   theme:
     - bootstrap
 _core:
-  default_config_hash: wDR9JKEATSWldBjw8du8s3G2zjEYeQf88nlld11hMLo
+  default_config_hash: Bux6OyrxjA_3UNQ6u6WHS-IV_Kuv7jpR0iJ3BwnNtFA
 id: bootstrap_breadcrumbs
 theme: bootstrap
-region: header
-weight: -100
+region: breadcrumb
+weight: 0
 provider: null
 plugin: system_breadcrumb_block
 settings:

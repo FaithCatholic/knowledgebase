@@ -6,14 +6,6 @@ dependencies:
     - core.entity_form_mode.media.media_library
     - field.field.media.private_file.field_private_file
     - media.type.private_file
-  module:
-    - field_layout
-    - layout_discovery
-third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
 id: media.private_file.media_library
 targetEntityType: media
 bundle: private_file

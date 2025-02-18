@@ -8,14 +8,7 @@ dependencies:
     - image.style.medium
     - media.type.private_file
   module:
-    - field_layout
-    - layout_discovery
     - svg_image
-third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
 id: media.private_file.media_library
 targetEntityType: media
 bundle: private_file

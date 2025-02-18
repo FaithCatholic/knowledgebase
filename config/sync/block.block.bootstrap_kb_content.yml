@@ -1,0 +1,22 @@
+uuid: 88e76c7c-531b-4490-9e1a-044bb6ddc23c
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - bootstrap_kb
+_core:
+  default_config_hash: I3B3g-fZ0zKZj3MMROk39bxa3aTq0KYIAo-helYAaRs
+id: bootstrap_kb_content
+theme: bootstrap_kb
+region: content
+weight: -3
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: 'Main page content'
+  label_display: '0'
+  provider: system
+visibility: {  }

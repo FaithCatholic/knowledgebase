@@ -8,14 +8,7 @@ dependencies:
     - image.style.medium
     - media.type.icon
   module:
-    - field_layout
-    - layout_discovery
     - svg_image
-third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
 id: media.icon.media_library
 targetEntityType: media
 bundle: icon

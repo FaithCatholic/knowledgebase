@@ -2,9 +2,9 @@ _core:
   default_config_hash: VDJxTZtQR21qB4lvOq8zszJZLvLKrSPQpdn2E3T71Ww
 langcode: en
 uuid: d96e5202-703a-4e67-a6c0-fc98f4c4ff64
-name: Information
+name: 'Knowledge Base'
 mail: techsupport@faithcatholic.com
-slogan: 'the single source of truth'
+slogan: 'The single source of truth'
 page:
   403: ''
   404: ''

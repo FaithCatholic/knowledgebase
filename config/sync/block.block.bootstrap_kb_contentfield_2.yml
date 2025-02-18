@@ -1,0 +1,27 @@
+uuid: 891e99e5-783d-47f3-be44-f27c92afd904
+langcode: en
+status: true
+dependencies:
+  module:
+    - fieldblock
+  theme:
+    - bootstrap_kb
+id: bootstrap_kb_contentfield_2
+theme: bootstrap_kb
+region: footer_first
+weight: 0
+provider: null
+plugin: 'fieldblock:node'
+settings:
+  id: 'fieldblock:node'
+  label: 'Content field'
+  label_display: visible
+  provider: fieldblock
+  label_from_field: true
+  field_name: changed
+  formatter_id: timestamp_ago
+  formatter_settings:
+    future_format: '@interval hence'
+    past_format: '@interval ago'
+    granularity: 2
+visibility: {  }

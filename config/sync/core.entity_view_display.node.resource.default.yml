@@ -24,17 +24,10 @@ dependencies:
     - image.style.wide
     - node.type.resource
   module:
-    - field_layout
-    - layout_discovery
     - link
     - svg_image
     - text
     - user
-third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
 id: node.resource.default
 targetEntityType: node
 bundle: resource

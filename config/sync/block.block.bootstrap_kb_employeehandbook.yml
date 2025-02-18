@@ -1,0 +1,38 @@
+uuid: ae2044b1-f7a3-46c3-8217-e03e678e5d21
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.employee-handbook
+  module:
+    - menu_block
+    - system
+  theme:
+    - bootstrap_kb
+id: bootstrap_kb_employeehandbook
+theme: bootstrap_kb
+region: sidebar_first
+weight: -5
+provider: null
+plugin: 'menu_block:employee-handbook'
+settings:
+  id: 'menu_block:employee-handbook'
+  label: 'Employee Handbook'
+  label_display: visible
+  provider: menu_block
+  follow: false
+  follow_parent: child
+  label_link: false
+  label_type: block
+  level: 1
+  depth: 0
+  expand_all_items: false
+  parent: 'employee-handbook:'
+  render_parent: false
+  suggestion: employee_handbook
+  hide_on_nonactive: false
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/handbook/*'

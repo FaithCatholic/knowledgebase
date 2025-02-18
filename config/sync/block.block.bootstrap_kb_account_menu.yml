@@ -1,0 +1,27 @@
+uuid: 53bf78d6-b1e1-45a1-b2ba-240e0ca67cd8
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.account
+  module:
+    - system
+  theme:
+    - bootstrap_kb
+_core:
+  default_config_hash: obQ_RNDe1y_5gG3Q5FxzAtamX11edsvAqGgYNZPW3wM
+id: bootstrap_kb_account_menu
+theme: bootstrap_kb
+region: top_header_form
+weight: -5
+provider: null
+plugin: 'system_menu_block:account'
+settings:
+  id: 'system_menu_block:account'
+  label: 'User account menu'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 1
+  expand_all_items: false
+visibility: {  }

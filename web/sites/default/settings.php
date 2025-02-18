@@ -48,3 +48,11 @@ $ddev_settings = __DIR__ . '/settings.ddev.php';
 if (getenv('IS_DDEV_PROJECT') == 'true' && is_readable($ddev_settings)) {
   require $ddev_settings;
 }
+
+if (getenv('GOOGLE_CLIENT_ID')) {
+  $config['social_auth_google.settings']['client_id'] = getenv('GOOGLE_CLIENT_ID');
+}
+
+if (getenv('GOOGLE_CLIENT_SECRET')) {
+  $config['social_auth_google.settings']['client_secret'] = getenv('GOOGLE_CLIENT_SECRET');
+}

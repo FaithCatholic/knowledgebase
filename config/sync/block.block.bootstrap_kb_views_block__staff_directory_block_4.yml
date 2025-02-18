@@ -1,0 +1,29 @@
+uuid: 992584ea-707b-4528-b054-b0e8de6e81ca
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.staff_directory
+  module:
+    - system
+    - views
+  theme:
+    - bootstrap_kb
+id: bootstrap_kb_views_block__staff_directory_block_4
+theme: bootstrap_kb
+region: content
+weight: 0
+provider: null
+plugin: 'views_block:staff_directory-block_4'
+settings:
+  id: 'views_block:staff_directory-block_4'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /corporate/management-directory

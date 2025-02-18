@@ -193,6 +193,10 @@
             "npm install --prefix ./web/themes/custom/archstl_schools_theme",
             "npm run project-setup --prefix ./web/themes/custom/archstl_schools_theme"
         ],
+        "bootstrap-setup": [
+            "npm install --prefix ./web/themes/custom/bootstrap_kb",
+            "npm run bootstrap-setup --prefix ./web/themes/custom/bootstrap_kb"
+        ],
         "project-update": [
             "npm run project-setup --prefix ./web/themes/custom/archstl_schools_theme"
         ],

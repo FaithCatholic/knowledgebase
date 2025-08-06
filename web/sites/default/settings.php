@@ -19,6 +19,20 @@ $settings['file_scan_ignore_directories'] = [
   'bower_components',
 ];
 
+//o365 variables below
+if (getenv('ACTIVE_DIRECTORY_CLIENTID')) {
+  $settings['o365']['api_settings']['client_id'] = getenv('ACTIVE_DIRECTORY_CLIENTID');
+}
+
+// Office 365 connector client secret.
+if (getenv('ACTIVE_DIRECTORY_SECRET')) {
+$settings['o365']['api_settings']['client_secret'] = getenv('ACTIVE_DIRECTORY_SECRET');
+}
+
+// Office 365 connector tenant ID.
+if (getenv('ACTIVE_DIRECTORY_TENANTID')) {
+$settings['o365']['api_settings']['tenant_id'] = getenv('ACTIVE_DIRECTORY_TENANTID');
+}
 
 // The hash_salt should be a unique random value for each application.
 // If left unset, the settings.platformsh.php file will attempt to provide one.

@@ -19,6 +19,7 @@ $settings['file_scan_ignore_directories'] = [
   'bower_components',
 ];
 
+
 // The hash_salt should be a unique random value for each application.
 // If left unset, the settings.platformsh.php file will attempt to provide one.
 // You can also provide a specific value here if you prefer and it will be used

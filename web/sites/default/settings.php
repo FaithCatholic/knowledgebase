@@ -21,23 +21,10 @@ $settings['file_scan_ignore_directories'] = [
 
 
 // Microsoft 365 integration variables below
-// Decode Platform.sh vars
-$platform = json_decode(getenv('PLATFORM_VARIABLES') ?: '{}', TRUE);
+$settings['o365']['api_settings']['client_id']     = getenv('O365_CLIENT_ID');
+$settings['o365']['api_settings']['tenant']        = getenv('O365_TENANT_ID');
+$settings['o365']['api_settings']['client_secret'] = getenv('O365_CLIENT_SECRET');
 
-// Client ID
-if (!empty($platform['ACTIVE_DIRECTORY_CLIENTID'])) {
-  $settings['o365']['api_settings']['client_id'] = $platform['ACTIVE_DIRECTORY_CLIENTID'];
-}
-
-// Tenant ID
-if (!empty($platform['ACTIVE_DIRECTORY_TENANTID'])) {
-  $settings['o365']['api_settings']['tenant'] = $platform['ACTIVE_DIRECTORY_TENANTID'];
-}
-
-// Client Secret
-if (!empty($platform['ACTIVE_DIRECTORY_CLIENTSECRET'])) {
-  $settings['o365']['api_settings']['client_secret'] = $platform['ACTIVE_DIRECTORY_CLIENTSECRET'];
-}
 
 
 // The hash_salt should be a unique random value for each application.

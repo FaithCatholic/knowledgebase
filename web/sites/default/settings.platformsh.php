@@ -124,11 +124,11 @@ if ($platformsh->inRuntime()) {
 $settings['trusted_host_patterns'] = ['.*'];
 
 //o365 variables below
-$settings['o365']['api_settings']['client_id'] = 'ACTIVE_DIRECTORY_CLIENTID';
+$settings['o365']['api_settings']['client_id'] = getenv('ACTIVE_DIRECTORY_CLIENTID');
 // Office 365 connector client secret.
-$settings['o365']['api_settings']['client_secret'] = 'ACTIVE_DIRECTORY_SECRET';
+$settings['o365']['api_settings']['client_secret'] = getenv('ACTIVE_DIRECTORY_SECRET');
 // Office 365 connector tenant ID.
-$settings['o365']['api_settings']['tenant_id'] = 'ACTIVE_DIRECTORY_TENANTID';
+$settings['o365']['api_settings']['tenant_id'] = getenv('ACTIVE_DIRECTORY_TENANTID');
 
 
 // Import variables prefixed with 'drupalsettings:' into $settings

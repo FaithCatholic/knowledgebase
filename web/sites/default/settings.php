@@ -19,6 +19,11 @@ $settings['file_scan_ignore_directories'] = [
   'bower_components',
 ];
 
+// Microsoft 365 integration variables below
+$settings['o365']['api_settings']['client_id']     = getenv('O365_CLIENT_ID');
+$settings['o365']['api_settings']['tenant_id']        = getenv('O365_TENANT_ID');
+$settings['o365']['api_settings']['client_secret'] = getenv('O365_CLIENT_SECRET');
+
 // The hash_salt should be a unique random value for each application.
 // If left unset, the settings.platformsh.php file will attempt to provide one.
 // You can also provide a specific value here if you prefer and it will be used
@@ -43,3 +48,8 @@ if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
 }
 
 $settings['state_cache'] = TRUE;
+// Automatically generated include for settings managed by ddev.
+$ddev_settings = dirname(__FILE__) . '/settings.ddev.php';
+if (getenv('IS_DDEV_PROJECT') == 'true' && is_readable($ddev_settings)) {
+  require $ddev_settings;
+}

@@ -106,6 +106,7 @@
         "drupal/metatag": "^2.0",
         "drupal/module_filter": "^5.0",
         "drupal/nodeaccess": "^2.0@alpha",
+        "drupal/o365": "^5.0",
         "drupal/paragraphs": "^1.17",
         "drupal/pathauto": "^1.12",
         "drupal/redirect": "^1.9",

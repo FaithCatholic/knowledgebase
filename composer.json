@@ -196,11 +196,6 @@
         ],
         "project-update": [
             "npm run project-setup --prefix ./web/themes/custom/archstl_schools_theme"
-        ],
-        "slides-setup": [
-            "php ./scripts/clone-script.php",
-            "npm install --prefix ./web/slides",
-            "npm run build --prefix ./web/slides"
         ]
     },
     "extra": {

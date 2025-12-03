@@ -1,3 +1,29 @@
+# Statements in this file will be executed (sourced) by the shell in SSH
+# sessions, in deploy hooks, in cron jobs, and in the application's runtime
+# environment. This file must be placed in the root of the application, not
+# necessarily the git repository's root. In case of multiple applications,
+# each application can have its own .environment file.
+
+export PATH="${PLATFORM_APP_DIR}/vendor/bin:${PATH}"
+
+# Set the URI for Drush commands.
+export PRIMARY_URL="$(echo "$PLATFORM_ROUTES" | base64 --decode | jq -r 'to_entries[] | select(.value.primary) | .key | rtrimstr("/")')"
+export DRUSH_OPTIONS_URI="$PRIMARY_URL"
+
+# Unpack all the relationship data into easy-to-access env vars like
+# DATABASE_HOST, DATABASE_PORT, etc.
+# These will be named according to the service name in the
+# platform `relationships:` yaml names.
+eval "$(
+  echo "$PLATFORM_RELATIONSHIPS" | base64 -d | jq -r '
+    to_entries[] |
+    .key as $service |
+    .value[0] |
+    to_entries[] |
+    select(.value != null and ((.value | type) == "string" or (.value | type) == "number" or (.value | type) == "boolean")) |
+    "export " + ($service | ascii_upcase) + "_" + (.key | ascii_upcase) + "=\"" + (.value | tostring) + "\""  '
+)"
+
 # Set database environment variables
 export DB_HOST="$MYSQL_HOST"
 export DB_PORT="$MYSQL_PORT"

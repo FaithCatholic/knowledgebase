@@ -8,7 +8,7 @@ applications:
 
     relationships:
       dbmysql:
-
+ 
     mounts:
 
       '/web/sites/default/files':
@@ -58,8 +58,8 @@ applications:
       build: |
         set -eux
         composer --no-ansi --no-interaction install --no-progress --prefer-dist --optimize-autoloader --no-dev
-        
-        set -e
+        export N_PREFIX=/app/.global
+        export PATH="$N_PREFIX/bin:$PATH"
 
         # Install the version specified in the .nvmrc file
         n auto
@@ -74,8 +74,8 @@ applications:
         
       deploy: |
         set -eux
-        # echo 'Put your deploy command here'
-  
+        ./scripts/hooks.deploy.sh
+
 
 
 services:

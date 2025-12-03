@@ -127,7 +127,7 @@ applications:
 # Full list of available services: https://docs.upsun.com/services/available/
 services:
   mysql:
-    type: mysql:10.6 # All available versions are: 10.6, 10.5, 10.4, 10.3
+    type: oracle-mysql:8.0 # All available versions are: 10.6, 10.5, 10.4, 10.3
 
   
 

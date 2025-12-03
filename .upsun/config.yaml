@@ -19,7 +19,7 @@ applications:
     # side is in the form `<service name>:<endpoint name>`.
     # More information: https://docs.upsun.com/app/reference/relationships/
     relationships:
-      mysql:
+      dbmysql:
       
 
     # Mounts define directories that are writable after the build is complete.

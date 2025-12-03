@@ -6,21 +6,15 @@ dependencies:
     - core.entity_view_mode.node.teaser
     - field.field.node.page.body
     - field.field.node.page.field_attachments
+    - field.field.node.page.field_contacts
     - field.field.node.page.field_diagram_reference
     - field.field.node.page.field_section
     - field.field.node.page.field_sidebar
     - field.field.node.page.field_tags
     - node.type.page
   module:
-    - field_layout
-    - layout_discovery
     - text
     - user
-third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
 _core:
   default_config_hash: 8BgdRtLbtQ0F__o0FHSH0Mx5fvXOra9tfT1GmNKbRYw
 id: node.page.teaser
@@ -56,6 +50,7 @@ content:
     region: content
 hidden:
   field_attachments: true
+  field_contacts: true
   field_diagram_reference: true
   field_section: true
   field_sidebar: true

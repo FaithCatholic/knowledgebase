@@ -2,6 +2,8 @@ uuid: 70d29688-4669-46ca-ae23-d90f3ba7e7e3
 langcode: en
 status: true
 dependencies:
+  module:
+    - system
   theme:
     - faith_genesis_theme
 _core:
@@ -9,7 +11,7 @@ _core:
 id: faith_genesis_theme_primary_local_tasks
 theme: faith_genesis_theme
 region: highlighted
-weight: -8
+weight: -10
 provider: null
 plugin: local_tasks_block
 settings:
@@ -18,5 +20,9 @@ settings:
   label_display: '0'
   provider: core
   primary: true
-  secondary: false
-visibility: {  }
+  secondary: true
+visibility:
+  request_path:
+    id: request_path
+    negate: true
+    pages: '<front>'

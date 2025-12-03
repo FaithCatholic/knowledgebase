@@ -10,8 +10,8 @@ dependencies:
     - faith_genesis_theme
 id: faith_genesis_theme_searchform
 theme: faith_genesis_theme
-region: sidebar_second
-weight: -13
+region: highlighted
+weight: -14
 provider: null
 plugin: search_form_block
 settings:
@@ -31,4 +31,4 @@ visibility:
   request_path:
     id: request_path
     negate: true
-    pages: "/corporate/strengths\r\n/corporate/staff-directory\r\n/corporate/staff-list\r\n/all-resources\r\n/systems/*"
+    pages: "/corporate/strengths\r\n/corporate/staff-directory\r\n/corporate/staff-list\r\n/all-resources\r\n/systems/*\r\n<front>"

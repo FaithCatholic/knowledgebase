@@ -1,0 +1,6 @@
+use_graph_data: 1
+graph_data_mapping: "jobTitle|field_job_title\r\nmobilePhone|field_mobile_phone\r\nbusinessPhone|field_office_phone\r\ndisplayName|field_full_name"
+use_profile_module: 0
+sync_profile_image: 0
+profile_image_mapping: ''
+graph_data_selected_fields: 'jobTitle,mobilePhone,businessPhone,displayName'

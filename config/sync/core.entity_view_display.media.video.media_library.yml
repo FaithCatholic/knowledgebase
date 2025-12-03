@@ -8,13 +8,7 @@ dependencies:
     - image.style.thumbnail
     - media.type.video
   module:
-    - field_layout
-    - image
-third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
+    - svg_image
 _core:
   default_config_hash: _fnkUKwQYHkXO1Ngmq9nE6FqWUNAmkddOxAH1h5aiKg
 id: media.video.media_library

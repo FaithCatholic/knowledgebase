@@ -7,15 +7,8 @@ dependencies:
     - node.type.diagram
   module:
     - content_moderation
-    - field_layout
-    - layout_discovery
     - mermaid_diagram_field
     - path
-third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
 id: node.diagram.default
 targetEntityType: node
 bundle: diagram

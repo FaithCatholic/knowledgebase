@@ -4,7 +4,6 @@ status: true
 dependencies:
   config:
     - filter.format.basic_html
-    - filter.format.markdown
   module:
     - comment
     - contact
@@ -34,5 +33,4 @@ permissions:
   - 'skip comment approval'
   - 'use exclude node title'
   - 'use text format basic_html'
-  - 'use text format markdown'
   - 'view media'

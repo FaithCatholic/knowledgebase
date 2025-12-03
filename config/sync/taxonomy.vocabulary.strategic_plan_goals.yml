@@ -1,0 +1,9 @@
+uuid: 31663308-ced0-4972-a117-c4676c504dd6
+langcode: en
+status: true
+dependencies: {  }
+name: 'Strategic Plan Goals'
+vid: strategic_plan_goals
+description: null
+weight: 0
+new_revision: false

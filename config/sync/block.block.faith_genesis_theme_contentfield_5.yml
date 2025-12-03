@@ -1,0 +1,27 @@
+uuid: 5cdb5268-83bc-4660-87cb-1625b49b9f55
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_contacts
+  module:
+    - fieldblock
+  theme:
+    - faith_genesis_theme
+id: faith_genesis_theme_contentfield_5
+theme: faith_genesis_theme
+region: sidebar_first
+weight: -15
+provider: null
+plugin: 'fieldblock:node'
+settings:
+  id: 'fieldblock:node'
+  label: Contacts
+  label_display: visible
+  provider: fieldblock
+  label_from_field: true
+  field_name: field_contacts
+  formatter_id: entity_reference_entity_view
+  formatter_settings:
+    view_mode: compact
+visibility: {  }

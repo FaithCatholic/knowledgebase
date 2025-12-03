@@ -635,16 +635,16 @@ display:
         type: views_bootstrap_grid
         options:
           grouping: {  }
+          col_xs: col-xs-12
+          col_sm: col-sm-6
+          col_md: col-md-4
+          col_lg: col-lg-4
           alignment: horizontal
           col_class_default: 1
           col_class_custom: ''
           row_class_default: 1
           row_class_custom: resource
           columns: '3'
-          col_xs: col-xs-12
-          col_sm: col-sm-6
-          col_md: col-md-4
-          col_lg: col-lg-4
       row:
         type: fields
         options:
@@ -1280,11 +1280,6 @@ display:
           grouping: {  }
           row_class: ''
           default_row_class: true
-          override: 1
-          sticky: 0
-          caption: ''
-          summary: ''
-          description: ''
           columns:
             title: title
             field_icon: field_icon
@@ -1294,66 +1289,71 @@ display:
             field_link: field_short_description
             field_sort_weight: field_sort_weight
             edit_node: edit_node
+          default: '-1'
           info:
             title:
-              sortable: 0
+              sortable: false
               default_sort_order: asc
               align: views-align-center
               separator: ''
-              empty_column: 0
+              empty_column: false
               responsive: ''
             field_icon:
-              sortable: 0
+              sortable: false
               default_sort_order: asc
               align: views-align-center
               separator: ''
-              empty_column: 0
+              empty_column: false
               responsive: ''
             field_image:
-              sortable: 0
+              sortable: false
               default_sort_order: asc
               align: views-align-center
               separator: ''
-              empty_column: 0
+              empty_column: false
               responsive: ''
             field_short_description:
-              sortable: 0
+              sortable: false
               default_sort_order: asc
               align: views-align-center
               separator: '<br>'
-              empty_column: 0
+              empty_column: false
               responsive: ''
             field_tags:
               align: ''
               separator: ''
-              empty_column: 0
+              empty_column: false
               responsive: ''
             field_link:
               align: ''
               separator: ''
-              empty_column: 0
+              empty_column: false
               responsive: ''
             field_sort_weight:
-              sortable: 0
+              sortable: false
               default_sort_order: asc
               align: views-align-center
               separator: ''
-              empty_column: 0
+              empty_column: false
               responsive: ''
             edit_node:
-              sortable: 0
+              sortable: false
               default_sort_order: asc
               align: views-align-center
               separator: ''
-              empty_column: 0
+              empty_column: false
               responsive: ''
-          default: '-1'
-          empty_table: 0
-          responsive: 0
+          override: true
+          sticky: false
+          summary: ''
+          empty_table: false
+          caption: ''
+          description: ''
+          responsive: false
           bootstrap_styles:
-            striped: 0
-            bordered: 0
-            hover: 0
+            bordered: '0'
+            hover: '0'
+            striped: '0'
             condensed: 0
       row:
         type: fields
@@ -1960,11 +1960,6 @@ display:
           grouping: {  }
           row_class: ''
           default_row_class: true
-          override: 1
-          sticky: 0
-          caption: ''
-          summary: ''
-          description: ''
           columns:
             field_link: field_short_description
             title: title
@@ -1973,59 +1968,64 @@ display:
             field_short_description: field_short_description
             field_tags: field_short_description
             edit_node: edit_node
+          default: '-1'
           info:
             field_link:
               align: ''
               separator: ''
-              empty_column: 0
+              empty_column: false
               responsive: ''
             title:
-              sortable: 0
+              sortable: false
               default_sort_order: asc
               align: views-align-center
               separator: ''
-              empty_column: 0
+              empty_column: false
               responsive: ''
             field_image:
-              sortable: 0
+              sortable: false
               default_sort_order: asc
               align: views-align-center
               separator: '<br>'
-              empty_column: 0
+              empty_column: false
               responsive: ''
             view_node:
-              sortable: 0
+              sortable: false
               default_sort_order: asc
               align: views-align-center
               separator: ''
-              empty_column: 0
+              empty_column: false
               responsive: ''
             field_short_description:
-              sortable: 0
+              sortable: false
               default_sort_order: asc
               align: views-align-center
               separator: '<br>'
-              empty_column: 0
+              empty_column: false
               responsive: ''
             field_tags:
               align: ''
               separator: ''
-              empty_column: 0
+              empty_column: false
               responsive: ''
             edit_node:
-              sortable: 0
+              sortable: false
               default_sort_order: asc
               align: views-align-center
               separator: ''
-              empty_column: 0
+              empty_column: false
               responsive: ''
-          default: '-1'
-          empty_table: 0
-          responsive: 0
+          override: true
+          sticky: false
+          summary: ''
+          empty_table: false
+          caption: ''
+          description: ''
+          responsive: false
           bootstrap_styles:
+            bordered: '0'
+            hover: '0'
             striped: striped
-            bordered: 0
-            hover: 0
             condensed: 0
       row:
         type: fields

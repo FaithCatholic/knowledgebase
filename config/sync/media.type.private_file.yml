@@ -12,4 +12,3 @@ source_configuration:
   source_field: field_private_file
 field_map:
   name: name
-  mimetype: field_private_file

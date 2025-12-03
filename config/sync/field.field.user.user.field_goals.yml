@@ -1,0 +1,30 @@
+uuid: 540435e1-5310-4f29-b49f-b9ab6bccc66e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_goals
+    - taxonomy.vocabulary.strategic_plan_goals
+  module:
+    - user
+id: user.user.field_goals
+field_name: field_goals
+entity_type: user
+bundle: user
+label: Goals
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      strategic_plan_goals: strategic_plan_goals
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

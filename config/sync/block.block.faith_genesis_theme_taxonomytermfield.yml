@@ -1,0 +1,32 @@
+uuid: a9d3cf5e-b852-48a4-8eb3-4d6949379a9d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_lead_s
+  module:
+    - fieldblock
+    - system
+  theme:
+    - faith_genesis_theme
+id: faith_genesis_theme_taxonomytermfield
+theme: faith_genesis_theme
+region: content
+weight: -6
+provider: null
+plugin: 'fieldblock:taxonomy_term'
+settings:
+  id: 'fieldblock:taxonomy_term'
+  label: 'Team Lead(s)'
+  label_display: visible
+  provider: fieldblock
+  label_from_field: false
+  field_name: field_lead_s
+  formatter_id: entity_reference_entity_view
+  formatter_settings:
+    view_mode: compact
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/taxonomy/term/*'

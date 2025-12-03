@@ -15,6 +15,10 @@ code: |-
   	float: right;
   	margin-top: 20px;
   }
+
+  #anchor {
+    scroll-margin-top: 20px;
+  }
 media: all
 preprocess: true
 conditions:

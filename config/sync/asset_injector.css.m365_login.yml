@@ -1,0 +1,18 @@
+uuid: cd6f343e-c685-487c-a963-7641a5581bce
+langcode: en
+status: true
+dependencies: {  }
+id: m365_login
+label: 'm365 login'
+code: |
+  .button-o365-sso {
+
+  	float: right;
+  	margin-top: 20px;
+  	margin-right: 30px;
+  }  
+media: all
+preprocess: true
+conditions: {  }
+contexts: {  }
+conditions_require_all: true

@@ -12,7 +12,7 @@ dependencies:
 id: resources
 theme: faith_genesis_theme
 region: content
-weight: -6
+weight: -10
 provider: null
 plugin: 'views_block:resources-block_1'
 settings:

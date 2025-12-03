@@ -25,15 +25,8 @@ dependencies:
     - image.style.medium
     - node.type.resource
   module:
-    - field_layout
-    - layout_discovery
     - svg_image
     - user
-third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
 id: node.resource.teaser
 targetEntityType: node
 bundle: resource

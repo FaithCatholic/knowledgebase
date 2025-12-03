@@ -6,15 +6,8 @@ dependencies:
     - field.field.media.icon.field_media_font_awesome_icon
     - media.type.icon
   module:
-    - field_layout
     - fontawesome_iconpicker_widget
-    - layout_discovery
     - path
-third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
 id: media.icon.default
 targetEntityType: media
 bundle: icon

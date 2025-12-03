@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - node
+    - user
 _core:
   default_config_hash: 0Jw_BFJCCtWk187tIYvME58VFpYwPaAdrc4eRtAyHH0
 label: Default
@@ -17,7 +18,36 @@ matchers:
       metadata: '[node:content-type:name] #[node:nid] | [node:created:medium] by [node:author]'
       bundles: {  }
       group_by_bundle: false
-      include_unpublished: false
       substitution_type: canonical
       limit: 100
+      include_unpublished: false
+    weight: 0
+  817a38f8-6f5c-4743-9c64-97a7d6754fb3:
+    id: 'entity:media'
+    uuid: 817a38f8-6f5c-4743-9c64-97a7d6754fb3
+    settings:
+      metadata: ''
+      bundles:
+        audio: audio
+        document: document
+        icon: icon
+        image: image
+        private_file: private_file
+        remote_video: remote_video
+        unlisted_file: unlisted_file
+      group_by_bundle: false
+      substitution_type: media
+      limit: 100
+    weight: 0
+  9da1e969-3e4d-421b-b7f6-ab8160f9ad7b:
+    id: 'entity:user'
+    uuid: 9da1e969-3e4d-421b-b7f6-ab8160f9ad7b
+    settings:
+      metadata: ''
+      bundles: {  }
+      group_by_bundle: false
+      substitution_type: canonical
+      limit: 100
+      roles: {  }
+      include_blocked: false
     weight: 0

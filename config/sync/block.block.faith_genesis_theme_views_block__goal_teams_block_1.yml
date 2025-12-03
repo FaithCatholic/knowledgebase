@@ -1,0 +1,30 @@
+uuid: 73bc2e9f-665b-4f9e-aa81-d6b2058a15af
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.goal_teams
+  module:
+    - system
+    - views
+  theme:
+    - faith_genesis_theme
+id: faith_genesis_theme_views_block__goal_teams_block_1
+theme: faith_genesis_theme
+region: content
+weight: -5
+provider: null
+plugin: 'views_block:goal_teams-block_1'
+settings:
+  id: 'views_block:goal_teams-block_1'
+  label: 'Team Members'
+  label_display: visible
+  provider: views
+  context_mapping: {  }
+  views_label: 'Team Members'
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/taxonomy/term/*'

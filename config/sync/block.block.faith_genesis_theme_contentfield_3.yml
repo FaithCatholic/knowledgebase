@@ -12,7 +12,7 @@ dependencies:
 id: faith_genesis_theme_contentfield_3
 theme: faith_genesis_theme
 region: sidebar_second
-weight: -9
+weight: -12
 provider: null
 plugin: 'fieldblock:node'
 settings:

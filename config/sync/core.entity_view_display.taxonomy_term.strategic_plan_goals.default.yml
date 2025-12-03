@@ -1,0 +1,23 @@
+uuid: d94e30b6-a5c0-4f5a-b1b7-3049cd12b27b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.strategic_plan_goals.field_lead_s
+    - taxonomy.vocabulary.strategic_plan_goals
+  module:
+    - text
+id: taxonomy_term.strategic_plan_goals.default
+targetEntityType: taxonomy_term
+bundle: strategic_plan_goals
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  field_lead_s: true

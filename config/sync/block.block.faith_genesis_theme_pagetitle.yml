@@ -1,0 +1,31 @@
+uuid: d420c380-3fae-438a-bed8-d26bcf1450cc
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_class
+    - node
+  theme:
+    - faith_genesis_theme
+third_party_settings:
+  block_class:
+    classes: h3
+id: faith_genesis_theme_pagetitle
+theme: faith_genesis_theme
+region: highlighted
+weight: -13
+provider: null
+plugin: page_title_block
+settings:
+  id: page_title_block
+  label: 'Page title'
+  label_display: '0'
+  provider: core
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+    bundles:
+      page: page

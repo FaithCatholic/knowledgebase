@@ -6,15 +6,8 @@ dependencies:
     - field.field.node.diagram.field_diagram
     - node.type.diagram
   module:
-    - field_layout
-    - layout_discovery
     - mermaid_diagram_field
     - user
-third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
 id: node.diagram.default
 targetEntityType: node
 bundle: diagram

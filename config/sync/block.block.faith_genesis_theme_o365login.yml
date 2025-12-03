@@ -1,0 +1,33 @@
+uuid: a08272f8-3b1d-45ac-8585-749ebe7edcf9
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:2411d5dc-dbd2-40c2-b33c-48eda24aee13'
+  module:
+    - block_content
+    - user
+  theme:
+    - faith_genesis_theme
+id: faith_genesis_theme_o365login
+theme: faith_genesis_theme
+region: top_bar
+weight: 0
+provider: null
+plugin: 'block_content:2411d5dc-dbd2-40c2-b33c-48eda24aee13'
+settings:
+  id: 'block_content:2411d5dc-dbd2-40c2-b33c-48eda24aee13'
+  label: 'O365 Login'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      anonymous: anonymous

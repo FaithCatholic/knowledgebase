@@ -2,6 +2,8 @@ uuid: fc501667-adbe-4e40-aea9-b51fca79468e
 langcode: en
 status: true
 dependencies:
+  module:
+    - node
   theme:
     - faith_genesis_theme
 _core:
@@ -9,7 +11,7 @@ _core:
 id: faith_genesis_theme_page_title
 theme: faith_genesis_theme
 region: content
-weight: -13
+weight: -17
 provider: null
 plugin: page_title_block
 settings:
@@ -17,4 +19,13 @@ settings:
   label: 'Page title'
   label_display: '0'
   provider: core
-visibility: {  }
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+    bundles:
+      article: article
+      diagram: diagram
+      resource: resource

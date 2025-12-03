@@ -3,7 +3,6 @@ langcode: en
 status: true
 dependencies:
   config:
-    - filter.format.markdown
     - node.type.article
     - node.type.page
     - taxonomy.vocabulary.tags
@@ -12,14 +11,12 @@ dependencies:
     - contextual
     - exclude_node_title
     - file
-    - filter
     - help
     - node
     - path
     - system
     - taxonomy
     - toolbar
-    - tour
 _core:
   default_config_hash: NtMgnXp0miNtJhag07NSjwdCm4zpJwhlDFs1HgyL4wI
 id: content_editor
@@ -33,7 +30,6 @@ permissions:
   - 'access files overview'
   - 'access help pages'
   - 'access toolbar'
-  - 'access tour'
   - 'administer url aliases'
   - 'create article content'
   - 'create page content'
@@ -50,7 +46,6 @@ permissions:
   - 'edit terms in tags'
   - 'revert all revisions'
   - 'use exclude node title'
-  - 'use text format markdown'
   - 'view all revisions'
   - 'view own unpublished content'
   - 'view the administration theme'

@@ -16,8 +16,8 @@ third_party_settings:
     classes: h3
 id: faith_genesis_theme_contentfield
 theme: faith_genesis_theme
-region: sidebar_second
-weight: -12
+region: sidebar_first
+weight: -18
 provider: null
 plugin: 'fieldblock:node'
 settings:

@@ -1,5 +1,5 @@
-client_id: $google-oauth-id
-client_secret: $google-oauth-secret
+client_id: 354111371533-0t5q2hflq6ug8a5dab9hvb9tqnh8tkj2.apps.googleusercontent.com
+client_secret: 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
 scopes: ''
 endpoints: ''
 restricted_domain: ''

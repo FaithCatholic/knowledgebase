@@ -1,0 +1,30 @@
+uuid: 0d1fad3e-4ed0-4cf7-81ef-fa786cf7168c
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.team_strengths
+  module:
+    - system
+    - views
+  theme:
+    - faith_genesis_theme
+id: faith_genesis_theme_views_block__team_strengths_block_1
+theme: faith_genesis_theme
+region: content
+weight: -4
+provider: null
+plugin: 'views_block:team_strengths-block_1'
+settings:
+  id: 'views_block:team_strengths-block_1'
+  label: ''
+  label_display: visible
+  provider: views
+  context_mapping: {  }
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/taxonomy/term/*'

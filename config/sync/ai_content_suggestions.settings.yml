@@ -1,0 +1,6 @@
+plugins:
+  readability: ''
+  summarise: ''
+  taxonomy_suggest: ''
+  title_suggest: ''
+  tone: ''

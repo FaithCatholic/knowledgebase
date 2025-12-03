@@ -8,6 +8,7 @@ dependencies:
     - field.field.user.user.field_department
     - field.field.user.user.field_direct_reports
     - field.field.user.user.field_full_name
+    - field.field.user.user.field_goals
     - field.field.user.user.field_hide
     - field.field.user.user.field_job_title
     - field.field.user.user.field_management
@@ -21,16 +22,9 @@ dependencies:
     - field.field.user.user.user_picture
     - image.style.thumbnail
   module:
-    - field_layout
-    - layout_discovery
     - svg_image
     - telephone
     - user
-third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
 _core:
   default_config_hash: mZLyuWM9CQx2ZJVqFGSbzgFnHzudVbHBYmdU256A5Wk
 id: user.user.default
@@ -61,6 +55,14 @@ content:
       link_to_entity: false
     third_party_settings: {  }
     weight: 1
+    region: content
+  field_goals:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 9
     region: content
   field_job_title:
     type: string

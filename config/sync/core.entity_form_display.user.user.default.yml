@@ -8,6 +8,7 @@ dependencies:
     - field.field.user.user.field_department
     - field.field.user.user.field_direct_reports
     - field.field.user.user.field_full_name
+    - field.field.user.user.field_goals
     - field.field.user.user.field_hide
     - field.field.user.user.field_job_title
     - field.field.user.user.field_management
@@ -21,16 +22,9 @@ dependencies:
     - field.field.user.user.user_picture
     - image.style.thumbnail
   module:
-    - field_layout
-    - layout_discovery
     - svg_image
     - telephone
     - user
-third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
 _core:
   default_config_hash: FaQ9Ptcpxpg30AtiqRDtl_8zbJArHP1LPfug_s59TOA
 id: user.user.default
@@ -85,6 +79,12 @@ content:
     settings:
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  field_goals:
+    type: options_buttons
+    weight: 20
+    region: content
+    settings: {  }
     third_party_settings: {  }
   field_hide:
     type: boolean_checkbox

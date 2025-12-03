@@ -1,0 +1,12 @@
+_core:
+  default_config_hash: '--gJY4SG2aCyYL-lpxoOaKbiudksIdFmnE8AHqYJNc0'
+link_text: 'Login with Microsoft 365'
+link_position: 1
+hide_login_form: 0
+auto_redirect: 0
+redirect_login_destination: 1
+hide_user_fields: 0
+only_existing_users: 0
+logout_office: 0
+update_username: 0
+username_attribute: displayName

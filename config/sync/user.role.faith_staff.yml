@@ -13,12 +13,14 @@ dependencies:
     - path
     - search
     - system
+    - toc_api
 id: faith_staff
 label: 'FAITH Staff'
 weight: 7
 is_admin: null
 permissions:
   - 'access administration pages'
+  - 'administer table of contents types'
   - 'create url aliases'
   - 'grant node permissions'
   - 'link to any page'

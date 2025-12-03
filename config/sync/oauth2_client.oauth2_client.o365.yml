@@ -1,0 +1,12 @@
+uuid: 9937c5fb-1e05-4392-a1a3-501a0b683932
+langcode: en
+status: true
+dependencies:
+  module:
+    - o365
+id: o365
+label: 'Microsoft 365'
+description: ''
+oauth2_client_plugin_id: o365
+credential_provider: oauth2_client
+credential_storage_key: ''

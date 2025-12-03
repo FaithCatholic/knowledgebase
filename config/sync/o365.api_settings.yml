@@ -1,0 +1,3 @@
+redirect_login: 'https://kb.faithcatholic.com'
+redirect_callback: 'https://kb.faithcatholic.com/o365/callback'
+auth_scopes: ''

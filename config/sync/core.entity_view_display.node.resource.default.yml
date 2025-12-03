@@ -24,17 +24,11 @@ dependencies:
     - image.style.wide
     - node.type.resource
   module:
-    - field_layout
-    - layout_discovery
+    - fontawesome
     - link
     - svg_image
     - text
     - user
-third_party_settings:
-  field_layout:
-    id: layout_onecol
-    settings:
-      label: ''
 id: node.resource.default
 targetEntityType: node
 bundle: resource
@@ -50,7 +44,7 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    weight: 5
+    weight: 6
     region: content
   field_app_link_ios:
     type: link
@@ -62,14 +56,22 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    weight: 4
+    weight: 5
     region: content
   field_description:
     type: text_default
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 2
+    weight: 3
+    region: content
+  field_icon:
+    type: fontawesome_icon_formatter
+    label: hidden
+    settings:
+      layers: false
+    third_party_settings: {  }
+    weight: 0
     region: content
   field_image:
     type: image
@@ -84,7 +86,7 @@ content:
         height: null
       svg_render_as_image: true
     third_party_settings: {  }
-    weight: 0
+    weight: 1
     region: content
   field_link:
     type: link
@@ -96,7 +98,7 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    weight: 1
+    weight: 2
     region: content
   field_tags:
     type: entity_reference_label
@@ -104,18 +106,17 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 3
+    weight: 4
     region: content
   links:
     settings: {  }
     third_party_settings: {  }
-    weight: 6
+    weight: 7
     region: content
 hidden:
   field_admins: true
   field_billing_cycle: true
   field_cost_per_seat: true
-  field_icon: true
   field_monthly_cost: true
   field_number_of_seats: true
   field_renewal_month: true

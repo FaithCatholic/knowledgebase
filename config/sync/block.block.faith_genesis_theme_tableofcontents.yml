@@ -1,0 +1,28 @@
+uuid: 34f189a4-a1e1-42c1-a293-15e91853120d
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - toc_filter
+  theme:
+    - faith_genesis_theme
+id: faith_genesis_theme_tableofcontents
+theme: faith_genesis_theme
+region: sidebar_first
+weight: -17
+provider: null
+plugin: toc_filter
+settings:
+  id: toc_filter
+  label: 'Table of contents'
+  label_display: '0'
+  provider: toc_filter
+visibility:
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+    bundles:
+      page: page

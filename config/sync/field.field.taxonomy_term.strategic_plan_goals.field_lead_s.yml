@@ -1,0 +1,29 @@
+uuid: 39b7543c-97ee-432d-9325-7a24902066ee
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_lead_s
+    - taxonomy.vocabulary.strategic_plan_goals
+id: taxonomy_term.strategic_plan_goals.field_lead_s
+field_name: field_lead_s
+entity_type: taxonomy_term
+bundle: strategic_plan_goals
+label: Lead(s)
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings:
+    target_bundles: null
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    filter:
+      type: _none
+    include_anonymous: false
+field_type: entity_reference

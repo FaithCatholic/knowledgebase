@@ -50,7 +50,9 @@ applications:
         n: "*"
       php:
         composer/composer: "^2"
-
+    variables: 
+      env:
+        N_PREFIX: /app/.global
 
     hooks:
       build: |

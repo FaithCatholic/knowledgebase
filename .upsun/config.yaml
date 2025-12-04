@@ -104,13 +104,13 @@ applications:
         hash -r          
 
         # Build custom theme
-        composer genesis-setup
-        #composer slides-setup
+        ./vendor/bin/composer genesis-setup
+        ./vendor/bin/composer slides-setup
 
         
       deploy: |
         set -eux
-        
+
     crons:
       drupal:
         spec: '*/19 * * * *'

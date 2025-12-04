@@ -4,7 +4,13 @@ applications:
     source:
       root: "/"
 
-    type: "php:8.2"
+    type: "php:8.4"
+    runtime:
+      extensions: 
+        - sodium
+        - apcu
+        - blackfire
+        - imagick
 
     relationships:
       dbmysql:

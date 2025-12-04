@@ -42,11 +42,41 @@ applications:
          source_path: 'console'
 
     web:
-
       locations:
         "/":
           passthru: "/index.php"
           root: "web"
+          expires: 5m
+          allow: false
+          rules:
+            '\.(jpe?g|png|gif|svgz?|css|js|map|ico|bmp|eot|woff2?|otf|ttf)$':
+              allow: true
+            '^/robots\.txt$':
+              allow: true
+            '^/sitemap\.xml$':
+              allow: true
+            '^/sites/sites\.php$':
+              scripts: false
+            '^/sites/[^/]+/settings.*?\.php$':
+              scripts: false
+
+        "/slides":
+          root: "web/slides"
+          index:
+            - index.html
+          scripts: false
+          allow: true
+          expires: 1h
+
+        "/sites/default/files":
+          allow: true
+          expires: 5m
+          passthru: "/index.php"
+          root: "web/sites/default/files"
+          scripts: false
+          rules:
+            '^/sites/default/files/(css|js)':
+              expires: 2w
           
     build:
       flavor: composer
@@ -63,7 +93,7 @@ applications:
     hooks:
       build: |
         set -eux
-        composer --no-ansi --no-interaction install --no-progress --prefer-dist --optimize-autoloader --no-dev
+        composer install --no-ansi --no-interaction --no-progress --prefer-dist --optimize-autoloader --no-dev
         export N_PREFIX=/app/.global
         export PATH="$N_PREFIX/bin:$PATH"
 
@@ -80,6 +110,12 @@ applications:
         
       deploy: |
         set -eux
+        
+    crons:
+      drupal:
+        spec: '*/19 * * * *'
+        commands: 
+          start: 'cd web ; drush core-cron'
 
 services:
   dbmysql:

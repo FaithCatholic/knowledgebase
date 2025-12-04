@@ -104,10 +104,14 @@ applications:
         hash -r          
 
         # Build custom theme
-        php $(which composer) genesis-setup --working-dir=.
-        php $(which composer) slides-setup --working-dir=.
+        npm install --prefix ./web/themes/contrib/faith_genesis_theme
+        npm run genesis-setup --prefix ./web/themes/contrib/faith_genesis_theme
 
-        
+        # Build slides
+        php ./scripts/clone-script.php
+        npm install --prefix ./web/slides
+        npm run build --prefix ./web/slides
+
       deploy: |
         set -eux
 

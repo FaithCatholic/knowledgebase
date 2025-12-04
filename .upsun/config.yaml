@@ -1,0 +1,136 @@
+applications:
+  drupal:
+
+    source:
+      root: "/"
+
+    type: "php:8.4"
+    runtime:
+      extensions: 
+        - sodium
+        - apcu
+        - blackfire
+        - imagick
+
+    relationships:
+      dbmysql:
+ 
+    mounts:
+
+      '/web/sites/default/files':
+         source: storage
+         source_path: 'files'
+
+      '/tmp':
+         source: storage
+         source_path: 'tmp'
+
+      '/private':
+         source: storage
+         source_path: 'private'
+
+      '/.drush':
+         source: storage
+         source_path: 'drush'
+
+      '/drush-backups':
+         source: storage
+         source_path: 'drush-backups'
+
+      '/.console':
+         source: storage
+         source_path: 'console'
+
+    web:
+      locations:
+        "/":
+          passthru: "/index.php"
+          root: "web"
+          expires: 5m
+          allow: false
+          rules:
+            '\.(jpe?g|png|gif|svgz?|css|js|map|ico|bmp|eot|woff2?|otf|ttf)$':
+              allow: true
+            '^/robots\.txt$':
+              allow: true
+            '^/sitemap\.xml$':
+              allow: true
+            '^/sites/sites\.php$':
+              scripts: false
+            '^/sites/[^/]+/settings.*?\.php$':
+              scripts: false
+
+        "/slides":
+          root: "web/slides"
+          index:
+            - index.html
+          scripts: false
+          allow: true
+          expires: 1h
+
+        "/sites/default/files":
+          allow: true
+          expires: 5m
+          passthru: "/index.php"
+          root: "web/sites/default/files"
+          scripts: false
+          rules:
+            '^/sites/default/files/(css|js)':
+              expires: 2w
+          
+    build:
+      flavor: composer
+
+    dependencies:
+      nodejs:
+        n: "*"
+      php:
+        composer/composer: "^2"
+    variables: 
+      env:
+        N_PREFIX: /app/.global
+
+    hooks:
+      build: |
+        set -eux
+        composer install --no-ansi --no-interaction --no-progress --prefer-dist --optimize-autoloader --no-dev
+        export N_PREFIX=/app/.global
+        export PATH="$N_PREFIX/bin:$PATH"
+
+        # Install the version specified in the .nvmrc file
+        n auto
+
+        # Reset the location hash to recognize the newly installed version
+        hash -r          
+
+        # Build custom theme
+        npm install --prefix ./web/themes/contrib/faith_genesis_theme
+        npm run genesis-setup --prefix ./web/themes/contrib/faith_genesis_theme
+
+        # Build slides
+        php ./scripts/clone-script.php
+        npm install --prefix ./web/slides
+        npm run build --prefix ./web/slides
+
+      deploy: |
+        set -eux
+
+    crons:
+      drupal:
+        spec: '*/19 * * * *'
+        commands: 
+          start: 'cd web ; drush core-cron'
+
+services:
+  dbmysql:
+    type: oracle-mysql:8.0 
+
+  
+routes:
+  "https://{default}/":
+    type: upstream
+    upstream: "drupal:http"
+
+  "https://www.{default}":
+    type: redirect
+    to: "https://{default}/"

@@ -104,8 +104,8 @@ applications:
         hash -r          
 
         # Build custom theme
-        ./vendor/bin/composer genesis-setup
-        ./vendor/bin/composer slides-setup
+        php ./vendor/bin/composer genesis-setup
+        php ./vendor/bin/composer slides-setup
 
         
       deploy: |

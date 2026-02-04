@@ -60,7 +60,7 @@
         "drupal/ckeditor_abbreviation": "^5.0",
         "drupal/ckeditor_indentblock": "^1.1",
         "drupal/color_field": "^3.0",
-        "drupal/colorbox": "^2.0",
+        "drupal/colorbox": "^2.2",
         "drupal/config_ignore_auto": "^3.0",
         "drupal/core-composer-scaffold": "^10.1",
         "drupal/core-project-message": "^10.1",
@@ -84,6 +84,7 @@
         "drupal/gemini_provider": "^1.0@beta",
         "drupal/geofield": "^1.57",
         "drupal/google_tag": "^2.0",
+        "drupal/group": "^3.3",
         "drupal/image_widget_crop": "^2.4",
         "drupal/imagick": "^2.0",
         "drupal/improve_line_breaks_filter": "^1.5",
@@ -242,7 +243,7 @@
         "patches": {
             "drupal/core": {
                 "Reprovision default media thumbnails when not found at icon_base_uri":
-                "https://www.drupal.org/files/issues/2023-11-06/3060509-53.patch"
+                "https://www.drupal.org/files/issues/2026-01-09/3060509-65-restore-default-media-icons.patch"
             },
             "drupal/markdown": {
                 "SubformState incorrect interface error":

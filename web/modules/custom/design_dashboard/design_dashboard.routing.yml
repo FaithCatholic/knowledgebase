@@ -1,0 +1,8 @@
+design_dashboard.page:
+  path: '/design/dashboard'
+  defaults:
+    _controller: '\Drupal\design_dashboard\Controller\DesignDashboardController::page'
+  requirements:
+    _role: 'management'
+  options:
+    no_cache: TRUE

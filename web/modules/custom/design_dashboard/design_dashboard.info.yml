@@ -1,0 +1,5 @@
+name: Design Dashboard
+type: module
+description: Serves the static designer capacity dashboard to users with the Management role.
+core_version_requirement: ^10 || ^11
+package: Custom

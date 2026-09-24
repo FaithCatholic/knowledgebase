@@ -15437,16 +15437,16 @@
         },
         {
             "name": "vardot/ckeditor5-anchor-drupal",
-            "version": "2.0.3",
+            "version": "2.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Vardot/ckeditor5-anchor-drupal.git",
-                "reference": "a98f89091be465c914ce26777734807cf5c902e8"
+                "reference": "3da1fa260dd4102635396445dfbd7c37b1b0892f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Vardot/ckeditor5-anchor-drupal/zipball/a98f89091be465c914ce26777734807cf5c902e8",
-                "reference": "a98f89091be465c914ce26777734807cf5c902e8",
+                "url": "https://api.github.com/repos/Vardot/ckeditor5-anchor-drupal/zipball/3da1fa260dd4102635396445dfbd7c37b1b0892f",
+                "reference": "3da1fa260dd4102635396445dfbd7c37b1b0892f",
                 "shasum": ""
             },
             "require": {
@@ -15475,7 +15475,7 @@
                 "issues": "http://drupal.org/project/issues/anchor_link",
                 "source": "http://cgit.drupalcode.org/anchor_link"
             },
-            "time": "2025-07-04T22:36:19+00:00"
+            "time": "2026-08-25T08:25:36+00:00"
         },
         {
             "name": "webflo/drupal-finder",

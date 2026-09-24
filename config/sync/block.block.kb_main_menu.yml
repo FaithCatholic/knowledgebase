@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - system
+    - user
     - we_megamenu
   theme:
     - faith_genesis_theme
@@ -23,3 +24,10 @@ visibility:
     id: request_path
     negate: true
     pages: "/information-technology/*\r\n/design/*"
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      authenticated: authenticated

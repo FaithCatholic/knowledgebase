@@ -19,6 +19,23 @@ code: |-
   #anchor {
     scroll-margin-top: 20px;
   }
+
+  .fa-fas::before, .fa-far::before {
+      display: none !important;
+  }
+  /* This maps the broken class to the correct font-family */
+  .fa-fas, .fa-far {
+      font-family: "Font Awesome 6 Pro" !important;
+      font-weight: 900; /* Use 900 for Solid, 400 for Regular */
+  }
+
+  /* Adjusting the Gin-style breadcrumb in Bootstrap context */
+  .breadcrumb .back-to-site-link {
+      display: inline-block;
+      margin-right: 10px;
+      padding-right: 10px;
+      border-right: 1px solid #ccc; /* This creates the vertical bar seen in Gin */
+  }
 media: all
 preprocess: true
 conditions:

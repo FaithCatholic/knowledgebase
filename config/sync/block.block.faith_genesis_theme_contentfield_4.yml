@@ -9,7 +9,7 @@ dependencies:
 id: faith_genesis_theme_contentfield_4
 theme: faith_genesis_theme
 region: content
-weight: -3
+weight: -7
 provider: null
 plugin: 'fieldblock:node'
 settings:

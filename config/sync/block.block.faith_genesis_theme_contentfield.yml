@@ -17,7 +17,7 @@ third_party_settings:
 id: faith_genesis_theme_contentfield
 theme: faith_genesis_theme
 region: sidebar_first
-weight: -18
+weight: -21
 provider: null
 plugin: 'fieldblock:node'
 settings:

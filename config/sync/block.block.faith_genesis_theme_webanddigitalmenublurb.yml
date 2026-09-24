@@ -1,0 +1,25 @@
+uuid: 4bbe3c28-0a32-43a7-89fd-6caf04f398d8
+langcode: en
+status: false
+dependencies:
+  content:
+    - 'block_content:basic:0ba6706a-d017-43ff-9ea4-7d8a433a3713'
+  module:
+    - block_content
+  theme:
+    - faith_genesis_theme
+id: faith_genesis_theme_webanddigitalmenublurb
+theme: faith_genesis_theme
+region: navigation
+weight: 0
+provider: null
+plugin: 'block_content:0ba6706a-d017-43ff-9ea4-7d8a433a3713'
+settings:
+  id: 'block_content:0ba6706a-d017-43ff-9ea4-7d8a433a3713'
+  label: 'Web and digital menu blurb'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility: {  }

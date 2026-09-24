@@ -5,9 +5,9 @@ method: svg
 load_assets: true
 use_cdn: true
 external_svg_location: 'https://kit.fontawesome.com/bc332693ac.js'
-use_shim: true
-external_shim_location: 'https://use.fontawesome.com/releases/v6.4.0/js/v4-shims.js'
-allow_pseudo_elements: false
+use_shim: false
+external_shim_location: 'https://use.fontawesome.com/releases/v6.6.0/js/v4-shims.js'
+allow_pseudo_elements: true
 use_solid_file: true
 use_regular_file: true
 use_light_file: true

@@ -5,6 +5,7 @@ dependencies:
   module:
     - search
     - system
+    - user
   theme:
     - faith_genesis_theme
 id: faith_genesis_theme_searchform_2
@@ -24,3 +25,10 @@ visibility:
     id: request_path
     negate: false
     pages: '<front>'
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      authenticated: authenticated

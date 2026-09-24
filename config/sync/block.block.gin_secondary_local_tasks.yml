@@ -1,15 +1,15 @@
-uuid: 598052a5-ebec-4225-9de3-907371576bd9
+uuid: 3fd7d1b9-1709-4ca3-a560-97ba0206d9f3
 langcode: en
 status: true
 dependencies:
   theme:
-    - faith_genesis_theme
+    - gin
 _core:
-  default_config_hash: ydSxdq7R66I8UMC460rOzlfzvlUL4VRbdwc6z9DWaUI
-id: faith_genesis_theme_secondary_local_tasks
-theme: faith_genesis_theme
-region: highlighted
-weight: -7
+  default_config_hash: BCWhood0xXFQYqxFgL1spXdb9KeIuXH1YvTdjIEedDg
+id: gin_secondary_local_tasks
+theme: gin
+region: pre_content
+weight: 0
 provider: null
 plugin: local_tasks_block
 settings:

@@ -151,3 +151,4 @@ $settings['skip_permissions_hardening'] = TRUE;
 # $settings['config_exclude_modules'] = ['devel', 'stage_file_proxy'];
 
 $settings['file_private_path'] = '../private';
+$settings['config_sync_directory'] = '../config/sync';

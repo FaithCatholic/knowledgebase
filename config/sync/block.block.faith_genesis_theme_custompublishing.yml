@@ -1,0 +1,25 @@
+uuid: 3336bd67-708d-4e5d-9dd7-f3d5888dc8cc
+langcode: en
+status: false
+dependencies:
+  content:
+    - 'block_content:basic:d2184f95-0406-4a53-b1d3-13d58a00a522'
+  module:
+    - block_content
+  theme:
+    - faith_genesis_theme
+id: faith_genesis_theme_custompublishing
+theme: faith_genesis_theme
+region: navigation
+weight: 0
+provider: null
+plugin: 'block_content:d2184f95-0406-4a53-b1d3-13d58a00a522'
+settings:
+  id: 'block_content:d2184f95-0406-4a53-b1d3-13d58a00a522'
+  label: 'Custom Publishing menu blurb'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility: {  }

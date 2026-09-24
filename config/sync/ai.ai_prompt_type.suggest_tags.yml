@@ -1,0 +1,11 @@
+uuid: f82fe6fc-d7c9-4919-b554-e02c0f8e6dd8
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - ai_content_suggestions
+id: suggest_tags
+label: 'Suggest tags'
+variables: {  }
+tokens: {  }

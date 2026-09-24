@@ -12,7 +12,7 @@ dependencies:
 id: faith_genesis_theme_views_block__goal_teams_block_1
 theme: faith_genesis_theme
 region: content
-weight: -5
+weight: -9
 provider: null
 plugin: 'views_block:goal_teams-block_1'
 settings:

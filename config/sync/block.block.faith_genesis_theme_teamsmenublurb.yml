@@ -1,0 +1,25 @@
+uuid: b8528046-a5b7-4ba9-81ae-f7deb0d733d3
+langcode: en
+status: false
+dependencies:
+  content:
+    - 'block_content:basic:76522cd3-482a-4849-8a33-e603d9d02b6f'
+  module:
+    - block_content
+  theme:
+    - faith_genesis_theme
+id: faith_genesis_theme_teamsmenublurb
+theme: faith_genesis_theme
+region: navigation
+weight: 0
+provider: null
+plugin: 'block_content:76522cd3-482a-4849-8a33-e603d9d02b6f'
+settings:
+  id: 'block_content:76522cd3-482a-4849-8a33-e603d9d02b6f'
+  label: 'Teams menu blurb'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility: {  }

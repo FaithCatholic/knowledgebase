@@ -4,6 +4,15 @@ status: true
 dependencies:
   config:
     - filter.format.basic_html
+    - media.type.audio
+    - media.type.document
+    - media.type.icon
+    - media.type.image
+    - media.type.private_file
+    - media.type.remote_video
+    - media.type.unlisted_file
+    - media.type.video
+    - taxonomy.vocabulary.tags
   module:
     - comment
     - contact
@@ -12,9 +21,12 @@ dependencies:
     - filter
     - fontawesome
     - media
+    - menu_link_attributes
     - search
     - shortcut
     - system
+    - taxonomy
+    - toolbar
 _core:
   default_config_hash: cFrlqjtkTfvY3RGccjJkPf1SGIfJ942IrxTLWAO4mgA
 id: authenticated
@@ -25,12 +37,75 @@ permissions:
   - 'access comments'
   - 'access content'
   - 'access fontawesome additional settings'
+  - 'access media overview'
   - 'access shortcuts'
   - 'access site-wide contact form'
+  - 'access toolbar'
+  - 'access user contact forms'
+  - 'access user profiles'
+  - 'change own username'
+  - 'create audio media'
+  - 'create document media'
+  - 'create icon media'
+  - 'create image media'
+  - 'create media'
+  - 'create private_file media'
+  - 'create remote_video media'
+  - 'create terms in tags'
+  - 'create unlisted_file media'
+  - 'create video media'
+  - 'delete media'
+  - 'delete own audio media'
+  - 'delete own document media'
   - 'delete own files'
+  - 'delete own icon media'
+  - 'delete own image media'
+  - 'delete own private_file media'
+  - 'delete own remote_video media'
+  - 'delete own unlisted_file media'
+  - 'delete own video media'
+  - 'edit any audio media'
+  - 'edit any document media'
+  - 'edit any icon media'
+  - 'edit any image media'
+  - 'edit any private_file media'
+  - 'edit any remote_video media'
+  - 'edit any unlisted_file media'
+  - 'edit any video media'
+  - 'edit own audio media'
+  - 'edit own document media'
+  - 'edit own icon media'
+  - 'edit own image media'
+  - 'edit own private_file media'
+  - 'edit own remote_video media'
+  - 'edit own unlisted_file media'
+  - 'edit own video media'
+  - 'edit terms in tags'
   - 'post comments'
+  - 'revert any audio media revisions'
+  - 'revert any document media revisions'
+  - 'revert any icon media revisions'
+  - 'revert any image media revisions'
+  - 'revert any private_file media revisions'
+  - 'revert any remote_video media revisions'
+  - 'revert any unlisted_file media revisions'
+  - 'revert any video media revisions'
   - 'search content'
   - 'skip comment approval'
+  - 'update media'
   - 'use exclude node title'
+  - 'use menu link attributes'
   - 'use text format basic_html'
+  - 'view all media revisions'
+  - 'view any audio media revisions'
+  - 'view any document media revisions'
+  - 'view any icon media revisions'
+  - 'view any image media revisions'
+  - 'view any private_file media revisions'
+  - 'view any remote_video media revisions'
+  - 'view any unlisted_file media revisions'
+  - 'view any video media revisions'
   - 'view media'
+  - 'view own unpublished media'
+  - 'view user email addresses'
+  - 'view vocabulary labels'

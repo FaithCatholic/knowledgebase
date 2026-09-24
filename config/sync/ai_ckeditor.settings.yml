@@ -5,5 +5,10 @@ prompts:
   summarise: "Summarize the following text in the same language,\r\ndo not return the original text or restate it word-for-word.\r\nHere is the original text:\r\n"
   tone: "Change the tone of the following text to be {{ tone }} using the same language as the following text.\r\n"
   translate: "Translate the following text into {{ lang }}\r\n"
+  modify_prompt: |-
+    Use the following instructions to process this text. Return only the processed text without explanations.
+    Instructions: {{ modify_prompt }}
+
+    Text to process:
 _core:
   default_config_hash: 2xvTnAFagtSdmE-GLvKO4EwssCJHk6BSGpXhGko58jM

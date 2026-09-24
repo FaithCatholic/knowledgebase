@@ -4,29 +4,44 @@ status: true
 dependencies:
   config:
     - filter.format.full_html
-    - node.type.article
     - node.type.page
+    - workflows.workflow.editorial
   module:
+    - content_moderation
+    - contextual
     - exclude_node_title
     - filter
-    - nodeaccess
+    - node
     - path
     - search
     - system
-    - toc_api
+    - toolbar
 id: faith_staff
 label: 'FAITH Staff'
 weight: 7
 is_admin: null
 permissions:
   - 'access administration pages'
-  - 'administer table of contents types'
+  - 'access content overview'
+  - 'access contextual links'
+  - 'access toolbar'
+  - 'create page content'
   - 'create url aliases'
-  - 'grant node permissions'
+  - 'delete own page content'
+  - 'edit any page content'
+  - 'edit own page content'
   - 'link to any page'
-  - 'nodeaccess grant article permissions'
-  - 'nodeaccess grant page permissions'
   - 'use advanced search'
+  - 'use editorial transition archive'
+  - 'use editorial transition archived_draft'
+  - 'use editorial transition archived_published'
+  - 'use editorial transition create_new_draft'
+  - 'use editorial transition publish'
   - 'use exclude node title'
   - 'use text format full_html'
+  - 'view all revisions'
+  - 'view latest version'
+  - 'view own unpublished content'
+  - 'view page revisions'
   - 'view the administration theme'
+  - 'view user email addresses'

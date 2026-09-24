@@ -3,7 +3,7 @@ _core:
 allowed_grant_operations:
   grant_view: true
   grant_update: true
-  grant_delete: false
+  grant_delete: true
 bundles_roles_grants:
   article:
     administrator:
@@ -105,35 +105,35 @@ bundles_roles_grants:
       grant_update: 0
       grant_delete: 0
   resource:
-    anonymous:
-      grant_view: 0
-      grant_update: 0
-      grant_delete: 0
     authenticated:
-      grant_view: 0
-      grant_update: 0
+      grant_view: 1
+      grant_update: 1
       grant_delete: 0
     content_editor:
-      grant_view: 0
-      grant_update: 0
+      grant_view: 1
+      grant_update: 1
       grant_delete: 0
     administrator:
-      grant_view: 0
-      grant_update: 0
-      grant_delete: 0
+      grant_view: 1
+      grant_update: 1
+      grant_delete: 1
     management:
-      grant_view: 0
-      grant_update: 0
-      grant_delete: 0
+      grant_view: 1
+      grant_update: 1
+      grant_delete: 1
     faith_staff:
-      grant_view: 0
-      grant_update: 0
+      grant_view: 1
+      grant_update: 1
       grant_delete: 0
     it:
-      grant_view: 0
-      grant_update: 0
-      grant_delete: 0
+      grant_view: 1
+      grant_update: 1
+      grant_delete: 1
     author:
+      grant_view: 1
+      grant_update: 1
+      grant_delete: 1
+    anonymous:
       grant_view: 0
       grant_update: 0
       grant_delete: 0
@@ -141,7 +141,7 @@ grants_tab_availability:
   article: true
   diagram: false
   page: true
-  resource: false
+  resource: true
 map_rid_gid:
   anonymous: 0
   authenticated: 1

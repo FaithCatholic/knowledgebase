@@ -1,0 +1,28 @@
+uuid: e17c394d-4f7b-4098-a06f-4338fbe9f8be
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+    - we_megamenu
+  theme:
+    - faith_genesis_theme
+id: faith_genesis_theme_public
+theme: faith_genesis_theme
+region: header
+weight: 0
+provider: null
+plugin: 'we_megamenu_block:public'
+settings:
+  id: 'we_megamenu_block:public'
+  label: Public
+  label_display: '0'
+  provider: we_megamenu
+visibility:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      anonymous: anonymous

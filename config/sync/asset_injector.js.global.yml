@@ -1,0 +1,56 @@
+uuid: 118c7c78-ce92-4f59-a40e-06dff9025b84
+langcode: en
+status: false
+dependencies:
+  module:
+    - user
+id: global
+label: Global
+code: |-
+  (function () {
+    const fixBackToSite = () => {
+      // Find all breadcrumb spans
+      const spans = document.querySelectorAll('.gin-breadcrumb__text');
+      
+      spans.forEach(span => {
+        // Check if text includes "Back to site" (case-insensitive & handles whitespace)
+        if (span.textContent.trim().toLowerCase() === 'back to site' && !span.parentElement.classList.contains('wrapped-link')) {
+          const link = document.createElement('a');
+          link.href = '/';
+          link.className = 'gin-breadcrumb__link wrapped-link';
+          link.style.color = 'inherit';
+          link.style.text-decoration = 'none';
+          
+          // Move the span inside the link
+          span.parentNode.insertBefore(link, span);
+          link.appendChild(span);
+        }
+      });
+    };
+
+    // Run on load
+    fixBackToSite();
+
+    // Run whenever the document changes (to catch AJAX/Gin dynamic loads)
+    const observer = new MutationObserver(fixBackToSite);
+    observer.observe(document.body, { childList: true, subtree: true });
+  })();
+noscript: ''
+noscriptRegion: {  }
+jquery: false
+header: false
+preprocess: true
+conditions:
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      authenticated: authenticated
+      content_editor: content_editor
+      administrator: administrator
+      management: management
+      faith_staff: faith_staff
+contexts: {  }
+conditions_require_all: true

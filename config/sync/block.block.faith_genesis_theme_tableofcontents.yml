@@ -10,13 +10,13 @@ dependencies:
 id: faith_genesis_theme_tableofcontents
 theme: faith_genesis_theme
 region: sidebar_first
-weight: -17
+weight: -19
 provider: null
 plugin: toc_filter
 settings:
   id: toc_filter
   label: 'Table of contents'
-  label_display: '0'
+  label_display: visible
   provider: toc_filter
 visibility:
   'entity_bundle:node':

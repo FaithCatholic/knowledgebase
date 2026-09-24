@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.media.full
     - field.field.node.page.body
     - field.field.node.page.field_attachments
     - field.field.node.page.field_contacts
@@ -12,6 +13,7 @@ dependencies:
     - field.field.node.page.field_tags
     - node.type.page
   module:
+    - colorbox
     - text
     - user
 _core:
@@ -34,11 +36,13 @@ content:
     weight: 0
     region: content
   field_attachments:
-    type: entity_reference_entity_view
+    type: colorbox_view_modes
     label: hidden
     settings:
-      view_mode: default
-      link: false
+      colorbox_view_mode: full
+      colorbox_modal_view_mode: full
+      colorbox_gallery: post
+      colorbox_gallery_custom: ''
     third_party_settings: {  }
     weight: 4
     region: content

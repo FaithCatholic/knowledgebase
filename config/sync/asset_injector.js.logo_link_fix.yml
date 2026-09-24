@@ -1,0 +1,43 @@
+uuid: 5952a5b6-2062-42fb-b17a-1d24105827a2
+langcode: en
+status: true
+dependencies:
+  module:
+    - user
+id: logo_link_fix
+label: 'Logo link fix'
+code: |-
+  (function ($, Drupal) {
+    Drupal.behaviors.ginLogoFixSurgical = {
+      attach: function (context) {
+        // Find the logo link specifically where href is empty or just #
+        const $logo = $('.toolbar-logo.is-active', context);
+        
+        if ($logo.length) {
+          // 1. Force the href to the homepage
+          $logo.attr('href', '/');
+          
+          // 2. Remove the 'is-active' state so it doesn't look disabled
+          $logo.removeClass('is-active');
+          
+          // 3. Optional: Remove the aria-current so screen readers treat it as a link
+          $logo.removeAttr('aria-current');
+        }
+      }
+    };
+  })(jQuery, Drupal);
+noscript: ''
+noscriptRegion: {  }
+jquery: false
+header: false
+preprocess: true
+conditions:
+  user_role:
+    id: user_role
+    negate: true
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      anonymous: anonymous
+contexts: {  }
+conditions_require_all: true

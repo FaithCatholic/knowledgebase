@@ -13,14 +13,14 @@ dependencies:
     - path
     - search
     - system
-    - toc_api
+    - toolbar
 id: management
 label: Management
 weight: 4
 is_admin: null
 permissions:
   - 'access administration pages'
-  - 'administer table of contents types'
+  - 'access toolbar'
   - 'create url aliases'
   - 'grant node permissions'
   - 'link to any page'

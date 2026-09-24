@@ -13,12 +13,14 @@ dependencies:
     - path
     - search
     - system
+    - toolbar
 id: it
 label: IT
 weight: 8
 is_admin: null
 permissions:
   - 'access administration pages'
+  - 'access toolbar'
   - 'create url aliases'
   - 'grant node permissions'
   - 'link to any page'

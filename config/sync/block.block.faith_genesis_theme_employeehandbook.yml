@@ -11,7 +11,7 @@ dependencies:
 id: faith_genesis_theme_employeehandbook
 theme: faith_genesis_theme
 region: sidebar_first
-weight: -16
+weight: -20
 provider: null
 plugin: 'system_menu_block:employee-handbook'
 settings:

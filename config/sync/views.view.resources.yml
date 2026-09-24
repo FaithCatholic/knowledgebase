@@ -13,7 +13,12 @@ dependencies:
     - node.type.resource
     - taxonomy.vocabulary.resource_type
     - taxonomy.vocabulary.section
+    - user.role.administrator
     - user.role.authenticated
+    - user.role.content_editor
+    - user.role.faith_staff
+    - user.role.it
+    - user.role.management
   content:
     - 'taxonomy_term:resource_type:8e4546c1-071c-4fd3-865f-2079fbf30c90'
     - 'taxonomy_term:section:fda666c5-d6a6-472c-b04d-fa8a663109d9'
@@ -499,6 +504,11 @@ display:
         options:
           role:
             authenticated: authenticated
+            content_editor: content_editor
+            administrator: administrator
+            management: management
+            faith_staff: faith_staff
+            it: it
       cache:
         type: tag
         options: {  }

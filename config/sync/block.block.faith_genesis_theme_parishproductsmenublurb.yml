@@ -1,0 +1,25 @@
+uuid: e0d4afc0-c2a7-4b91-b1be-7d08a7b8ef08
+langcode: en
+status: false
+dependencies:
+  content:
+    - 'block_content:basic:e5e60a27-01d6-4852-bd38-65d8bc297e28'
+  module:
+    - block_content
+  theme:
+    - faith_genesis_theme
+id: faith_genesis_theme_parishproductsmenublurb
+theme: faith_genesis_theme
+region: navigation
+weight: 0
+provider: null
+plugin: 'block_content:e5e60a27-01d6-4852-bd38-65d8bc297e28'
+settings:
+  id: 'block_content:e5e60a27-01d6-4852-bd38-65d8bc297e28'
+  label: 'Parish Products menu blurb'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility: {  }

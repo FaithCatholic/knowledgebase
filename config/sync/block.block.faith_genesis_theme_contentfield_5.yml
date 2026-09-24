@@ -11,7 +11,7 @@ dependencies:
 id: faith_genesis_theme_contentfield_5
 theme: faith_genesis_theme
 region: sidebar_first
-weight: -15
+weight: -18
 provider: null
 plugin: 'fieldblock:node'
 settings:

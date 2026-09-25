@@ -18,7 +18,9 @@ if (getenv('IS_DDEV_PROJECT') == 'true' && file_exists(__DIR__ . '/settings.ddev
  * Keep this code block at the end of this file to take full effect.
  */
 
- if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
+ // settings.local.php is committed for DDEV, so skip it on Upsun: it shows
+ // verbose errors and turns off CSS/JS aggregation.
+ if (!getenv('PLATFORM_APPLICATION') && file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
    include $app_root . '/' . $site_path . '/settings.local.php';
  }
 

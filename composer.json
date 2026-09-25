@@ -29,6 +29,18 @@
                 }
             }
         },
+                {
+            "type": "package",
+            "package": {
+                "name": "jackmoore/colorbox",
+                "version": "1.6.4",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://github.com/jackmoore/colorbox/archive/refs/tags/1.6.4.zip",
+                    "type": "zip"
+                }
+            }
+        },
         {
             "type": "package",
             "package": {
@@ -62,9 +74,9 @@
         "drupal/color_field": "^3.0",
         "drupal/colorbox": "^2.2",
         "drupal/config_ignore_auto": "^3.0",
-        "drupal/core-composer-scaffold": "^10.1",
-        "drupal/core-project-message": "^10.1",
-        "drupal/core-recommended": "^10.1",
+        "drupal/core-composer-scaffold": "^11.3",
+        "drupal/core-project-message": "^11.3",
+        "drupal/core-recommended": "^11.3",
         "drupal/crop": "^2.3",
         "drupal/ctools": "^4.0",
         "drupal/dashboard": "^2.0",
@@ -73,23 +85,22 @@
         "drupal/entity_browser_enhanced": "^2.0",
         "drupal/entity_embed": "^1.5",
         "drupal/entity_reference_revisions": "^1.11",
-        "drupal/exclude_node_title": "^1.4",
-        "drupal/extlink": "^1.7",
+        "drupal/exclude_node_title": "^2.0",
+        "drupal/extlink": "^3.0",
         "drupal/field_group": "^4.0",
         "drupal/fieldblock": "^2.2",
-        "drupal/file_details": "^1.14",
         "drupal/flag": "^4.0@beta",
         "drupal/flood_control": "^3.0",
         "drupal/focal_point": "^2.0",
         "drupal/fontawesome": "^3.0",
         "drupal/gemini_provider": "^1.0@beta",
         "drupal/geofield": "^1.57",
-        "drupal/gin": "^4.1",
+        "drupal/gin": "^5.0",
         "drupal/gin_login": "^2.1",
-        "drupal/gin_toolbar": "^2.1",
+        "drupal/gin_toolbar": "^3.0",
         "drupal/google_tag": "^2.0",
         "drupal/group": "^3.3",
-        "drupal/image_widget_crop": "^2.4",
+        "drupal/image_widget_crop": "^3.0",
         "drupal/imagick": "^2.0",
         "drupal/improve_line_breaks_filter": "^1.5",
         "drupal/inline_entity_form": "^3.0@RC",
@@ -107,11 +118,11 @@
         "drupal/metatag": "^2.0",
         "drupal/module_filter": "^5.0",
         "drupal/nodeaccess": "^2.0@alpha",
-        "drupal/o365": "^5.0",
+        "drupal/o365": "^6.0",
         "drupal/paragraphs": "^1.17",
         "drupal/pathauto": "^1.12",
         "drupal/redirect": "^1.9",
-        "drupal/rules": "^3.0@alpha",
+        "drupal/rules": "^4.0",
         "drupal/scheduler": "^2.0",
         "drupal/schema_metatag": "^3.0",
         "drupal/search_api": "^1.31",
@@ -136,6 +147,7 @@
         "drush/drush": "^13",
         "faithcatholic/faith_genesis_theme": "^4.0",
         "gravitymedia/ghostscript": "^2.3",
+        "jackmoore/colorbox": "1.6.4",
         "league/commonmark": "^2.0",
         "mermaid-js/mermaid": "10.8.0",
         "michelf/php-markdown": "^2.0",
@@ -159,6 +171,7 @@
             "oomphinc/composer-installers-extender": true,
             "php-http/discovery": true,
             "phpstan/extension-installer": true,
+            "symfony/runtime": true,
             "wikimedia/composer-merge-plugin": true
         },
         "sort-packages": true
@@ -245,16 +258,6 @@
             ]
         },
         "patches": {
-            "drupal/core": {
-                "Reprovision default media thumbnails when not found at icon_base_uri":
-                "https://www.drupal.org/files/issues/2026-01-09/3060509-65-restore-default-media-icons.patch"
-            },
-            "drupal/markdown": {
-                "SubformState incorrect interface error":
-                "https://git.drupalcode.org/project/markdown/-/merge_requests/29.diff",
-                "fix logging error that breaks drush 13":
-                "./patches/markdown.patch"
-            },
             "drupal/tac_lite": {
                 "Creation of dynamic property $uid is deprecated":
                 "https://www.drupal.org/files/issues/2023-09-27/tac_lite-dynamic_property-3390089.patch"
@@ -266,6 +269,10 @@
             "drupal/fontawesome": {
                 "Breaking change introduced in a38b572 (Update to version 6.4.2)-https://www.drupal.org/project/fontawesome/issues/3417901":
                 "https://www.drupal.org/files/issues/2024-01-29/fontawesome-prefixbug-3417901-1.patch"
+            },
+            "drupal/file_details": {
+                "Fix for drupal 11 compatability":
+                "https://www.drupal.org/files/issues/2025-02-15/3440701-drupal11-compatibility-fixes.patch"
             }
         },
         "drupal-core-project-message": {

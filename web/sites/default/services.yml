@@ -100,6 +100,15 @@ parameters:
     # Disabling the Twig cache is not recommended in production environments.
     # @default true
     cache: true
+    # Twig yield mode:
+    #
+    # Drupal 11 requires Twig's yield mode. This file replaces core's whole
+    # twig.config, so it has to be set here too; without it, templates fail
+    # with "EscaperRuntime::escape(): Argument #4 ($autoescape) must be of type
+    # bool, null given".
+    #
+    # @default true
+    use_yield: true
     # File extensions:
     #
     # List of file extensions the Twig system is allowed to load via the

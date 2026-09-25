@@ -145,7 +145,7 @@
         "drupal/we_megamenu": "^1.16",
         "drupal/workbench_access": "^2.0",
         "drush/drush": "^13",
-        "faithcatholic/faith_genesis_theme": "^4.0",
+        "faithcatholic/faith_genesis_theme": "^5.0",
         "gravitymedia/ghostscript": "^2.3",
         "jackmoore/colorbox": "1.6.4",
         "league/commonmark": "^2.0",

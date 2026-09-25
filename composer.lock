@@ -9461,17 +9461,20 @@
         },
         {
             "name": "faithcatholic/faith_genesis_theme",
-            "version": "v4.0.4",
+            "version": "v5.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FaithCatholic/faith_genesis_theme.git",
-                "reference": "81ea47f5d759c3dc20c6365054ba3a565a0c6694"
+                "reference": "2b4e719011b4c30307f1effc5a55e248d0b8cc1b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FaithCatholic/faith_genesis_theme/zipball/81ea47f5d759c3dc20c6365054ba3a565a0c6694",
-                "reference": "81ea47f5d759c3dc20c6365054ba3a565a0c6694",
+                "url": "https://api.github.com/repos/FaithCatholic/faith_genesis_theme/zipball/2b4e719011b4c30307f1effc5a55e248d0b8cc1b",
+                "reference": "2b4e719011b4c30307f1effc5a55e248d0b8cc1b",
                 "shasum": ""
+            },
+            "require": {
+                "drupal/bootstrap5": "^4.0"
             },
             "type": "drupal-theme",
             "notification-url": "https://packagist.org/downloads/",
@@ -9487,7 +9490,7 @@
                 "issues": "https://www.drupal.org/project/issues/faith_genesis_theme",
                 "source": "http://cgit.drupalcode.org/faith_genesis_theme"
             },
-            "time": "2025-08-15T18:23:15+00:00"
+            "time": "2026-09-25T12:56:22+00:00"
         },
         {
             "name": "google-gemini-php/client",

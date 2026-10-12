@@ -100,6 +100,19 @@
                 {% for warning in row.warnings %}
                   <div class="small text-warning-emphasis">{{ warning }}</div>
                 {% endfor %}
+                {% set details_id = 'upsun-' ~ row.id|clean_id %}
+                <div class="d-flex gap-1 mt-1">
+                  {% if row.domains is not null %}
+                    <button class="btn btn-sm btn-outline-{{ row.domains_level ?: 'secondary' }} py-0 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#{{ details_id }}-domains" aria-expanded="false" aria-controls="{{ details_id }}-domains">
+                      {{ 'Domains (@count)'|t({'@count': row.domains|length}) }}
+                    </button>
+                  {% endif %}
+                  {% if row.users is not null %}
+                    <button class="btn btn-sm btn-outline-{{ row.users_level ?: 'secondary' }} py-0 collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#{{ details_id }}-users" aria-expanded="false" aria-controls="{{ details_id }}-users">
+                      {{ 'Users (@count)'|t({'@count': row.users|length}) }}
+                    </button>
+                  {% endif %}
+                </div>
               </td>
               <td>
                 {% if row.environment %}
@@ -144,6 +157,90 @@
                 {{ row.cost ?: '–' }}
                 {% if row.cost_previous %}
                   <div class="small text-body-secondary">{{ 'Last month @amount'|t({'@amount': row.cost_previous}) }}</div>
+                {% endif %}
+              </td>
+            </tr>
+            <tr class="upsun-details">
+              <td colspan="9">
+                {% if row.domains is not null %}
+                  <div class="collapse" id="{{ details_id }}-domains">
+                    <div class="details-panel">
+                      <h3 class="h6">{{ 'Domains'|t }}</h3>
+                      {% if row.domains %}
+                        <table class="table table-sm w-auto mb-0">
+                          <thead>
+                            <tr>
+                              <th scope="col">{{ 'Domain'|t }}</th>
+                              <th scope="col">{{ 'Type'|t }}</th>
+                              <th scope="col">{{ 'Certificate'|t }}</th>
+                              <th scope="col">{{ 'Expires'|t }}</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for domain in row.domains %}
+                              <tr>
+                                <td><a href="https://{{ domain.name }}/">{{ domain.name }}</a></td>
+                                <td>{{ domain.type }}</td>
+                                <td>{{ domain.ssl_issuer ?: '–' }}</td>
+                                <td class="usage">
+                                  {{ domain.ssl_expires }}
+                                  {% if domain.ssl_level %}
+                                    <span class="badge text-bg-{{ domain.ssl_level }}">{{ domain.ssl_status }}</span>
+                                  {% else %}
+                                    <small class="text-body-secondary">{{ domain.ssl_status }}</small>
+                                  {% endif %}
+                                </td>
+                              </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      {% else %}
+                        <p class="small text-body-secondary mb-0">{{ 'No custom domains. The site uses its Upsun default URL.'|t }}</p>
+                      {% endif %}
+                    </div>
+                  </div>
+                {% endif %}
+                {% if row.users is not null %}
+                  <div class="collapse" id="{{ details_id }}-users">
+                    <div class="details-panel">
+                      <h3 class="h6">{{ 'Users'|t }}</h3>
+                      <table class="table table-sm w-auto mb-0">
+                        <thead>
+                          <tr>
+                            <th scope="col">{{ 'Name'|t }}</th>
+                            <th scope="col">{{ 'Email'|t }}</th>
+                            <th scope="col">{{ 'Project role'|t }}</th>
+                            <th scope="col">{{ 'Environment roles'|t }}</th>
+                            <th scope="col">{{ 'MFA'|t }}</th>
+                            <th scope="col">{{ 'Added'|t }}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for user in row.users %}
+                            <tr>
+                              <td>
+                                {{ user.name }}
+                                {% if user.owner %}<span class="badge text-bg-secondary">{{ 'Org owner'|t }}</span>{% endif %}
+                              </td>
+                              <td>{% if user.email %}<a href="mailto:{{ user.email }}">{{ user.email }}</a>{% endif %}</td>
+                              <td>{{ user.role }}</td>
+                              <td class="small">{{ user.environment_roles ?: '–' }}</td>
+                              <td>
+                                {% if user.mfa %}
+                                  <span class="badge text-bg-success">{{ 'On'|t }}</span>
+                                {% elseif user.sso %}
+                                  <span class="badge text-bg-secondary">{{ 'SSO'|t }}</span>
+                                {% else %}
+                                  <span class="badge text-bg-warning">{{ 'Off'|t }}</span>
+                                {% endif %}
+                              </td>
+                              <td class="usage">{{ user.granted ?: '–' }}</td>
+                            </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                 {% endif %}
               </td>
             </tr>

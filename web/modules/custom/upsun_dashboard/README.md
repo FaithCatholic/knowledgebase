@@ -14,6 +14,8 @@ For each project's production environment it shows:
 | PHP        | The app's runtime in the current deployment (`php:8.4`) |
 | Services   | Every service in the current deployment (MariaDB 10.11, Redis 7.2, …) |
 | CPU, Memory, Disk | Upsun observability metrics: last hour's average as a percentage of each container's limit. Disk is persistent storage only, not `/tmp`. |
+| Domains (collapsed) | Each domain's type, certificate issuer and expiry. Yellow when a certificate expires within 14 days (Upsun renews about a month ahead, so this usually means renewal is failing) or there's no certificate; red when expired. |
+| Users (collapsed) | Everyone with access to the project: name, email, project role, environment roles when not admin, MFA, and when they were added. Yellow when someone has neither MFA nor SSO. |
 | This month | The project's line items on its billing profile's open invoice, plus last month's closed invoice |
 
 Under the table, a **Billing** section shows each billing profile's month so far: project

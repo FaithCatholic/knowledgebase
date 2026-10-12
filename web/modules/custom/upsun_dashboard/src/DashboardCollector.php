@@ -103,6 +103,7 @@ class DashboardCollector {
           'title' => $project['title'] ?: $project['id'],
           'org' => $org['label'] ?? $org['name'],
           'org_type' => $org['type'] ?? '',
+          'org_owner_id' => $org['owner_id'] ?? NULL,
           'region' => $project['region'] ?? '',
           'plan' => $project['plan'] ?? '',
           'status' => $project['status'] ?? '',
@@ -285,7 +286,87 @@ class DashboardCollector {
       $row['warnings'][] = 'Metrics: ' . $this->errorMessage($e);
     }
 
+    try {
+      $row['domains'] = $this->readDomains($base);
+    }
+    catch (\Throwable $e) {
+      $row['warnings'][] = 'Domains: ' . $this->errorMessage($e);
+    }
+
+    try {
+      $row['users'] = $this->readUsers($base, $stub['org_owner_id'] ?? NULL);
+    }
+    catch (\Throwable $e) {
+      $row['warnings'][] = 'Users: ' . $this->errorMessage($e);
+    }
+
     return $row;
+  }
+
+  /**
+   * Reads the project's domains and their certificates.
+   */
+  protected function readDomains(string $base): array {
+    $response = $this->client->get($base . '/domains');
+    $domains = [];
+    foreach ($response['items'] ?? $response as $domain) {
+      // "countryName=US, organizationName=Let's Encrypt, commonName=YE1"
+      preg_match('/organizationName=([^,]+)/', $domain['ssl']['ca'] ?? '', $issuer);
+      $domains[] = [
+        'name' => $domain['name'],
+        'type' => $domain['type'] ?? '',
+        'ssl_expires' => !empty($domain['ssl']['has_certificate']) ? ($domain['ssl']['expires_on'] ?? NULL) : NULL,
+        'ssl_issuer' => $issuer[1] ?? NULL,
+      ];
+    }
+    usort($domains, fn($a, $b) => strcmp($a['name'], $b['name']));
+    return $domains;
+  }
+
+  /**
+   * Reads the users who have access to the project.
+   *
+   * The access list only has user IDs. Each page links to a signed
+   * ref:users URL that returns those users' names, emails and MFA status.
+   */
+  protected function readUsers(string $base, ?string $owner_id): array {
+    $access = [];
+    $people = [];
+    $page = $this->client->get($base . '/user-access', ['page' => ['size' => 200]]);
+    while (TRUE) {
+      $access = array_merge($access, $page['items'] ?? []);
+      foreach ($page['_links'] ?? [] as $key => $link) {
+        if (str_starts_with($key, 'ref:users:')) {
+          $people += $this->client->get($link['href']);
+        }
+      }
+      if (empty($page['_links']['next']['href'])) {
+        break;
+      }
+      $page = $this->client->get($page['_links']['next']['href']);
+    }
+
+    $users = [];
+    foreach ($access as $grant) {
+      $person = $people[$grant['user_id']] ?? [];
+      $permissions = $grant['permissions'] ?? [];
+      // "admin" or "viewer" for the project; "production:admin" and so on
+      // for each environment type.
+      $role = current(array_filter($permissions, fn($permission) => !str_contains($permission, ':'))) ?: '';
+      $users[] = [
+        'name' => trim(($person['first_name'] ?? '') . ' ' . ($person['last_name'] ?? '')) ?: ($person['username'] ?? $grant['user_id']),
+        'email' => $person['email'] ?? '',
+        'role' => $role,
+        'environment_roles' => $role === 'admin' ? [] : array_values(array_filter($permissions, fn($permission) => str_contains($permission, ':'))),
+        'owner' => $grant['user_id'] === $owner_id,
+        'mfa' => !empty($person['mfa_enabled']),
+        'sso' => !empty($person['sso_enabled']),
+        'granted' => $grant['granted_at'] ?? NULL,
+      ];
+    }
+    // Owner first, then admins, then everyone else by name.
+    usort($users, fn($a, $b) => [$b['owner'], $a['role'] !== 'admin', $a['name']] <=> [$a['owner'], $b['role'] !== 'admin', $b['name']]);
+    return $users;
   }
 
   /**

@@ -48,14 +48,19 @@ class UpsunClient {
    */
   public function get(string $path, array $query = []): array {
     $url = str_starts_with($path, 'https://') ? $path : self::API_URL . $path;
-    $response = $this->httpClient->request('GET', $url, [
+    $options = [
       'headers' => [
         'Authorization' => 'Bearer ' . $this->accessToken(),
         'Accept' => 'application/json',
       ],
-      'query' => $query,
       'timeout' => 60,
-    ]);
+    ];
+    // Guzzle replaces the URL's own query string whenever this option is set,
+    // even to an empty array, which would break paging and signed links.
+    if ($query) {
+      $options['query'] = $query;
+    }
+    $response = $this->httpClient->request('GET', $url, $options);
     return json_decode((string) $response->getBody(), TRUE) ?? [];
   }
 

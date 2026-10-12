@@ -2,6 +2,7 @@
 
 namespace Drupal\upsun_dashboard\Controller;
 
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Batch\BatchBuilder;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Datetime\DateFormatterInterface;
@@ -20,6 +21,14 @@ class DashboardController extends ControllerBase {
   const WARNING_PERCENT = 80;
 
   const DANGER_PERCENT = 90;
+
+  /**
+   * Certificates expiring within this many days get a warning badge.
+   *
+   * Upsun renews Let's Encrypt certificates about a month before they expire,
+   * so one this close usually means renewal is failing.
+   */
+  const CERTIFICATE_WARNING_DAYS = 14;
 
   /**
    * Display names for Upsun service types.
@@ -42,6 +51,7 @@ class DashboardController extends ControllerBase {
     protected DashboardCollector $collector,
     protected UpsunClient $client,
     protected DateFormatterInterface $dateFormatter,
+    protected TimeInterface $time,
   ) {}
 
   /**
@@ -159,7 +169,53 @@ class DashboardController extends ControllerBase {
       ];
     }
 
+    $domains = NULL;
+    $domains_level = NULL;
+    if (isset($project['domains'])) {
+      $domains = [];
+      foreach ($project['domains'] as $domain) {
+        $expires = $domain['ssl_expires'] ? strtotime($domain['ssl_expires']) : NULL;
+        $days = $expires ? (int) floor(($expires - $this->time->getRequestTime()) / 86400) : NULL;
+        $level = match (TRUE) {
+          // Usually a parked or redirect-only domain whose DNS isn't on Upsun.
+          $days === NULL => 'warning',
+          $days < 0 => 'danger',
+          $days < self::CERTIFICATE_WARNING_DAYS => 'warning',
+          default => NULL,
+        };
+        $domains_level = $this->worstLevel($domains_level, $level);
+        $domains[] = [
+          'name' => $domain['name'],
+          'type' => $domain['type'],
+          'ssl_issuer' => $domain['ssl_issuer'],
+          'ssl_expires' => $expires ? $this->dateFormatter->format($expires, 'custom', 'Y-m-d') : NULL,
+          'ssl_level' => $level,
+          'ssl_status' => match (TRUE) {
+            $days === NULL => $this->t('No certificate'),
+            $days < 0 => $this->t('Expired'),
+            default => $this->formatPlural($days, '1 day left', '@count days left'),
+          },
+        ];
+      }
+    }
+
+    $users = NULL;
+    $users_level = NULL;
+    if (isset($project['users'])) {
+      $users = [];
+      foreach ($project['users'] as $user) {
+        if (!$user['mfa'] && !$user['sso']) {
+          $users_level = 'warning';
+        }
+        $users[] = [
+          'granted' => $user['granted'] ? $this->dateFormatter->format(strtotime($user['granted']), 'custom', 'Y-m-d') : NULL,
+          'environment_roles' => implode(', ', $user['environment_roles']),
+        ] + $user;
+      }
+    }
+
     return [
+      'id' => $project['id'],
       'title' => $project['title'],
       'url' => $project['url'] ?? NULL,
       'console_url' => $project['console_url'] ?? NULL,
@@ -177,6 +233,10 @@ class DashboardController extends ControllerBase {
       'php_level' => $this->versionLevel($php, 8.3, 8.2),
       'services' => $services,
       'containers' => $containers,
+      'domains' => $domains,
+      'domains_level' => $domains_level,
+      'users' => $users,
+      'users_level' => $users_level,
       'cost' => isset($cost['current']) ? $this->money($cost['current']) : NULL,
       'cost_previous' => isset($cost['previous']) ? $this->money($cost['previous']) : NULL,
       'error' => $project['error'] ?? NULL,
@@ -248,6 +308,14 @@ class DashboardController extends ControllerBase {
       'profiles' => $rows,
       'total' => $profiles ? $this->money($total) : NULL,
     ];
+  }
+
+  /**
+   * Returns whichever of two badge levels is more severe.
+   */
+  protected function worstLevel(?string $a, ?string $b): ?string {
+    $order = ['' => 0, 'warning' => 1, 'danger' => 2];
+    return $order[$b ?? ''] > $order[$a ?? ''] ? $b : $a;
   }
 
   /**

@@ -41,6 +41,7 @@ class UpsunDashboardHooks {
         'variables' => [
           'rows' => [],
           'summary' => [],
+          'billing' => [],
           'updated' => NULL,
           'configured' => FALSE,
           'refresh_link' => NULL,

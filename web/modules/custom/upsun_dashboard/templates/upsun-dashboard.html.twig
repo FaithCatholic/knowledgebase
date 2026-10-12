@@ -5,7 +5,9 @@
  *
  * Available variables:
  * - rows: One entry per project, built by DashboardController::buildRow().
- * - summary: Counts for the cards above the table.
+ * - summary: Counts for the cards above the table, plus 'cost', this
+ *   month's total across all billing profiles.
+ * - billing: One entry per billing profile, for the table under the projects.
  * - updated: When the data was last collected, or NULL if never.
  * - configured: Whether UPSUN_API_TOKEN is set.
  * - refresh_link: Link that refreshes the data in a batch.
@@ -45,8 +47,9 @@
   </div>
 
   {% if rows %}
-    <div class="row row-cols-2 row-cols-md-3 row-cols-xl-6 g-2 mb-4 summary">
+    <div class="d-flex flex-wrap gap-2 mb-4 summary">
       {% for card in [
+        {label: 'This month (est.)'|t, count: summary.cost ?: '–', level: null},
         {label: 'Projects'|t, count: summary.projects, level: null},
         {label: 'On Drupal 11'|t, count: summary.drupal_current, level: 'success'},
         {label: 'Older Drupal'|t, count: summary.drupal_behind, level: summary.drupal_behind ? 'warning' : null},
@@ -54,12 +57,10 @@
         {label: 'Disk or memory ≥ 80%'|t, count: summary.resources_high, level: summary.resources_high ? 'danger' : null},
         {label: 'Errors or warnings'|t, count: summary.errors, level: summary.errors ? 'danger' : null},
       ] %}
-        <div class="col">
-          <div class="card h-100{{ card.level ? ' border-' ~ card.level }}">
-            <div class="card-body">
-              <div class="display-6{{ card.level ? ' text-' ~ card.level ~ '-emphasis' }}">{{ card.count }}</div>
-              <div class="small text-body-secondary">{{ card.label }}</div>
-            </div>
+        <div class="card{{ card.level ? ' border-' ~ card.level }}">
+          <div class="card-body">
+            <div class="display-6{{ card.level ? ' text-' ~ card.level ~ '-emphasis' }}">{{ card.count }}</div>
+            <div class="small text-body-secondary">{{ card.label }}</div>
           </div>
         </div>
       {% endfor %}
@@ -77,6 +78,7 @@
             <th scope="col">{{ 'CPU'|t }}</th>
             <th scope="col">{{ 'Memory'|t }}</th>
             <th scope="col">{{ 'Disk'|t }}</th>
+            <th scope="col" class="text-end">{{ 'This month'|t }}</th>
           </tr>
         </thead>
         <tbody>
@@ -138,6 +140,48 @@
                   {% endfor %}
                 </td>
               {% endfor %}
+              <td class="text-end usage">
+                {{ row.cost ?: '–' }}
+                {% if row.cost_previous %}
+                  <div class="small text-body-secondary">{{ 'Last month @amount'|t({'@amount': row.cost_previous}) }}</div>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+
+  {% if billing %}
+    <h2 class="h5 mt-4">{{ 'Billing'|t }}</h2>
+    <p class="small text-body-secondary">
+      {{ 'From each billing profile’s open invoice. Subscription charges are for the whole month; usage charges keep growing until the month ends. Org-level charges are support, user licenses and discounts that aren’t tied to one project.'|t }}
+    </p>
+    <div class="table-responsive">
+      <table class="table table-sm w-auto">
+        <thead>
+          <tr>
+            <th scope="col">{{ 'Organizations'|t }}</th>
+            <th scope="col">{{ 'Month'|t }}</th>
+            <th scope="col" class="text-end">{{ 'Projects'|t }}</th>
+            <th scope="col" class="text-end">{{ 'Org-level'|t }}</th>
+            <th scope="col" class="text-end">{{ 'Total'|t }}</th>
+            <th scope="col" class="text-end">{{ 'Last month'|t }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for profile in billing %}
+            <tr>
+              <td>
+                {{ profile.orgs }}
+                {% if profile.error %}<div class="small text-danger-emphasis">{{ profile.error }}</div>{% endif %}
+              </td>
+              <td>{{ profile.period ?: '–' }}</td>
+              <td class="text-end usage">{{ profile.projects ?: '–' }}</td>
+              <td class="text-end usage">{{ profile.unassigned ?: '–' }}</td>
+              <td class="text-end usage"><strong>{{ profile.total ?: '–' }}</strong></td>
+              <td class="text-end usage">{{ profile.previous ?: '–' }}</td>
             </tr>
           {% endfor %}
         </tbody>

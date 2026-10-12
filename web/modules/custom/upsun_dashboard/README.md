@@ -1,7 +1,8 @@
 # Upsun Dashboard
 
 Shows every Upsun project we host on one page at **https://kb.faithcatholic.com/hosting/dashboard**,
-visible to roles with the **View the Upsun hosting dashboard** permission.
+visible to roles with the **View the Upsun hosting dashboard** permission. The page
+includes hosting costs, so grant it accordingly.
 
 For each project's production environment it shows:
 
@@ -13,6 +14,16 @@ For each project's production environment it shows:
 | PHP        | The app's runtime in the current deployment (`php:8.4`) |
 | Services   | Every service in the current deployment (MariaDB 10.11, Redis 7.2, …) |
 | CPU, Memory, Disk | Upsun observability metrics: last hour's average as a percentage of each container's limit. Disk is persistent storage only, not `/tmp`. |
+| This month | The project's line items on its billing profile's open invoice, plus last month's closed invoice |
+
+Under the table, a **Billing** section shows each billing profile's month so far: project
+charges, org-level charges (support, user licenses and discounts that aren't tied to one
+project) and the total, next to last month's total. The "This month (est.)" card is the
+total across all profiles.
+
+On fixed-plan orgs the open invoice is the full month's price from day one. On flexible
+orgs (kb), resource charges are priced for the whole month, but usage charges such as
+requests and bandwidth keep growing until the month ends.
 
 Badges turn yellow or red for:
 
@@ -27,7 +38,8 @@ The thresholds are constants at the top of `DashboardController`.
 1. **Collect.** `DashboardCollector` calls the API as the user who owns the token. It
    lists that user's organizations, then every project in each one, then reads each
    project's production environment, current deployment, metrics and `composer.lock`.
-   `composer.lock` is only downloaded again when the production commit changes.
+   `composer.lock` is only downloaded again when the production commit changes. Last, it
+   reads the open and previous invoices of each organization's billing profile.
 2. **Store.** The results go into State (`upsun_dashboard.snapshot`). The page only reads
    State, so it never waits on the API.
 3. **Refresh.** Data refreshes three ways:
@@ -44,8 +56,10 @@ The thresholds are constants at the top of `DashboardController`.
 ## Setup
 
 1. **Create an API token** in the Upsun console under *My profile → API tokens*. The token
-   acts as that user, so the dashboard shows exactly the projects that user can see. A
-   dedicated read-only account would be best.
+   acts as that user, so the dashboard shows exactly the projects that user can see. Costs
+   need billing access to each organization. Organizations the user doesn't own (such as
+   Brooks Digital) have no billing profile, so their projects show no cost. A dedicated
+   read-only account with billing access would be best.
 2. **Store it as a sensitive variable on the kb project** (not in git, not in config):
 
    ```bash

@@ -49,12 +49,15 @@ class DashboardController extends ControllerBase {
    */
   public function page(): array {
     $snapshot = $this->collector->getSnapshot();
-    $rows = array_map([$this, 'buildRow'], $snapshot['projects']);
+    $costs = $snapshot['billing']['projects'];
+    $rows = array_map(fn($project) => $this->buildRow($project, $costs[$project['id']] ?? []), $snapshot['projects']);
+    $billing = $this->buildBilling($snapshot['billing']['profiles']);
 
     return [
       '#theme' => 'upsun_dashboard',
       '#rows' => $rows,
-      '#summary' => $this->buildSummary($rows),
+      '#summary' => $this->buildSummary($rows) + ['cost' => $billing['total']],
+      '#billing' => $billing['profiles'],
       '#updated' => $snapshot['updated'] ? $this->dateFormatter->format($snapshot['updated'], 'custom', 'M j, Y g:i a') : NULL,
       '#configured' => $this->client->isConfigured(),
       '#refresh_link' => [
@@ -90,7 +93,8 @@ class DashboardController extends ControllerBase {
   public static function batchCollect(array &$context): void {
     $collector = \Drupal::service(DashboardCollector::class);
     if (!isset($context['sandbox']['queue'])) {
-      $context['sandbox']['queue'] = array_values($collector->listProjects());
+      $context['sandbox']['organizations'] = $collector->listOrganizations();
+      $context['sandbox']['queue'] = array_values($collector->listProjects($context['sandbox']['organizations']));
       $context['sandbox']['total'] = count($context['sandbox']['queue']);
       $context['results']['projects'] = [];
     }
@@ -98,19 +102,26 @@ class DashboardController extends ControllerBase {
     if ($stub = array_shift($context['sandbox']['queue'])) {
       $previous = $collector->getSnapshot()['projects'][$stub['id']] ?? [];
       $context['results']['projects'][$stub['id']] = $collector->collectProject($stub, $previous);
-      $context['message'] = t('Collected @project', ['@project' => $stub['title']]);
+      $context['message'] = $context['sandbox']['queue']
+        ? t('Collected @project', ['@project' => $stub['title']])
+        : t('Collecting billing…');
+    }
+    else {
+      // Billing is one extra step after the last project.
+      $context['results']['billing'] = $collector->collectBilling($context['sandbox']['organizations']);
     }
 
-    $total = $context['sandbox']['total'];
-    $context['finished'] = $total ? 1 - count($context['sandbox']['queue']) / $total : 1;
+    // One step per project, plus one for billing.
+    $done = $context['sandbox']['total'] - count($context['sandbox']['queue']) + (isset($context['results']['billing']) ? 1 : 0);
+    $context['finished'] = $done / ($context['sandbox']['total'] + 1);
   }
 
   /**
    * Batch finish callback: stores the new snapshot.
    */
   public static function batchFinished(bool $success, array $results): void {
-    if ($success && isset($results['projects'])) {
-      \Drupal::service(DashboardCollector::class)->saveSnapshot($results['projects']);
+    if ($success && isset($results['projects'], $results['billing'])) {
+      \Drupal::service(DashboardCollector::class)->saveSnapshot($results['projects'], $results['billing']);
       \Drupal::messenger()->addStatus(t('Refreshed @count projects.', ['@count' => count($results['projects'])]));
     }
     else {
@@ -121,7 +132,7 @@ class DashboardController extends ControllerBase {
   /**
    * Turns a stored project into template variables.
    */
-  protected function buildRow(array $project): array {
+  protected function buildRow(array $project, array $cost): array {
     $drupal = $project['packages']['drupal/core'] ?? NULL;
     $php = NULL;
     foreach ($project['apps'] ?? [] as $app) {
@@ -166,6 +177,8 @@ class DashboardController extends ControllerBase {
       'php_level' => $this->versionLevel($php, 8.3, 8.2),
       'services' => $services,
       'containers' => $containers,
+      'cost' => isset($cost['current']) ? $this->money($cost['current']) : NULL,
+      'cost_previous' => isset($cost['previous']) ? $this->money($cost['previous']) : NULL,
       'error' => $project['error'] ?? NULL,
       'stale' => !empty($project['stale']),
       'warnings' => $project['warnings'] ?? [],
@@ -205,6 +218,44 @@ class DashboardController extends ControllerBase {
       }
     }
     return $summary;
+  }
+
+  /**
+   * Builds the per-billing-profile totals shown under the table.
+   *
+   * @return array
+   *   - profiles: One entry per billing profile.
+   *   - total: This month's total across all profiles, formatted.
+   */
+  protected function buildBilling(array $profiles): array {
+    $rows = [];
+    $total = 0;
+    foreach ($profiles as $profile) {
+      $current = $profile['current'];
+      $previous = $profile['previous'];
+      $total += $current['total'] ?? 0;
+      $rows[] = [
+        'orgs' => implode(', ', $profile['orgs']),
+        'error' => $profile['error'],
+        'period' => $current ? $this->dateFormatter->format(strtotime($current['start']), 'custom', 'M Y') : NULL,
+        'projects' => $current ? $this->money($current['total'] - $current['unassigned'], $current['currency']) : NULL,
+        'unassigned' => $current ? $this->money($current['unassigned'], $current['currency']) : NULL,
+        'total' => $current ? $this->money($current['total'], $current['currency']) : NULL,
+        'previous' => $previous ? $this->money($previous['total'], $previous['currency']) : NULL,
+      ];
+    }
+    return [
+      'profiles' => $rows,
+      'total' => $profiles ? $this->money($total) : NULL,
+    ];
+  }
+
+  /**
+   * Formats an amount in cents.
+   */
+  protected function money(int $cents, string $currency = 'USD'): string {
+    $amount = number_format($cents / 100, 2);
+    return $currency === 'USD' ? '$' . $amount : $amount . ' ' . $currency;
   }
 
   /**

@@ -32,20 +32,29 @@ class DashboardCollector {
   ) {}
 
   /**
-   * Returns the stored snapshot: ['updated' => int, 'projects' => array].
+   * Returns the stored snapshot.
+   *
+   * @return array
+   *   With keys 'updated' (Unix time), 'projects' (keyed by project ID) and
+   *   'billing' (see collectBilling()).
    */
   public function getSnapshot(): array {
-    return $this->state->get(self::STATE_KEY, []) + ['updated' => 0, 'projects' => []];
+    return $this->state->get(self::STATE_KEY, []) + [
+      'updated' => 0,
+      'projects' => [],
+      'billing' => ['projects' => [], 'profiles' => []],
+    ];
   }
 
   /**
    * Stores a new snapshot and clears the dashboard's render cache.
    */
-  public function saveSnapshot(array $projects): void {
+  public function saveSnapshot(array $projects, array $billing): void {
     uasort($projects, fn($a, $b) => strcasecmp($a['title'], $b['title']));
     $this->state->set(self::STATE_KEY, [
       'updated' => $this->time->getCurrentTime(),
       'projects' => $projects,
+      'billing' => $billing,
     ]);
     Cache::invalidateTags(['upsun_dashboard']);
   }
@@ -58,28 +67,36 @@ class DashboardCollector {
   }
 
   /**
-   * Collects every project and stores the result.
+   * Collects every project and the billing data, and stores the result.
    */
   public function refreshAll(): array {
     $previous = $this->getSnapshot()['projects'];
+    $organizations = $this->listOrganizations();
     $projects = [];
-    foreach ($this->listProjects() as $id => $stub) {
+    foreach ($this->listProjects($organizations) as $id => $stub) {
       $projects[$id] = $this->collectProject($stub, $previous[$id] ?? []);
     }
-    $this->saveSnapshot($projects);
+    $this->saveSnapshot($projects, $this->collectBilling($organizations));
     return $projects;
   }
 
   /**
-   * Lists the projects in every organization the token's user belongs to.
+   * Lists the organizations the token's user belongs to.
+   */
+  public function listOrganizations(): array {
+    $me = $this->client->get('/users/me');
+    return $this->client->getAll('/users/' . $me['id'] . '/organizations');
+  }
+
+  /**
+   * Lists the projects in the given organizations.
    *
    * @return array
    *   Basic project details keyed by project ID.
    */
-  public function listProjects(): array {
-    $me = $this->client->get('/users/me');
+  public function listProjects(array $organizations): array {
     $projects = [];
-    foreach ($this->client->getAll('/users/' . $me['id'] . '/organizations') as $org) {
+    foreach ($organizations as $org) {
       foreach ($this->client->getAll('/organizations/' . $org['id'] . '/projects') as $project) {
         $projects[$project['id']] = [
           'id' => $project['id'],
@@ -95,6 +112,83 @@ class DashboardCollector {
       }
     }
     return $projects;
+  }
+
+  /**
+   * Totals this month's and last month's invoices per project.
+   *
+   * Each organization bills through a billing profile. Its open (CURRENT)
+   * invoice is the month so far: subscription items are priced for the whole
+   * month and usage items keep accruing. Line items without a project, such
+   * as support, user licenses and discounts, are kept per profile as
+   * "unassigned".
+   *
+   * @return array
+   *   - projects: Keyed by project ID, each with 'current' and 'previous'
+   *     amounts in cents.
+   *   - profiles: Keyed by billing profile ID, each with 'orgs' (labels),
+   *     'error', and 'current' and 'previous' invoices: ['total',
+   *     'unassigned', 'currency', 'start', 'end'], amounts in cents.
+   */
+  public function collectBilling(array $organizations): array {
+    $profiles = [];
+    foreach ($organizations as $org) {
+      // Organizations the user doesn't own have no billing profile.
+      if (!empty($org['billing_profile_id'])) {
+        $profiles[$org['billing_profile_id']][] = $org['label'] ?? $org['name'];
+      }
+    }
+
+    $billing = ['projects' => [], 'profiles' => []];
+    foreach ($profiles as $profile_id => $labels) {
+      $profile = ['orgs' => $labels, 'error' => NULL, 'current' => NULL, 'previous' => NULL];
+      $base = '/billing/profiles/' . $profile_id . '/invoices';
+      try {
+        $current = $previous = NULL;
+        foreach ($this->client->getAll($base) as $invoice) {
+          if (($invoice['type'] ?? 'invoice') !== 'invoice') {
+            continue;
+          }
+          if ($invoice['status'] === 'CURRENT') {
+            $current ??= $invoice;
+          }
+          elseif (!$previous || $invoice['invoice_start_date'] > $previous['invoice_start_date']) {
+            $previous = $invoice;
+          }
+        }
+
+        foreach (['current' => $current, 'previous' => $previous] as $period => $invoice) {
+          if (!$invoice) {
+            continue;
+          }
+          $profile[$period] = [
+            'total' => (int) $invoice['total']['amount'],
+            'unassigned' => 0,
+            'currency' => $invoice['total']['currency'] ?? 'USD',
+            'start' => $invoice['invoice_start_date'],
+            'end' => $invoice['invoice_end_date'],
+          ];
+          foreach ($this->client->getAll($base . '/' . $invoice['id'] . '/details') as $item) {
+            $amount = (int) ($item['total']['amount'] ?? 0);
+            if (!empty($item['project_id'])) {
+              $billing['projects'][$item['project_id']][$period] = ($billing['projects'][$item['project_id']][$period] ?? 0) + $amount;
+            }
+            else {
+              $profile[$period]['unassigned'] += $amount;
+            }
+          }
+        }
+      }
+      catch (\Throwable $e) {
+        $profile['error'] = $this->errorMessage($e);
+        $this->logger->warning('Could not collect billing for @orgs: @message', [
+          '@orgs' => implode(', ', $labels),
+          '@message' => $profile['error'],
+        ]);
+      }
+      $billing['profiles'][$profile_id] = $profile;
+    }
+    return $billing;
   }
 
   /**

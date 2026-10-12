@@ -1,3 +1,15 @@
+/* Break out of the theme's .container so the dashboard spans the window. */
+.upsun-dashboard {
+  width: 100vw;
+  margin-inline-start: calc(50% - 50vw);
+  padding-inline: 1.5rem;
+}
+
+/* 100vw includes the vertical scrollbar; clip the few pixels it overhangs. */
+html:has(.upsun-dashboard) {
+  overflow-x: clip;
+}
+
 .upsun-dashboard .table td {
   vertical-align: top;
 }
@@ -11,6 +23,10 @@
   display: inline-block;
   min-width: 7rem;
   color: var(--bs-secondary-color);
+}
+
+.upsun-dashboard .summary .card {
+  flex: 1 1 10rem;
 }
 
 .upsun-dashboard .summary .card-body {

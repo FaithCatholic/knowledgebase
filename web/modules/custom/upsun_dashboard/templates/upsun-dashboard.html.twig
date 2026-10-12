@@ -1,0 +1,148 @@
+{#
+/**
+ * @file
+ * Upsun hosting dashboard.
+ *
+ * Available variables:
+ * - rows: One entry per project, built by DashboardController::buildRow().
+ * - summary: Counts for the cards above the table.
+ * - updated: When the data was last collected, or NULL if never.
+ * - configured: Whether UPSUN_API_TOKEN is set.
+ * - refresh_link: Link that refreshes the data in a batch.
+ */
+#}
+{% macro usage(item, suffix) %}
+  {% if item.percent is not null %}
+    {% if item.level %}
+      <span class="badge text-bg-{{ item.level }}">{{ item.percent }}%</span>
+    {% else %}
+      {{ item.percent }}%
+    {% endif %}
+    {% if suffix %}<small class="text-body-secondary">{{ suffix }}</small>{% endif %}
+  {% else %}
+    <span class="text-body-secondary">–</span>
+  {% endif %}
+{% endmacro %}
+{% import _self as dashboard %}
+
+<div class="upsun-dashboard">
+
+  {% if not configured %}
+    <div class="alert alert-warning">
+      {{ 'The <code>UPSUN_API_TOKEN</code> environment variable is not set, so the dashboard cannot collect data.'|t }}
+    </div>
+  {% endif %}
+
+  <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
+    <p class="mb-0 text-body-secondary">
+      {% if updated %}
+        {{ 'Data collected @updated. Usage is the average over the last hour.'|t({'@updated': updated}) }}
+      {% else %}
+        {{ 'No data collected yet.'|t }}
+      {% endif %}
+    </p>
+    {% if configured %}{{ refresh_link }}{% endif %}
+  </div>
+
+  {% if rows %}
+    <div class="row row-cols-2 row-cols-md-3 row-cols-xl-6 g-2 mb-4 summary">
+      {% for card in [
+        {label: 'Projects'|t, count: summary.projects, level: null},
+        {label: 'On Drupal 11'|t, count: summary.drupal_current, level: 'success'},
+        {label: 'Older Drupal'|t, count: summary.drupal_behind, level: summary.drupal_behind ? 'warning' : null},
+        {label: 'PHP below 8.3'|t, count: summary.php_behind, level: summary.php_behind ? 'warning' : null},
+        {label: 'Disk or memory ≥ 80%'|t, count: summary.resources_high, level: summary.resources_high ? 'danger' : null},
+        {label: 'Errors or warnings'|t, count: summary.errors, level: summary.errors ? 'danger' : null},
+      ] %}
+        <div class="col">
+          <div class="card h-100{{ card.level ? ' border-' ~ card.level }}">
+            <div class="card-body">
+              <div class="display-6{{ card.level ? ' text-' ~ card.level ~ '-emphasis' }}">{{ card.count }}</div>
+              <div class="small text-body-secondary">{{ card.label }}</div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-sm table-hover align-top">
+        <thead>
+          <tr>
+            <th scope="col">{{ 'Project'|t }}</th>
+            <th scope="col">{{ 'Production'|t }}</th>
+            <th scope="col">{{ 'Drupal'|t }}</th>
+            <th scope="col">{{ 'PHP'|t }}</th>
+            <th scope="col">{{ 'Services'|t }}</th>
+            <th scope="col">{{ 'CPU'|t }}</th>
+            <th scope="col">{{ 'Memory'|t }}</th>
+            <th scope="col">{{ 'Disk'|t }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in rows %}
+            <tr{% if row.error %} class="table-danger"{% endif %}>
+              <td>
+                <strong>
+                  {% if row.url %}<a href="{{ row.url }}">{{ row.title }}</a>{% else %}{{ row.title }}{% endif %}
+                </strong>
+                <div class="small text-body-secondary">
+                  {{ row.org }} · {{ row.plan }} · {{ row.region }}
+                  {% if row.console_url %}· <a href="{{ row.console_url }}">{{ 'Console'|t }}</a>{% endif %}
+                </div>
+                {% if row.error %}
+                  <div class="small text-danger-emphasis">
+                    {{ row.error }}{% if row.stale %} ({{ 'showing older data'|t }}){% endif %}
+                  </div>
+                {% endif %}
+                {% for warning in row.warnings %}
+                  <div class="small text-warning-emphasis">{{ warning }}</div>
+                {% endfor %}
+              </td>
+              <td>
+                {% if row.environment %}
+                  {{ row.environment }}
+                  <span class="badge text-bg-{{ row.environment_level }}">{{ row.environment_status }}</span>
+                  {% if row.commit_date %}
+                    <div class="small text-body-secondary">{{ 'Last commit @date'|t({'@date': row.commit_date}) }}</div>
+                  {% endif %}
+                {% endif %}
+              </td>
+              <td>
+                {% if row.drupal %}
+                  <span class="badge text-bg-{{ row.drupal_level }}">{{ row.drupal }}</span>
+                  {% if row.drush %}<div class="small text-body-secondary">Drush {{ row.drush }}</div>{% endif %}
+                {% else %}
+                  <span class="text-body-secondary">–</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if row.php %}
+                  <span class="badge text-bg-{{ row.php_level }}">{{ row.php }}</span>
+                {% else %}
+                  <span class="text-body-secondary">–</span>
+                {% endif %}
+              </td>
+              <td>
+                {% for service in row.services %}
+                  <div class="text-nowrap">{{ service }}</div>
+                {% endfor %}
+              </td>
+              {% for metric in ['cpu', 'memory', 'disk'] %}
+                <td class="usage">
+                  {% for container in row.containers %}
+                    <div>
+                      <span class="usage-name">{{ container.name }}</span>
+                      {{ dashboard.usage(container[metric], metric == 'disk' ? container.disk.detail : null) }}
+                    </div>
+                  {% endfor %}
+                </td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+
+</div>

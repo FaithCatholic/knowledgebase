@@ -40,3 +40,10 @@ $settings['o365'] = [
     'tenant_id' => getenv('O365_TENANT_ID'),
   ]
 ];
+// Upsun dashboard (upsun_dashboard module). UPSUN_API_TOKEN is a sensitive
+// project-level variable on Upsun; see the module README.
+$settings['upsun_dashboard'] = [
+  'api_token' => getenv('UPSUN_API_TOKEN'),
+  // Seconds between automatic refreshes on cron.
+  'refresh_interval' => 3600,
+];

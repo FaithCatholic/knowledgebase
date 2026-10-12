@@ -1,0 +1,23 @@
+.upsun-dashboard .table td {
+  vertical-align: top;
+}
+
+.upsun-dashboard .usage {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.upsun-dashboard .usage-name {
+  display: inline-block;
+  min-width: 7rem;
+  color: var(--bs-secondary-color);
+}
+
+.upsun-dashboard .summary .card-body {
+  padding: 0.75rem 1rem;
+}
+
+.upsun-dashboard .summary .display-6 {
+  font-size: 1.75rem;
+  font-variant-numeric: tabular-nums;
+}

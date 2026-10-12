@@ -1,0 +1,15 @@
+upsun_dashboard.page:
+  path: '/hosting/dashboard'
+  defaults:
+    _controller: '\Drupal\upsun_dashboard\Controller\DashboardController::page'
+    _title: 'Upsun hosting dashboard'
+  requirements:
+    _permission: 'view upsun dashboard'
+
+upsun_dashboard.refresh:
+  path: '/hosting/dashboard/refresh'
+  defaults:
+    _controller: '\Drupal\upsun_dashboard\Controller\DashboardController::refresh'
+  requirements:
+    _permission: 'view upsun dashboard'
+    _csrf_token: 'TRUE'

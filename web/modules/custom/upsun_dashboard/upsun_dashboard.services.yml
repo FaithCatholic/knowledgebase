@@ -1,0 +1,8 @@
+services:
+  _defaults:
+    autowire: true
+  logger.channel.upsun_dashboard:
+    parent: logger.channel_base
+    arguments: ['upsun_dashboard']
+  Drupal\upsun_dashboard\UpsunClient: ~
+  Drupal\upsun_dashboard\DashboardCollector: ~

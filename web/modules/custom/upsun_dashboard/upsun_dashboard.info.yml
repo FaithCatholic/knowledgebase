@@ -1,0 +1,5 @@
+name: Upsun Dashboard
+type: module
+description: Shows Drupal, PHP, database and resource usage for every Upsun project the API token can see.
+core_version_requirement: ^11.1
+package: Custom

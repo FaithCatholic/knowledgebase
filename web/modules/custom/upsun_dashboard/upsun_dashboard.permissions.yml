@@ -1,0 +1,4 @@
+view upsun dashboard:
+  title: 'View the Upsun hosting dashboard'
+  description: 'Shows every Upsun project, its versions and resource usage. Also allows refreshing the data.'
+  restrict access: true

@@ -147,6 +147,7 @@
         "drupal/workbench_access": "^2.0",
         "drush/drush": "^13",
         "faithcatholic/faith_genesis_theme": "^5.0",
+        "faithcatholic/massmail": "^1.0",
         "gravitymedia/ghostscript": "^2.3",
         "jackmoore/colorbox": "1.6.4",
         "league/commonmark": "^2.0",

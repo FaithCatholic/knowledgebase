@@ -5,6 +5,7 @@ namespace Drupal\kb_chat\Entity;
 use Drupal\Core\Entity\Attribute\ContentEntityType;
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Entity\EntityViewBuilder;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\kb_chat\KbChatDocumentAccessControlHandler;
@@ -30,6 +31,9 @@ use Drupal\kb_chat\KbChatDocumentAccessControlHandler;
   ],
   handlers: [
     'access' => KbChatDocumentAccessControlHandler::class,
+    // Rendering lets the search index's "Rendered HTML output" field, the
+    // chat's single Main content field, cover documents as well as nodes.
+    'view_builder' => EntityViewBuilder::class,
   ],
   base_table: 'kb_chat_document',
   admin_permission: 'administer kb chat documents',
@@ -77,7 +81,12 @@ class KbChatDocument extends ContentEntityBase {
       ->setSetting('max_length', 128);
     $fields['text'] = BaseFieldDefinition::create('string_long')
       ->setLabel(t('Text'))
-      ->setDescription(t('The document text, extracted for indexing.'));
+      ->setDescription(t('The document text, extracted for indexing.'))
+      ->setDisplayOptions('view', [
+        'label' => 'hidden',
+        'type' => 'basic_string',
+        'weight' => 0,
+      ]);
     $fields['modified'] = BaseFieldDefinition::create('timestamp')
       ->setLabel(t('Modified'))
       ->setDescription(t('When the document last changed in its source.'));

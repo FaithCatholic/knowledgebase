@@ -124,9 +124,11 @@ scanned images), Word (.docx), Excel (.xlsx), plain text, CSV and Markdown. File
    ```
 5. **Search index.** Edit the chat's index:
    - add the **Shared drive document** datasource
-   - add the **Title** and **Text** fields
-   - on the AI Search fields tab, set **Text** to *Main content* and **Title** to *Contextual
-     content*
+   - edit the **Rendered HTML output** field and choose the **Default** view mode for Shared
+     drive document; documents render their text, so this one field stays Main content for both
+     pages and documents
+   - the existing **Title** field covers documents too (Contextual content); don't add the
+     document **Text** field as Main content: AI Search allows only one
    - index
 
 ## Magazine archive

@@ -1,0 +1,10 @@
+inline-chat:
+  css:
+    theme:
+      css/inline-chat.css: {}
+  js:
+    js/inline-chat.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+    - ai_chatbot/sticky-chatbot

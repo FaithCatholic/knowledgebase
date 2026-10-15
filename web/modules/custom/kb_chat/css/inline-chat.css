@@ -1,0 +1,35 @@
+/**
+ * The AI Chatbot (DeepChat) block, shown inside the page.
+ *
+ * kb_chat adds .kb-chat-inline to the block when it is placed in the Content
+ * region. The chatbot module only offers floating placements, so this undoes
+ * the fixed positioning and the collapse animation.
+ */
+.kb-chat-inline .chat-container,
+.kb-chat-inline .chat-container.chat-collapsed {
+  position: relative;
+  z-index: auto;
+  inset: auto;
+  width: 100%;
+  height: auto;
+  margin: 1rem 0;
+  transform: none;
+  border: 1px solid #d6d9de;
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+/* The header is a title bar here, not a toggle. */
+.kb-chat-inline .ai-deepchat--header {
+  cursor: default;
+}
+
+.kb-chat-inline .ai-deepchat--header .toggle-icon {
+  display: none;
+}
+
+.kb-chat-inline .chat-element,
+.kb-chat-inline deep-chat {
+  display: block;
+  max-width: 100%;
+}

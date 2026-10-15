@@ -2,10 +2,12 @@
 
 namespace Drupal\kb_chat\Hook;
 
+use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\State\StateInterface;
 use Drupal\kb_chat\AnthropicCostReport;
+use Drupal\kb_chat\Plugin\AiFunctionCall\LinkedRagTool;
 
 /**
  * Hook implementations for KB Chat.
@@ -30,6 +32,34 @@ class KbChatHooks {
     if ($this->anthropicCosts->isConfigured() && time() - $last >= $interval) {
       $this->state->set('kb_chat.anthropic_checked', time());
       $this->anthropicCosts->refresh();
+    }
+  }
+
+  /**
+   * Implements hook_ai_function_call_info_alter().
+   *
+   * Gives the RAG/Vector Search tool's results their page title and link, so
+   * chat answers can link the pages they cite.
+   */
+  #[Hook('ai_function_call_info_alter')]
+  public function linkRagResults(array &$definitions): void {
+    if (isset($definitions['ai_search:rag_search'])) {
+      $definitions['ai_search:rag_search']['class'] = LinkedRagTool::class;
+    }
+  }
+
+  /**
+   * Implements hook_block_view_BASE_BLOCK_ID_alter() for ai_deepchat_block.
+   *
+   * The chatbot module only offers floating placements. When its DeepChat
+   * block is placed in the Content region, show it inside the page instead,
+   * always open.
+   */
+  #[Hook('block_view_ai_deepchat_block_alter')]
+  public function inlineChat(array &$build, BlockPluginInterface $block): void {
+    if (isset($build['#block']) && $build['#block']->getRegion() === 'content') {
+      $build['#attributes']['class'][] = 'kb-chat-inline';
+      $build['#attached']['library'][] = 'kb_chat/inline-chat';
     }
   }
 

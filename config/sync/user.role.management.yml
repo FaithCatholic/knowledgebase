@@ -7,8 +7,9 @@ dependencies:
     - node.type.article
     - node.type.page
   module:
-    - exclude_node_title
+    - ai_chatbot
     - filter
+    - kb_chat
     - nodeaccess
     - path
     - search
@@ -20,6 +21,7 @@ weight: 4
 is_admin: null
 permissions:
   - 'access administration pages'
+  - 'access deepchat api'
   - 'access toolbar'
   - 'create url aliases'
   - 'grant node permissions'
@@ -27,6 +29,6 @@ permissions:
   - 'nodeaccess grant article permissions'
   - 'nodeaccess grant page permissions'
   - 'use advanced search'
-  - 'use exclude node title'
   - 'use text format full_html'
+  - 'view ai costs'
   - 'view the administration theme'

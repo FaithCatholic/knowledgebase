@@ -12,7 +12,7 @@ dependencies:
 id: faith_genesis_theme_views_block__team_strengths_block_1
 theme: faith_genesis_theme
 region: content
-weight: -8
+weight: -9
 provider: null
 plugin: 'views_block:team_strengths-block_1'
 settings:
@@ -22,7 +22,7 @@ settings:
   provider: views
   context_mapping: {  }
   views_label: ''
-  items_per_page: none
+  items_per_page: null
 visibility:
   request_path:
     id: request_path

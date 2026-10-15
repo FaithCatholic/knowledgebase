@@ -311,8 +311,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
           is_grouped: false
           group_info:
             label: ''
@@ -353,8 +351,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -444,8 +440,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -459,18 +453,6 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-        status_extra:
-          id: status_extra
-          table: node_field_data
-          field: status_extra
-          entity_type: node
-          plugin_id: node_status
-          operator: '='
-          value: false
-          group: 1
-          expose:
-            operator_limit_selection: false
-            operator_list: {  }
         uid:
           id: uid
           table: node_field_data
@@ -499,12 +481,6 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              content_editor: '0'
-              administrator: '0'
-              management: '0'
-              faith_staff: '0'
-              it: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -615,6 +591,7 @@ display:
           empty_table: true
           caption: ''
           description: ''
+          class: ''
       row:
         type: fields
       query:
@@ -636,7 +613,6 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
-        - user
         - 'user.node_grants:view'
         - user.permissions
       tags: {  }
@@ -668,7 +644,6 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
-        - user
         - 'user.node_grants:view'
         - user.permissions
       tags: {  }

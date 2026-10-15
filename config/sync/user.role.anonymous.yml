@@ -6,8 +6,6 @@ dependencies:
     - filter.format.restricted_html
   module:
     - comment
-    - contact
-    - exclude_node_title
     - filter
     - media
     - system
@@ -20,7 +18,5 @@ is_admin: false
 permissions:
   - 'access comments'
   - 'access content'
-  - 'access site-wide contact form'
-  - 'use exclude node title'
   - 'use text format restricted_html'
   - 'view media'

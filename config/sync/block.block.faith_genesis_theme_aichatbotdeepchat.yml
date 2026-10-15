@@ -1,0 +1,61 @@
+uuid: 13222057-468d-4d81-b0aa-0cef5ce286d5
+langcode: en
+status: true
+dependencies:
+  module:
+    - ai_chatbot
+    - system
+    - user
+  theme:
+    - faith_genesis_theme
+id: faith_genesis_theme_aichatbotdeepchat
+theme: faith_genesis_theme
+region: content
+weight: -8
+provider: null
+plugin: ai_deepchat_block
+settings:
+  id: ai_deepchat_block
+  label: 'FAITH Catholic KB Chatbot'
+  label_display: visible
+  provider: ai_chatbot
+  bot_name: 'KB Assistant'
+  bot_image: /modules/contrib/ai/modules/ai_chatbot/assets/ai-icon-gradient.svg
+  use_username: 1
+  default_username: ''
+  use_avatar: 1
+  default_avatar: ''
+  first_message: "Hi! Ask me anything about FAITH procedures and resources. I'll answer from the knowledge base and link the pages I used."
+  loading_message: ''
+  agent_delegation_message: ''
+  stream: 0
+  toggle_state: remember
+  width: 100%
+  height: auto
+  placement: bottom-right
+  show_copy_icon: true
+  collapse_minimal: false
+  style_file: 'module:ai_chatbot:chatgpt.yml'
+  disable_csrf: false
+  chat_processor_plugin: ai_assistant_api_processor
+  plugin_configuration:
+    assistant_id: kb_chat
+    stream_output: false
+    verbose_mode: false
+    show_structured_results: false
+  expansion_method: expand
+  load_strategy: eager
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /welcome
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      administrator: administrator
+      management: management
+      faith_staff: faith_staff

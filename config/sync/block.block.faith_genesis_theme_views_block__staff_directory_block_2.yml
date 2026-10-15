@@ -12,7 +12,7 @@ dependencies:
 id: faith_genesis_theme_views_block__staff_directory_block_2
 theme: faith_genesis_theme
 region: content
-weight: -16
+weight: -17
 provider: null
 plugin: 'views_block:staff_directory-block_2'
 settings:
@@ -21,7 +21,7 @@ settings:
   label_display: '0'
   provider: views
   views_label: ''
-  items_per_page: none
+  items_per_page: null
 visibility:
   request_path:
     id: request_path

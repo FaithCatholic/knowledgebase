@@ -12,7 +12,7 @@ dependencies:
 id: faith_genesis_theme_taxonomytermfield
 theme: faith_genesis_theme
 region: content
-weight: -10
+weight: -11
 provider: null
 plugin: 'fieldblock:taxonomy_term'
 settings:

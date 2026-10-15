@@ -19,7 +19,5 @@ settings:
   label: 'Custom Publishing menu blurb'
   label_display: '0'
   provider: block_content
-  status: true
-  info: ''
   view_mode: full
 visibility: {  }

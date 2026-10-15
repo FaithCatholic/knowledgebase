@@ -12,7 +12,7 @@ dependencies:
 id: faith_genesis_theme_loginmessage
 theme: faith_genesis_theme
 region: content
-weight: -20
+weight: -21
 provider: null
 plugin: 'block_content:6f0aa318-a25e-4e82-bdf1-e1919bba3c1b'
 settings:
@@ -20,8 +20,6 @@ settings:
   label: 'Login Message'
   label_display: '0'
   provider: block_content
-  status: true
-  info: ''
   view_mode: full
 visibility:
   user_role:

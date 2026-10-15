@@ -7,7 +7,6 @@ dependencies:
     - node.type.article
     - node.type.page
   module:
-    - exclude_node_title
     - filter
     - nodeaccess
     - path
@@ -27,6 +26,5 @@ permissions:
   - 'nodeaccess grant article permissions'
   - 'nodeaccess grant page permissions'
   - 'use advanced search'
-  - 'use exclude node title'
   - 'use text format full_html'
   - 'view the administration theme'

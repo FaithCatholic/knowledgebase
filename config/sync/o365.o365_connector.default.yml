@@ -1,0 +1,8 @@
+uuid: 5a62bbc7-5c20-4ab0-86f2-104afd03264b
+langcode: en
+status: true
+dependencies: {  }
+id: default
+label: 'Microsoft 365'
+redirect_login: 'https://kb.faithcatholic.com'
+auth_scopes: ''

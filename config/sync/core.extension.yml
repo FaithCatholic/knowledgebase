@@ -4,9 +4,15 @@ module:
   admin_toolbar: 0
   admin_toolbar_tools: 0
   ai: 0
+  ai_agents: 0
   ai_api_explorer: 0
-  ai_ckeditor: 0
+  ai_assistant_api: 0
+  ai_chatbot: 0
   ai_content_suggestions: 0
+  ai_logging: 0
+  ai_provider_anthropic: 0
+  ai_search: 0
+  ai_vdb_provider_postgres: 0
   anchor_link: 0
   asset_injector: 0
   automated_cron: 0
@@ -15,11 +21,11 @@ module:
   block_class: 0
   block_content: 0
   breakpoint: 0
+  chargebee_tools: 0
   ckeditor5: 0
   colorbox: 0
   comment: 0
   config: 0
-  contact: 0
   content_moderation: 0
   contextual: 0
   dashboard: 0
@@ -41,7 +47,6 @@ module:
   field_widget_actions: 0
   fieldblock: 0
   file: 0
-  file_details: 0
   filter: 0
   fontawesome: 0
   fontawesome_iconpicker_widget: 0
@@ -49,7 +54,6 @@ module:
   gemini_provider: 0
   gin_toolbar: 0
   help: 0
-  history: 0
   image: 0
   imagick: 0
   improve_line_breaks_filter: 0
@@ -62,11 +66,13 @@ module:
   jquery_ui_resizable: 0
   jquery_ui_slider: 0
   jquery_ui_touch_punch: 0
+  kb_chat: 0
   key: 0
   layout_builder: 0
   layout_discovery: 0
   link: 0
   linkit: 0
+  massmail: 0
   media: 0
   media_entity_browser_media_library: 0
   media_library: 0
@@ -76,6 +82,7 @@ module:
   menu_link_content: 0
   menu_ui: 0
   mermaid_diagram_field: 0
+  modeler_api: 0
   module_filter: 0
   mysql: 0
   node: 0
@@ -88,6 +95,9 @@ module:
   path_alias: 0
   responsive_image: 0
   search: 0
+  search_api: 0
+  search_help: 0
+  search_node: 0
   settings_tray: 0
   shortcut: 0
   social_api: 0
@@ -106,6 +116,7 @@ module:
   toolbar: 0
   update: 0
   upgrade_status: 0
+  upsun_dashboard: 0
   user: 0
   views_bootstrap: 0
   views_bulk_edit: 0
@@ -126,4 +137,6 @@ theme:
   bootstrap: 0
   faith_genesis_theme: 0
   gin: 0
+  stable9: 0
+  bootstrap5: 0
 profile: standard

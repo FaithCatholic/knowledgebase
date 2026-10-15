@@ -15,8 +15,6 @@ dependencies:
     - taxonomy.vocabulary.tags
   module:
     - comment
-    - contact
-    - exclude_node_title
     - file
     - filter
     - fontawesome
@@ -39,9 +37,7 @@ permissions:
   - 'access fontawesome additional settings'
   - 'access media overview'
   - 'access shortcuts'
-  - 'access site-wide contact form'
   - 'access toolbar'
-  - 'access user contact forms'
   - 'access user profiles'
   - 'change own username'
   - 'create audio media'
@@ -93,7 +89,6 @@ permissions:
   - 'search content'
   - 'skip comment approval'
   - 'update media'
-  - 'use exclude node title'
   - 'use menu link attributes'
   - 'use text format basic_html'
   - 'view all media revisions'

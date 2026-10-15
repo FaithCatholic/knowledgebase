@@ -1,0 +1,42 @@
+uuid: cf235ed7-1628-49b3-82b1-39293f3a632b
+langcode: en
+status: true
+dependencies:
+  module:
+    - ai_search
+id: kb_chat
+label: 'KB Chat'
+description: 'Chat interface for KB site'
+system_prompt: "Always search the knowledge base with the search tool before answering. You answer questions from FAITH Catholic staff using only the passages that search returns. Cite the source page for each answer with its link. If the passages don't contain the answer, say you couldn't find it in the knowledge base and suggest who or where to ask; never guess or use outside knowledge. Keep answers short and practical. Cite the source page for each answer as a Markdown link using the title and URL from the search results, like Page title."
+secured_system_prompt: null
+tools:
+  'ai_search:rag_search': true
+tool_settings: {  }
+orchestration_agent: true
+triage_agent: false
+max_loops: 3
+max_loops_message: null
+default_information_tools: null
+tool_usage_limits:
+  'ai_search:rag_search':
+    index:
+      values:
+        - kb_chat_content
+      action: force_value
+      hide_property: 1
+    amount:
+      values:
+        - '5'
+      action: force_value
+      hide_property: 1
+    min_score:
+      values:
+        - '0.5'
+      action: force_value
+      hide_property: 1
+exclude_users_role: false
+masquerade_roles: {  }
+structured_output_enabled: null
+structured_output_schema: null
+hostname_filter_disabled: null
+guardrail_set: null

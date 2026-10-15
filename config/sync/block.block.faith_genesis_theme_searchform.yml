@@ -19,7 +19,7 @@ settings:
   label: 'Search form'
   label_display: '0'
   provider: search
-  page_id: ''
+  page_id: null
 visibility:
   user_role:
     id: user_role
@@ -31,4 +31,4 @@ visibility:
   request_path:
     id: request_path
     negate: true
-    pages: "/corporate/strengths\r\n/corporate/staff-directory\r\n/corporate/staff-list\r\n/all-resources\r\n/systems/*\r\n<front>"
+    pages: "/corporate/strengths\r\n/corporate/staff-directory\r\n/corporate/staff-list\r\n/all-resources\r\n/systems/*\r\n/massmail/*\r\n/hosting/dashboard\r\n<front>"

@@ -26,7 +26,7 @@ dependencies:
   module:
     - content_moderation
     - field_group
-    - fontawesome
+    - fontawesome_iconpicker_widget
     - link
     - path
     - svg_image
@@ -203,7 +203,7 @@ content:
       placeholder: ''
     third_party_settings: {  }
   field_icon:
-    type: fontawesome_icon_widget
+    type: fontawesome_iconpicker_widget
     weight: 11
     region: content
     settings: {  }

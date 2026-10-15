@@ -8,8 +8,104 @@ definitions:
     expanded: false
     enabled: true
   standard__front_page:
-    enabled: true
     menu_name: main
     parent: ''
-    expanded: false
     weight: -45
+    expanded: false
+    enabled: true
+  'admin_toolbar_tools__extra_links:entity__user_role__edit_permissions_form__authenticated':
+    menu_name: admin
+    parent: 'admin_toolbar_tools.extra_links:entity.user_role.edit_form.authenticated'
+    weight: 21
+    expanded: false
+    enabled: true
+  'admin_toolbar_tools__extra_links:entity__user_role__devel_load__authenticated':
+    menu_name: admin
+    parent: 'admin_toolbar_tools.extra_links:entity.user_role.edit_form.authenticated'
+    weight: 22
+    expanded: false
+    enabled: true
+  'admin_toolbar_tools__extra_links:entity__user_role__edit_permissions_form__management':
+    menu_name: admin
+    parent: 'admin_toolbar_tools.extra_links:entity.user_role.edit_form.management'
+    weight: 21
+    expanded: false
+    enabled: true
+  'admin_toolbar_tools__extra_links:entity__user_role__devel_load__management':
+    menu_name: admin
+    parent: 'admin_toolbar_tools.extra_links:entity.user_role.edit_form.management'
+    weight: 22
+    expanded: false
+    enabled: true
+  'admin_toolbar_tools__extra_links:entity__user_role__delete_form__management':
+    menu_name: admin
+    parent: 'admin_toolbar_tools.extra_links:entity.user_role.edit_form.management'
+    weight: 23
+    expanded: false
+    enabled: true
+  system__status:
+    menu_name: admin
+    parent: system.admin_reports
+    weight: 21
+    expanded: false
+    enabled: true
+  update__status:
+    menu_name: admin
+    parent: system.admin_reports
+    weight: 22
+    expanded: false
+    enabled: true
+  dblog__overview:
+    menu_name: admin
+    parent: system.admin_reports
+    weight: 23
+    expanded: false
+    enabled: true
+  entity__field_storage_config__collection:
+    menu_name: admin
+    parent: system.admin_reports
+    weight: 24
+    expanded: false
+    enabled: true
+  o365__auth_scopes:
+    menu_name: admin
+    parent: system.admin_reports
+    weight: 25
+    expanded: false
+    enabled: true
+  dblog__access_denied:
+    menu_name: admin
+    parent: system.admin_reports
+    weight: 26
+    expanded: false
+    enabled: true
+  dblog__page_not_found:
+    menu_name: admin
+    parent: system.admin_reports
+    weight: 27
+    expanded: false
+    enabled: true
+  dblog__search:
+    menu_name: admin
+    parent: system.admin_reports
+    weight: 28
+    expanded: false
+    enabled: true
+  upgrade_status__report:
+    menu_name: admin
+    parent: system.admin_reports
+    weight: 29
+    expanded: false
+    enabled: true
+  views_ui__reports_plugins:
+    menu_name: admin
+    parent: system.admin_reports
+    weight: 30
+    expanded: false
+    enabled: true
+  chargebee_tools__overview:
+    menu_name: admin
+    parent: system.admin_config_services
+    weight: 11
+    expanded: false
+    enabled: true

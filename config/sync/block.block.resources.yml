@@ -13,7 +13,7 @@ dependencies:
 id: resources
 theme: faith_genesis_theme
 region: content
-weight: -15
+weight: -16
 provider: null
 plugin: 'views_block:resources-block_1'
 settings:
@@ -22,7 +22,7 @@ settings:
   label_display: '0'
   provider: views
   views_label: ''
-  items_per_page: none
+  items_per_page: null
 visibility:
   request_path:
     id: request_path

@@ -1,0 +1,73 @@
+uuid: fafcab99-41d9-4eb4-9ef8-fb76a6322f16
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.full
+    - search_api.server.kb_chat_vectors
+  module:
+    - ai_search
+    - node
+id: kb_chat_content
+name: 'KB chat content'
+description: ''
+read_only: false
+field_settings:
+  rendered_item:
+    label: 'Rendered HTML output'
+    property_path: rendered_item
+    type: text
+    configuration:
+      roles:
+        - faith_staff
+      view_mode:
+        'entity:node':
+          ':default': full
+          article: ':default'
+          diagram: ':default'
+          page: ':default'
+          resource: ':default'
+  title:
+    label: Title
+    datasource_id: 'entity:node'
+    property_path: title
+    type: string
+    dependencies:
+      module:
+        - node
+  url:
+    label: URI
+    property_path: search_api_url
+    type: string
+    configuration:
+      absolute: true
+datasource_settings:
+  'entity:node':
+    bundles:
+      default: false
+      selected:
+        - article
+        - diagram
+        - page
+        - resource
+    languages:
+      default: false
+      selected:
+        - en
+processor_settings:
+  add_url: {  }
+  aggregated_field: {  }
+  custom_value: {  }
+  entity_status: {  }
+  entity_type: {  }
+  language_with_fallback: {  }
+  rendered_item: {  }
+tracker_settings:
+  ai_search_tracker:
+    indexing_order: lifo
+options:
+  cron_limit: 50
+  delete_on_fail: true
+  index_directly: true
+  track_changes_in_references: true
+server: kb_chat_vectors

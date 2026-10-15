@@ -7,9 +7,9 @@ dependencies:
     - node.type.page
     - workflows.workflow.editorial
   module:
+    - ai_chatbot
     - content_moderation
     - contextual
-    - exclude_node_title
     - filter
     - node
     - path
@@ -24,6 +24,7 @@ permissions:
   - 'access administration pages'
   - 'access content overview'
   - 'access contextual links'
+  - 'access deepchat api'
   - 'access toolbar'
   - 'create page content'
   - 'create url aliases'
@@ -37,7 +38,6 @@ permissions:
   - 'use editorial transition archived_published'
   - 'use editorial transition create_new_draft'
   - 'use editorial transition publish'
-  - 'use exclude node title'
   - 'use text format full_html'
   - 'view all revisions'
   - 'view latest version'

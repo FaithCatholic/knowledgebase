@@ -1,0 +1,35 @@
+uuid: 6544ac85-eb58-4b3e-bdfe-e47133cbe80f
+langcode: en
+status: true
+dependencies:
+  module:
+    - kb_chat
+    - system
+    - user
+  theme:
+    - faith_genesis_theme
+id: faith_genesis_theme_aicoststhismonth
+theme: faith_genesis_theme
+region: content
+weight: -7
+provider: null
+plugin: kb_chat_ai_costs
+settings:
+  id: kb_chat_ai_costs
+  label: 'AI costs this month'
+  label_display: visible
+  provider: kb_chat
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /welcome
+  user_role:
+    id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
+    roles:
+      administrator: administrator
+      management: management
+      faith_staff: faith_staff

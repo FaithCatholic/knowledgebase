@@ -1,0 +1,32 @@
+uuid: 80f86c63-a536-4af3-b852-2193a8022303
+langcode: en
+status: true
+dependencies:
+  module:
+    - ai_search
+    - ai_vdb_provider_postgres
+id: kb_chat_vectors
+name: 'KB chat vectors'
+description: ''
+backend: search_api_ai_search
+backend_config:
+  chat_model: anthropic__claude-opus-5-5
+  database: postgres
+  database_settings:
+    database_name: main
+    collection: kb_chat
+    metric: cosine_similarity
+    vector_index_strategy: none
+  embeddings_engine: gemini__models/gemini-embedding-2
+  embeddings_engine_configuration:
+    set_dimensions: false
+    dimensions: 3072
+  embedding_strategy: contextual_chunks
+  embedding_strategy_configuration:
+    chunk_size: '500'
+    embedding_collection_size: 50
+    chunk_min_overlap: '100'
+    contextual_content_max_percentage: '30'
+    skip_moderation: false
+  embedding_strategy_details: ''
+  include_raw_embedding_vector: false

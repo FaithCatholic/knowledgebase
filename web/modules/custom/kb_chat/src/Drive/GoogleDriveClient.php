@@ -86,19 +86,29 @@ class GoogleDriveClient {
   }
 
   /**
-   * Every file in a shared drive (not trashed, not folders).
+   * The files in a shared drive (not trashed), optionally of some types only.
+   *
+   * @param string $drive_id
+   *   The shared drive ID.
+   * @param string[] $mime_types
+   *   Only list these MIME types; empty for every file except folders.
+   *   Filtering here, not afterwards, keeps big drives full of images and
+   *   design files quick to list.
    *
    * @return array
    *   [file id => [id, name, mimeType, modifiedTime, webViewLink, size]].
    */
-  public function filesInDrive(string $drive_id): array {
+  public function filesInDrive(string $drive_id, array $mime_types = []): array {
     $files = [];
+    $types = $mime_types
+      ? '(' . implode(' or ', array_map(fn($type) => "mimeType = '" . str_replace("'", "\\'", $type) . "'", $mime_types)) . ')'
+      : "mimeType != 'application/vnd.google-apps.folder'";
     $query = [
       'corpora' => 'drive',
       'driveId' => $drive_id,
       'includeItemsFromAllDrives' => 'true',
       'supportsAllDrives' => 'true',
-      'q' => "trashed = false and mimeType != 'application/vnd.google-apps.folder'",
+      'q' => "trashed = false and $types",
       'pageSize' => 200,
       'fields' => 'nextPageToken,files(id,name,mimeType,modifiedTime,webViewLink,size)',
     ];

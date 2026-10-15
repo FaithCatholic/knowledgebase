@@ -55,8 +55,19 @@ final class KbChatCommands extends DrushCommands {
    */
   #[CLI\Command(name: 'kb-chat:drive-sync', aliases: ['kb-drive'])]
   #[CLI\Option(name: 'time-limit', description: 'Seconds to keep reading files. The rest wait for the next run.')]
+  #[CLI\Option(name: 'drives', description: 'Only show which shared drives each account can see.')]
   #[CLI\Usage(name: 'drush kb-drive --time-limit=1500', description: 'What Upsun cron runs every hour.')]
-  public function driveSync(array $options = ['time-limit' => 270]): void {
+  #[CLI\Usage(name: 'drush kb-drive --drives', description: 'List the shared drives each account can see.')]
+  public function driveSync(array $options = ['time-limit' => 270, 'drives' => FALSE]): void {
+    if ($options['drives']) {
+      foreach ($this->driveSync->drives() as $tier => $drives) {
+        $this->output()->writeln(sprintf('%s account sees %d shared drives:', ucfirst($tier), count($drives)));
+        foreach ($drives as $name => $excluded) {
+          $this->output()->writeln('  ' . $name . ($excluded ? '  (excluded)' : ''));
+        }
+      }
+      return;
+    }
     $counts = $this->driveSync->sync((int) $options['time-limit'], fn(string $message) => $this->output()->writeln($message));
     if (!empty($counts['running'])) {
       $this->logger()->notice(dt('Another Drive sync is already running.'));

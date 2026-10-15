@@ -84,6 +84,14 @@ $settings['kb_chat'] = [
   'google_billing_token' => getenv('GOOGLE_BILLING_PUSH_TOKEN'),
   // Seconds between Anthropic cost report refreshes on cron.
   'refresh_interval' => 3600,
+  // The magazine archive search tool: catholicmagazines.org's archive_search_api
+  // endpoint. MAGAZINE_ARCHIVE_TOKEN matches ARCHIVE_SEARCH_TOKEN there.
+  'magazine_archive' => [
+    'url' => 'https://catholicmagazines.org',
+    'token' => getenv('MAGAZINE_ARCHIVE_TOKEN'),
+    // Results per search.
+    'limit' => 8,
+  ],
   // Google Drive sync (kb-chat:drive-sync). Two service accounts decide each
   // file's tier: the staff one is only in allemployees@, the management one
   // only in mgtteam@. Their JSON keys are sensitive Upsun variables.
@@ -93,7 +101,7 @@ $settings['kb_chat'] = [
       'management' => getenv('GOOGLE_DRIVE_MGMT_SA_JSON'),
     ],
     // Shared drive names or IDs to leave out of the chat.
-    'exclude_drives' => [],
+    'exclude_drives' => ['Accounts Payable', 'Magazines'],
     // Larger files are skipped.
     'max_file_bytes' => 25 * 1024 * 1024,
     // Text beyond this is not indexed.

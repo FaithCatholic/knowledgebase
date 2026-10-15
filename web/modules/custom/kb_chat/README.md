@@ -128,3 +128,16 @@ scanned images), Word (.docx), Excel (.xlsx), plain text, CSV and Markdown. File
    - on the AI Search fields tab, set **Text** to *Main content* and **Title** to *Contextual
      content*
    - index
+
+## Magazine archive
+
+The **Search the magazine archive** agent tool (`kb_chat:magazine_archive_search`) searches
+every published issue at catholicmagazines.org. It calls that site's `/api/archive-search`
+endpoint (the `archive_search_api` module in the magazines repo), which queries the
+archive's Solr index of the PDF text as an anonymous visitor. Claude can pass keywords, an
+optional client and a year range, and gets back each issue's details, links and highlighted
+excerpts.
+
+Setup: store the same token as `ARCHIVE_SEARCH_TOKEN` on the magazines project and
+`MAGAZINE_ARCHIVE_TOKEN` on kb (the URL is in `$settings['kb_chat']['magazine_archive']`).
+Then enable the tool on the KB Chat agent.

@@ -51,6 +51,29 @@ class DriveSync {
   }
 
   /**
+   * The shared drives each account can see, without listing their files.
+   *
+   * @return array
+   *   [tier => [drive name => excluded (bool)]].
+   */
+  public function drives(): array {
+    if (!$this->isConfigured()) {
+      throw new \RuntimeException('Set GOOGLE_DRIVE_SA_JSON and GOOGLE_DRIVE_MGMT_SA_JSON to sync Google Drive.');
+    }
+    $settings = $this->settings();
+    $excluded = $settings['exclude_drives'] ?? [];
+    $drives = [];
+    foreach (KbChatDocument::TIERS as $tier) {
+      $client = new GoogleDriveClient($this->httpClient, $settings['accounts'][$tier]);
+      foreach ($client->sharedDrives() as $id => $name) {
+        $drives[$tier][$name] = in_array($id, $excluded, TRUE) || in_array($name, $excluded, TRUE);
+      }
+      ksort($drives[$tier]);
+    }
+    return $drives;
+  }
+
+  /**
    * Runs one sync.
    *
    * @param int $time_limit
@@ -212,7 +235,7 @@ class DriveSync {
         $progress("  $drive_name: excluded");
         continue;
       }
-      $drive_files = $client->filesInDrive($drive_id);
+      $drive_files = $client->filesInDrive($drive_id, $this->extractor->mimeTypes());
       foreach ($drive_files as $id => $file) {
         $files[$id] = $file + ['driveName' => $drive_name];
       }

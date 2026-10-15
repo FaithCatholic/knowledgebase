@@ -38,6 +38,13 @@ class TextExtractor {
   ];
 
   /**
+   * The MIME types that are indexed.
+   */
+  public function mimeTypes(): array {
+    return array_keys(self::TYPES);
+  }
+
+  /**
    * Whether a MIME type is indexed.
    */
   public function supports(string $mime_type): bool {

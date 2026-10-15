@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "654395c6d4db550316fc9f22c72039cb",
+    "content-hash": "5a58de384f433ae600637749a10b7609",
     "packages": [
         {
             "name": "appolodev/vanilla-icon-picker",

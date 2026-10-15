@@ -1,0 +1,13 @@
+--- a/src/Entity/Index.php
++++ b/src/Entity/Index.php
+@@ -2266,6 +2266,10 @@
+     unset($properties['processorInstances']);
+     unset($properties['fieldInstances']);
+     unset($properties['properties']);
++    // Since Drupal 11.4, EntityBase keeps a \WeakReference here, which can't be
++    // serialized. EntityBase::__sleep() clears it, but this method doesn't call
++    // the parent's.
++    unset($properties['typedData']);
+     return array_keys($properties);
+   }
+ 

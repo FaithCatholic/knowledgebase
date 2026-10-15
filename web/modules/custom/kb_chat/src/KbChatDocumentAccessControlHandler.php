@@ -8,7 +8,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 
 /**
- * Limits each KB chat document to the roles its tier allows.
+ * Limits each shared drive document to the roles its tier allows.
  *
  * AI Search checks this for every search result, so a management document
  * never reaches the model in a staff member's chat. Documents are only ever

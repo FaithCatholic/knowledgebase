@@ -19,9 +19,15 @@ class GoogleDriveClient {
   const SCOPE = 'https://www.googleapis.com/auth/drive.readonly';
 
   /**
-   * Retries for temporary errors (5xx, 429, network) before giving up.
+   * Retries for temporary errors before giving up. With exponential backoff
+   * the last wait is 64 seconds, long enough for a rate limit to reset.
    */
-  const RETRIES = 5;
+  const RETRIES = 7;
+
+  /**
+   * Drive's 403 reasons that mean "slow down" rather than "no access".
+   */
+  const RATE_LIMIT_REASONS = ['rateLimitExceeded', 'userRateLimitExceeded'];
 
   /**
    * The current access token and when it expires.
@@ -40,10 +46,14 @@ class GoogleDriveClient {
    *   The HTTP client.
    * @param string $keyJson
    *   The service account's JSON key file contents.
+   * @param \Closure|null $tick
+   *   Called after every request and during waits, so the caller can keep its
+   *   database connection alive through a long listing.
    */
   public function __construct(
     protected ClientInterface $httpClient,
     string $keyJson,
+    protected ?\Closure $tick = NULL,
   ) {
     $key = json_decode($keyJson, TRUE);
     if (!is_array($key) || empty($key['client_email']) || empty($key['private_key'])) {
@@ -148,9 +158,11 @@ class GoogleDriveClient {
           throw new \RuntimeException('Could not reach Google Drive: ' . $e->getMessage(), 0, $e);
         }
         $status = 0;
+        $response = NULL;
       }
-      if (($status === 0 || $status === 429 || $status >= 500) && $attempt < self::RETRIES) {
-        usleep((2 ** $attempt) * 1000000 + random_int(0, 1000000));
+      $this->tick();
+      if ($attempt < self::RETRIES && $this->isTemporary($status, $response)) {
+        $this->wait((2 ** $attempt) + random_int(0, 1000) / 1000);
         continue;
       }
       break;
@@ -162,6 +174,44 @@ class GoogleDriveClient {
         $response->getStatusCode(), $path, $error['error']['message'] ?? substr($body, 0, 200)), $response->getStatusCode());
     }
     return $body;
+  }
+
+  /**
+   * Whether an error is worth retrying: network, 5xx, or a rate limit.
+   *
+   * Drive reports rate limits as 429, or as 403 with a rate-limit reason.
+   */
+  protected function isTemporary(int $status, $response): bool {
+    if ($status === 0 || $status === 429 || $status >= 500) {
+      return TRUE;
+    }
+    if ($status === 403 && $response) {
+      $error = json_decode((string) $response->getBody(), TRUE);
+      $response->getBody()->rewind();
+      $reason = $error['error']['errors'][0]['reason'] ?? '';
+      return in_array($reason, self::RATE_LIMIT_REASONS, TRUE);
+    }
+    return FALSE;
+  }
+
+  /**
+   * Sleeps, calling the tick every few seconds.
+   */
+  protected function wait(float $seconds): void {
+    $end = microtime(TRUE) + $seconds;
+    while (($left = $end - microtime(TRUE)) > 0) {
+      usleep((int) (min($left, 5) * 1000000));
+      $this->tick();
+    }
+  }
+
+  /**
+   * Calls the tick callback, if any.
+   */
+  protected function tick(): void {
+    if ($this->tick) {
+      ($this->tick)();
+    }
   }
 
   /**

@@ -6,6 +6,7 @@ use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\State\StateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\kb_chat\AnthropicCostReport;
 use Drupal\kb_chat\Plugin\AiFunctionCall\LinkedRagTool;
 
@@ -45,6 +46,19 @@ class KbChatHooks {
   public function linkRagResults(array &$definitions): void {
     if (isset($definitions['ai_search:rag_search'])) {
       $definitions['ai_search:rag_search']['class'] = LinkedRagTool::class;
+    }
+  }
+
+  /**
+   * Implements hook_search_api_datasource_info_alter().
+   *
+   * Search API describes every entity datasource as "Provides X entities for
+   * indexing and searching"; say where these documents actually come from.
+   */
+  #[Hook('search_api_datasource_info_alter')]
+  public function describeDocuments(array &$infos): void {
+    if (isset($infos['entity:kb_chat_document'])) {
+      $infos['entity:kb_chat_document']['description'] = new TranslatableMarkup('Documents from Google Drive shared drives and on-premises file locations (such as the Synology drive), synced for the kb chat.');
     }
   }
 

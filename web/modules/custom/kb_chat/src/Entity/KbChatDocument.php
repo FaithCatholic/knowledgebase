@@ -19,10 +19,10 @@ use Drupal\kb_chat\KbChatDocumentAccessControlHandler;
  */
 #[ContentEntityType(
   id: 'kb_chat_document',
-  label: new TranslatableMarkup('KB chat document'),
-  label_collection: new TranslatableMarkup('KB chat documents'),
-  label_singular: new TranslatableMarkup('KB chat document'),
-  label_plural: new TranslatableMarkup('KB chat documents'),
+  label: new TranslatableMarkup('Shared drive document'),
+  label_collection: new TranslatableMarkup('Shared drive documents'),
+  label_singular: new TranslatableMarkup('shared drive document'),
+  label_plural: new TranslatableMarkup('shared drive documents'),
   entity_keys: [
     'id' => 'id',
     'uuid' => 'uuid',

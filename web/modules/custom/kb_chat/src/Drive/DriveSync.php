@@ -12,7 +12,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
- * Syncs Google Drive files into KB chat documents.
+ * Syncs Google Drive files into shared drive documents (kb_chat_document).
  *
  * Two service accounts decide each file's tier, so Google's own sharing rules
  * do the work: one account is a member of allemployees only, the other of
@@ -91,9 +91,10 @@ class DriveSync {
     // before anything is changed.
     $clients = [];
     $visible = [];
+    $tick = $this->keepAlive(...);
     foreach (KbChatDocument::TIERS as $tier) {
-      $clients[$tier] = new GoogleDriveClient($this->httpClient, $settings['accounts'][$tier]);
-      $visible[$tier] = $this->listFiles($clients[$tier]);
+      $clients[$tier] = new GoogleDriveClient($this->httpClient, $settings['accounts'][$tier], $tick);
+      $visible[$tier] = $this->listFiles($clients[$tier], $tier, $progress);
     }
 
     // The tier is the widest group that can open the file.
@@ -201,18 +202,38 @@ class DriveSync {
    * @return array
    *   [file id => Drive file + driveName].
    */
-  protected function listFiles(GoogleDriveClient $client): array {
+  protected function listFiles(GoogleDriveClient $client, string $tier, callable $progress): array {
     $files = [];
     $excluded = $this->settings()['exclude_drives'] ?? [];
-    foreach ($client->sharedDrives() as $drive_id => $drive_name) {
+    $drives = $client->sharedDrives();
+    $progress(sprintf('Listing %d shared drives as %s (%s)...', count($drives), $tier, $client->email()));
+    foreach ($drives as $drive_id => $drive_name) {
       if (in_array($drive_id, $excluded, TRUE) || in_array($drive_name, $excluded, TRUE)) {
+        $progress("  $drive_name: excluded");
         continue;
       }
-      foreach ($client->filesInDrive($drive_id) as $id => $file) {
+      $drive_files = $client->filesInDrive($drive_id);
+      foreach ($drive_files as $id => $file) {
         $files[$id] = $file + ['driveName' => $drive_name];
       }
+      $progress(sprintf('  %s: %d files', $drive_name, count($drive_files)));
     }
     return $files;
+  }
+
+  /**
+   * Keeps the database connection alive through a long Drive listing.
+   *
+   * A listing can make no database queries for many minutes, longer than
+   * MySQL's idle timeout, after which Drupal's next query fails with "MySQL
+   * server has gone away". A trivial query once a minute prevents that.
+   */
+  protected function keepAlive(): void {
+    static $last = 0;
+    if (time() - $last >= 60) {
+      $last = time();
+      $this->database->query('SELECT 1');
+    }
   }
 
   /**

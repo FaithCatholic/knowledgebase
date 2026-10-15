@@ -10,5 +10,5 @@ view kb chat management documents:
   description: 'Chat answers can use Google Drive documents shared only with mgtteam.'
   restrict access: true
 administer kb chat documents:
-  title: 'Administer KB chat documents'
+  title: 'Administer shared drive documents'
   restrict access: true

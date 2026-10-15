@@ -70,7 +70,7 @@ Then place the block in the region of your choice under *Structure → Block lay
 
 ## Google Drive documents
 
-Files in Google **shared drives** are synced into **KB chat document** entities, which the
+Files in Google **shared drives** are synced into **Shared drive document** entities, which the
 chat's search index covers alongside nodes. Answers link to the file in Drive.
 
 ### Who sees what
@@ -123,7 +123,7 @@ scanned images), Word (.docx), Excel (.xlsx), plain text, CSV and Markdown. File
    drush kb-drive --time-limit=600
    ```
 5. **Search index.** Edit the chat's index:
-   - add the **KB chat document** datasource
+   - add the **Shared drive document** datasource
    - add the **Title** and **Text** fields
    - on the AI Search fields tab, set **Text** to *Main content* and **Title** to *Contextual
      content*

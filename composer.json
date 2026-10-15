@@ -267,7 +267,9 @@
             },
             "drupal/we_megamenu": {
                 "Check for empty col_config and col_content":
-                "https://www.drupal.org/files/issues/2023-08-22/we_megamenu-3225104-5.patch"
+                "https://www.drupal.org/files/issues/2023-08-22/we_megamenu-3225104-5.patch",
+                "Fix fatal error when adding a link under an item with no menu-link column":
+                "patches/we_megamenu-menu-item-insert-null-column.patch"
             },
             "drupal/fontawesome": {
                 "Breaking change introduced in a38b572 (Update to version 6.4.2)-https://www.drupal.org/project/fontawesome/issues/3417901":

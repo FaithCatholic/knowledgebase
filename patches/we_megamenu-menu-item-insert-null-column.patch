@@ -1,0 +1,18 @@
+--- a/src/WeMegaMenuBuilder.php
++++ b/src/WeMegaMenuBuilder.php
+@@ -398,6 +398,15 @@
+           }
+         }
+ 
++        // The parent's layout may have no menu-link column yet: no rows, or
++        // rows holding only blocks. Create the column before adding the link,
++        // since PHP 8 can't add a property to a missing object.
++        if (!isset($menu_config->menu_config->{$key_menu}->rows_content[$row_count][$col_count]) || !is_object($menu_config->menu_config->{$key_menu}->rows_content[$row_count][$col_count])) {
++          $menu_config->menu_config->{$key_menu}->rows_content[$row_count][$col_count] = new \stdClass();
++        }
++        if (!isset($menu_config->menu_config->{$key_menu}->rows_content[$row_count][$col_count]->col_content) || !is_array($menu_config->menu_config->{$key_menu}->rows_content[$row_count][$col_count]->col_content)) {
++          $menu_config->menu_config->{$key_menu}->rows_content[$row_count][$col_count]->col_content = [];
++        }
+         $menu_config->menu_config->{$key_menu}->rows_content[$row_count][$col_count]->col_content[] = $tmp_col_content;
+         $items_validate_serialize = array_map("serialize", $menu_config->menu_config->{$key_menu}->rows_content[$row_count][$col_count]->col_content);
+         $items_validate_unique = array_unique($items_validate_serialize);

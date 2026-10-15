@@ -1,0 +1,105 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for KB Chat.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function kb_chat_schema(): array {
+  $schema['kb_chat_usage'] = [
+    'description' => 'One AI provider call (chat or embeddings) and its estimated cost.',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'created' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'uid' => [
+        'description' => 'The user the call was made for; 0 for cron and indexing.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'provider' => [
+        'description' => 'The AI provider plugin ID, such as anthropic or gemini.',
+        'type' => 'varchar_ascii',
+        'length' => 64,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'model' => [
+        'type' => 'varchar_ascii',
+        'length' => 128,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'operation' => [
+        'description' => 'The AI operation type, such as chat or embeddings.',
+        'type' => 'varchar_ascii',
+        'length' => 64,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'thread' => [
+        'description' => 'The AI request thread ID, grouping the calls of one request.',
+        'type' => 'varchar_ascii',
+        'length' => 128,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'input_tokens' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'output_tokens' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'cache_read_tokens' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'cache_write_tokens' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'tokens_estimated' => [
+        'description' => '1 if the provider reported no token counts and they were estimated from the text length.',
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'cost' => [
+        'description' => 'Estimated cost in USD, or NULL if the model has no price in settings.',
+        'type' => 'numeric',
+        'precision' => 14,
+        'scale' => 8,
+        'not null' => FALSE,
+      ],
+    ],
+    'primary key' => ['id'],
+    'indexes' => [
+      'created' => ['created'],
+      'provider_created' => ['provider', 'created'],
+    ],
+  ];
+  return $schema;
+}

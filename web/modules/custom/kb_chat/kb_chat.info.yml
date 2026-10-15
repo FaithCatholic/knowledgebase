@@ -1,0 +1,7 @@
+name: KB Chat
+type: module
+description: Supporting code for the kb staff chat. Tracks AI usage and cost, with month-to-date totals from Anthropic and Google.
+core_version_requirement: ^11.1
+package: Custom
+dependencies:
+  - ai:ai

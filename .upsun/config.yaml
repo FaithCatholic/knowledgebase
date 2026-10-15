@@ -11,9 +11,13 @@ applications:
         - apcu
         - blackfire
         - imagick
+        # The kb chat's vector index (Postgres VDB provider).
+        - pdo_pgsql
 
     relationships:
       dbmysql:
+      # Vector index for the kb chat (AI Search, Postgres VDB provider).
+      vectordb:
  
     mounts:
 
@@ -129,6 +133,13 @@ applications:
 services:
   dbmysql:
     type: oracle-mysql:8.0 
+
+  # PostgreSQL with pgvector, holding the kb chat's vector index.
+  vectordb:
+    type: postgresql:17
+    configuration:
+      extensions:
+        - vector
 
   
 routes:

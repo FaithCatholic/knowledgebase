@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "472d42e5ca51db83b00df36a478cb708",
+    "content-hash": "654395c6d4db550316fc9f22c72039cb",
     "packages": [
         {
             "name": "appolodev/vanilla-icon-picker",
@@ -2108,6 +2108,68 @@
             }
         },
         {
+            "name": "drupal/ai_provider_anthropic",
+            "version": "1.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/ai_provider_anthropic.git",
+                "reference": "1.2.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/ai_provider_anthropic-1.2.2.zip",
+                "reference": "1.2.2",
+                "shasum": "603e94933ae13884298525eeec744e4cf8b29f58"
+            },
+            "require": {
+                "drupal/ai": "^1.2.0",
+                "drupal/core": "^10.3 || ^11",
+                "drupal/key": "^1.18"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.2.2",
+                    "datestamp": "1773928939",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "a.dmitriiev",
+                    "homepage": "https://www.drupal.org/user/3235287"
+                },
+                {
+                    "name": "camoa",
+                    "homepage": "https://www.drupal.org/user/2448054"
+                },
+                {
+                    "name": "marcus_johansson",
+                    "homepage": "https://www.drupal.org/user/385947"
+                },
+                {
+                    "name": "wouters_f",
+                    "homepage": "https://www.drupal.org/user/721548"
+                },
+                {
+                    "name": "yautja_cetanu",
+                    "homepage": "https://www.drupal.org/user/626050"
+                }
+            ],
+            "description": "Anthropic provider implementation for the AI module for Drupal",
+            "homepage": "https://www.drupal.org/project/ai_provider_anthropic",
+            "support": {
+                "source": "https://git.drupalcode.org/project/ai_provider_anthropic"
+            }
+        },
+        {
             "name": "drupal/ai_provider_openai",
             "version": "1.2.5",
             "source": {
@@ -2179,6 +2241,89 @@
             "homepage": "https://www.drupal.org/project/ai_provider_openai",
             "support": {
                 "source": "https://git.drupalcode.org/project/ai_provider_openai"
+            }
+        },
+        {
+            "name": "drupal/ai_search",
+            "version": "1.3.0-alpha5",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/ai_search.git",
+                "reference": "1.3.0-alpha5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/ai_search-1.3.0-alpha5.zip",
+                "reference": "1.3.0-alpha5",
+                "shasum": "36aa21935139a75b4110e4ff593e32c37a137719"
+            },
+            "require": {
+                "drupal/ai": "^1.3",
+                "drupal/core": "^10.4 || ^11",
+                "drupal/search_api": "^1.40",
+                "league/html-to-markdown": "^5.1"
+            },
+            "conflict": {
+                "drupal/ai": "<1.3",
+                "drupal/search_api": "<1.40"
+            },
+            "require-dev": {
+                "allanpichardo/mysql-vector": "^2.0",
+                "drupal/search_api": "^1.x-dev",
+                "drupal/search_api_solr": "^4.0"
+            },
+            "suggest": {
+                "league/commonmark": "Allows previewing of chunked content when configuring the fields to be indexed in AI Search, and formats messages in the AI Chatbot module."
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.3.0-alpha5",
+                    "datestamp": "1790179668",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "a.dmitriiev",
+                    "homepage": "https://www.drupal.org/user/3235287"
+                },
+                {
+                    "name": "andrewbelcher",
+                    "homepage": "https://www.drupal.org/user/655282"
+                },
+                {
+                    "name": "gxleano",
+                    "homepage": "https://www.drupal.org/user/3591999"
+                },
+                {
+                    "name": "kevinquillen",
+                    "homepage": "https://www.drupal.org/user/317279"
+                },
+                {
+                    "name": "marcus_johansson",
+                    "homepage": "https://www.drupal.org/user/385947"
+                },
+                {
+                    "name": "scott_euser",
+                    "homepage": "https://www.drupal.org/user/3267594"
+                },
+                {
+                    "name": "seogow",
+                    "homepage": "https://www.drupal.org/user/3065779"
+                }
+            ],
+            "description": "AI Search module for Drupal",
+            "homepage": "https://www.drupal.org/project/ai_search",
+            "support": {
+                "source": "https://git.drupalcode.org/project/ai_search"
             }
         },
         {
@@ -2330,6 +2475,67 @@
             "homepage": "https://www.drupal.org/project/ai_validations",
             "support": {
                 "source": "https://git.drupalcode.org/project/ai_validations"
+            }
+        },
+        {
+            "name": "drupal/ai_vdb_provider_postgres",
+            "version": "1.0.0-alpha4",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/ai_vdb_provider_postgres.git",
+                "reference": "1.0.0-alpha4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/ai_vdb_provider_postgres-1.0.0-alpha4.zip",
+                "reference": "1.0.0-alpha4",
+                "shasum": "cb93dc2112ff15b25cf4b71ffb52e985e0c3ea13"
+            },
+            "require": {
+                "drupal/ai": "^1.3",
+                "drupal/ai_search": "~1.3@alpha",
+                "drupal/core": "^10.5 || ^11",
+                "drupal/key": "*",
+                "ext-pdo": "*",
+                "ext-pdo_pgsql": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.0-alpha4",
+                    "datestamp": "1789018467",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "aurora-norris",
+                    "homepage": "https://www.drupal.org/user/3825457"
+                },
+                {
+                    "name": "joshhytr",
+                    "homepage": "https://www.drupal.org/user/3633353"
+                },
+                {
+                    "name": "marcus_johansson",
+                    "homepage": "https://www.drupal.org/user/385947"
+                },
+                {
+                    "name": "rijidij",
+                    "homepage": "https://www.drupal.org/user/269886"
+                }
+            ],
+            "description": "Enables the use of a Postgres (pgvector) VDB in the AI module.",
+            "homepage": "https://www.drupal.org/project/ai_vdb_provider_postgres",
+            "support": {
+                "source": "https://git.drupalcode.org/project/ai_vdb_provider_postgres"
             }
         },
         {
@@ -17455,6 +17661,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "drupal/ai_vdb_provider_postgres": 15,
         "drupal/anchor_link": 10,
         "drupal/auto_anchors": 10,
         "drupal/flag": 10,

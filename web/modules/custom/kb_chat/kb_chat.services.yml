@@ -1,0 +1,11 @@
+services:
+  _defaults:
+    autowire: true
+  logger.channel.kb_chat:
+    parent: logger.channel_base
+    arguments: ['kb_chat']
+  Drupal\kb_chat\CostTracker: ~
+  Drupal\kb_chat\AnthropicCostReport: ~
+  Drupal\kb_chat\EventSubscriber\UsageSubscriber:
+    tags:
+      - { name: event_subscriber }

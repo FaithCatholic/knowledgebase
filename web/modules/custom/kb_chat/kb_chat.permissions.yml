@@ -1,0 +1,4 @@
+view ai costs:
+  title: 'View AI costs'
+  description: 'See the month-to-date cost of the kb chat: kb''s own estimate and the totals billed by Anthropic and Google.'
+  restrict access: true

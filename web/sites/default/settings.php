@@ -63,3 +63,35 @@ $settings['chargebee_tools'] = [
   // Seconds between Chargebee API calls.
   'delay' => 1,
 ];
+// Vector index for the kb chat (ai_vdb_provider_postgres). Upsun's
+// .environment exports VECTORDB_* from the vectordb relationship; the password
+// comes from the vectordb_password key, which reads VECTORDB_PASSWORD.
+if (getenv('VECTORDB_HOST')) {
+  $config['ai_vdb_provider_postgres.settings']['host'] = getenv('VECTORDB_HOST');
+  $config['ai_vdb_provider_postgres.settings']['port'] = (int) getenv('VECTORDB_PORT');
+  $config['ai_vdb_provider_postgres.settings']['username'] = getenv('VECTORDB_USERNAME');
+  $config['ai_vdb_provider_postgres.settings']['default_database'] = getenv('VECTORDB_PATH');
+  $config['ai_vdb_provider_postgres.settings']['password'] = 'vectordb_password';
+}
+// kb chat cost tracking (kb_chat module); see the module README. The keys are
+// sensitive Upsun variables.
+$settings['kb_chat'] = [
+  // Admin API key (sk-ant-admin...), for Anthropic's cost report.
+  'anthropic_admin_key' => getenv('ANTHROPIC_ADMIN_API_KEY'),
+  // Optional: only count this Anthropic workspace's costs (wrkspc_...).
+  'anthropic_workspace_id' => getenv('ANTHROPIC_WORKSPACE_ID'),
+  // Shared secret in the Google Pub/Sub push URL.
+  'google_billing_token' => getenv('GOOGLE_BILLING_PUSH_TOKEN'),
+  // Seconds between Anthropic cost report refreshes on cron.
+  'refresh_interval' => 3600,
+  // USD per million tokens, for kb's live estimate. Keys match a model ID
+  // exactly or as a prefix. Update when prices or models change.
+  'prices' => [
+    'claude-opus-5-5' => ['input' => 4.00, 'output' => 20.00, 'cache_read' => 0.20, 'cache_write' => 5.00],
+    'claude-sonnet-5-5' => ['input' => 2.00, 'output' => 10.00, 'cache_read' => 0.20, 'cache_write' => 2.50],
+    // Gemini embeddings (text input), paid tier. The Gemini module names
+    // models with a "models/" prefix. https://ai.google.dev/gemini-api/docs/pricing
+    'models/gemini-embedding-2' => ['input' => 0.20],
+    'gemini-embedding-2' => ['input' => 0.20],
+  ],
+];

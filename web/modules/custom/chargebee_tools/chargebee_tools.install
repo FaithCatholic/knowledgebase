@@ -1,0 +1,136 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for Chargebee Tools.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function chargebee_tools_schema(): array {
+  $schema['chargebee_tools_run'] = [
+    'description' => 'One bulk Chargebee run: an uploaded CSV and the operation to apply to it.',
+    'fields' => [
+      'rid' => [
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'operation' => [
+        'description' => 'The ChargebeeOperation plugin ID.',
+        'type' => 'varchar_ascii',
+        'length' => 64,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'site' => [
+        'description' => 'The configured Chargebee site key: test or live.',
+        'type' => 'varchar_ascii',
+        'length' => 16,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'mode' => [
+        'description' => 'check (look up only) or run (make the changes).',
+        'type' => 'varchar_ascii',
+        'length' => 16,
+        'not null' => TRUE,
+        'default' => 'check',
+      ],
+      'options' => [
+        'description' => 'The operation options, as JSON.',
+        'type' => 'text',
+        'not null' => FALSE,
+      ],
+      'filename' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'uid' => [
+        'description' => 'The user who queued the run.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'status' => [
+        'description' => 'queued, running, done or cancelled.',
+        'type' => 'varchar_ascii',
+        'length' => 16,
+        'not null' => TRUE,
+        'default' => 'queued',
+      ],
+      'created' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'started' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'finished' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+    ],
+    'primary key' => ['rid'],
+    'indexes' => [
+      'status' => ['status'],
+    ],
+  ];
+
+  $schema['chargebee_tools_row'] = [
+    'description' => 'One CSV row of a run, and its result. Pending rows are the work queue.',
+    'fields' => [
+      'rid' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'line' => [
+        'description' => 'The line number in the uploaded CSV.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'input' => [
+        'description' => 'The row, keyed by the operation\'s column names, as JSON.',
+        'type' => 'text',
+        'not null' => TRUE,
+      ],
+      'status' => [
+        'description' => 'pending, processing, success, warning, error, skipped or cancelled.',
+        'type' => 'varchar_ascii',
+        'length' => 16,
+        'not null' => TRUE,
+        'default' => 'pending',
+      ],
+      'message' => [
+        'type' => 'text',
+        'not null' => FALSE,
+      ],
+      'data' => [
+        'description' => 'Result values for the results CSV, as JSON.',
+        'type' => 'text',
+        'not null' => FALSE,
+      ],
+      'processed' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+    ],
+    'primary key' => ['rid', 'line'],
+    'indexes' => [
+      'status' => ['status', 'rid', 'line'],
+    ],
+  ];
+
+  return $schema;
+}

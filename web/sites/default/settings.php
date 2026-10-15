@@ -47,3 +47,19 @@ $settings['upsun_dashboard'] = [
   // Seconds between automatic refreshes on cron.
   'refresh_interval' => 3600,
 ];
+// Chargebee bulk tools (chargebee_tools module). The API keys are sensitive
+// project-level variables on Upsun; see the module README.
+$settings['chargebee_tools'] = [
+  'sites' => [
+    'test' => [
+      'site' => 'faithcatholic-test',
+      'api_key' => getenv('CHARGEBEE_TEST_API_KEY'),
+    ],
+    'live' => [
+      'site' => 'faithcatholic',
+      'api_key' => getenv('CHARGEBEE_LIVE_API_KEY'),
+    ],
+  ],
+  // Seconds between Chargebee API calls.
+  'delay' => 1,
+];

@@ -120,6 +120,11 @@ applications:
         spec: '*/19 * * * *'
         commands: 
           start: 'cd web ; drush core-cron'
+      # Sends queued Chargebee bulk runs (chargebee_tools module).
+      chargebee:
+        spec: '*/5 * * * *'
+        commands:
+          start: 'cd web ; drush chargebee:process --time-limit=270'
 
 services:
   dbmysql:

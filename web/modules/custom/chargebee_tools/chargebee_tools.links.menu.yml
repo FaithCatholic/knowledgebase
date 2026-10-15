@@ -1,0 +1,6 @@
+chargebee_tools.overview:
+  title: 'Chargebee tools'
+  description: 'Bulk Chargebee operations from a CSV of IDs.'
+  route_name: chargebee_tools.overview
+  parent: system.admin
+  weight: 20

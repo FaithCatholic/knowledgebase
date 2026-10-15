@@ -1,0 +1,4 @@
+use chargebee tools:
+  title: 'Use the Chargebee bulk tools'
+  description: 'Upload CSVs that change subscriptions, orders and invoices in Chargebee, including the live site.'
+  restrict access: true

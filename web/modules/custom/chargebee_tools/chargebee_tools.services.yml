@@ -1,0 +1,11 @@
+services:
+  _defaults:
+    autowire: true
+  logger.channel.chargebee_tools:
+    parent: logger.channel_base
+    arguments: ['chargebee_tools']
+  Drupal\chargebee_tools\ChargebeeClient: ~
+  Drupal\chargebee_tools\RunStorage: ~
+  Drupal\chargebee_tools\RunProcessor: ~
+  Drupal\chargebee_tools\ChargebeeOperationManager:
+    arguments: ['@container.namespaces', '@cache.discovery', '@module_handler']

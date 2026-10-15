@@ -1,0 +1,41 @@
+chargebee_tools.overview:
+  path: '/admin/chargebee-tools'
+  defaults:
+    _controller: '\Drupal\chargebee_tools\Controller\RunController::overview'
+    _title: 'Chargebee tools'
+  requirements:
+    _permission: 'use chargebee tools'
+
+chargebee_tools.new:
+  path: '/admin/chargebee-tools/new/{operation}'
+  defaults:
+    _form: '\Drupal\chargebee_tools\Form\NewRunForm'
+    _title_callback: '\Drupal\chargebee_tools\Form\NewRunForm::title'
+  requirements:
+    _permission: 'use chargebee tools'
+
+chargebee_tools.run:
+  path: '/admin/chargebee-tools/run/{rid}'
+  defaults:
+    _controller: '\Drupal\chargebee_tools\Controller\RunController::view'
+    _title_callback: '\Drupal\chargebee_tools\Controller\RunController::title'
+  requirements:
+    _permission: 'use chargebee tools'
+    rid: '\d+'
+
+chargebee_tools.download:
+  path: '/admin/chargebee-tools/run/{rid}/download'
+  defaults:
+    _controller: '\Drupal\chargebee_tools\Controller\RunController::download'
+  requirements:
+    _permission: 'use chargebee tools'
+    rid: '\d+'
+
+chargebee_tools.cancel:
+  path: '/admin/chargebee-tools/run/{rid}/cancel'
+  defaults:
+    _controller: '\Drupal\chargebee_tools\Controller\RunController::cancel'
+  requirements:
+    _permission: 'use chargebee tools'
+    _csrf_token: 'TRUE'
+    rid: '\d+'

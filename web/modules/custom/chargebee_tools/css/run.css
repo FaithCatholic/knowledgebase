@@ -1,0 +1,103 @@
+/**
+ * Progress bar and counters on the Chargebee run page.
+ */
+.cbt-run-progress {
+  --cbt-ok: #2e7d32;
+  --cbt-warning: #c77c02;
+  --cbt-error: #c62828;
+  --cbt-track: #e3e5ea;
+  --cbt-muted: #5c6370;
+  margin-block: 1rem 1.5rem;
+}
+
+/* Gin's dark mode. */
+.gin--dark-mode .cbt-run-progress {
+  --cbt-ok: #66bb6a;
+  --cbt-warning: #ffb74d;
+  --cbt-error: #ef5350;
+  --cbt-track: #3a3d45;
+  --cbt-muted: #a6abb5;
+}
+
+.cbt-run-progress__bar {
+  display: flex;
+  overflow: hidden;
+  height: 1.25rem;
+  border-radius: 0.625rem;
+  background: var(--cbt-track);
+}
+
+.cbt-run-progress__segment {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.cbt-run-progress__segment--ok {
+  background: var(--cbt-ok);
+}
+
+.cbt-run-progress__segment--warning {
+  background: var(--cbt-warning);
+}
+
+.cbt-run-progress__segment--error {
+  background: var(--cbt-error);
+}
+
+.cbt-run-progress__label {
+  margin-block: 0.5rem 1rem;
+  color: var(--cbt-muted);
+}
+
+.cbt-run-progress__counters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cbt-run-progress__counter {
+  min-width: 9rem;
+  margin: 0;
+  padding: 0.75rem 1rem;
+  border-inline-start: 4px solid var(--cbt-track);
+  border-radius: 0.25rem;
+  background: color-mix(in srgb, var(--cbt-track) 35%, transparent);
+}
+
+.cbt-run-progress__counter--ok {
+  border-color: var(--cbt-ok);
+}
+
+.cbt-run-progress__counter--warning {
+  border-color: var(--cbt-warning);
+}
+
+.cbt-run-progress__counter--error {
+  border-color: var(--cbt-error);
+}
+
+.cbt-run-progress__count {
+  display: block;
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.cbt-run-progress__counter--ok .cbt-run-progress__count {
+  color: var(--cbt-ok);
+}
+
+.cbt-run-progress__counter--warning .cbt-run-progress__count {
+  color: var(--cbt-warning);
+}
+
+.cbt-run-progress__counter--error .cbt-run-progress__count {
+  color: var(--cbt-error);
+}
+
+.cbt-run-progress__name {
+  color: var(--cbt-muted);
+}

@@ -1,0 +1,5 @@
+name: Chargebee Tools
+type: module
+description: Bulk Chargebee operations from a CSV of subscription, customer or order IDs, for jobs the Chargebee web interface can't do in bulk.
+core_version_requirement: ^11.1
+package: Custom

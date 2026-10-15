@@ -159,6 +159,7 @@
         "npm-asset/fonticonpicker--fonticonpicker": "^3.1",
         "oomphinc/composer-installers-extender": "^2.0",
         "platformsh/config-reader": "^2.4",
+        "smalot/pdfparser": "^2.13",
         "twig/twig": "<3.30",
         "wikimedia/composer-merge-plugin": "^2.1"
     },

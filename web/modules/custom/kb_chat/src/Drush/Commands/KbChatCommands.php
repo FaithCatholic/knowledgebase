@@ -4,6 +4,7 @@ namespace Drupal\kb_chat\Drush\Commands;
 
 use Drupal\kb_chat\AnthropicCostReport;
 use Drupal\kb_chat\CostTracker;
+use Drupal\kb_chat\Drive\DriveSync;
 use Drush\Attributes as CLI;
 use Drush\Commands\AutowireTrait;
 use Drush\Commands\DrushCommands;
@@ -18,6 +19,7 @@ final class KbChatCommands extends DrushCommands {
   public function __construct(
     private readonly CostTracker $costs,
     private readonly AnthropicCostReport $anthropicCosts,
+    private readonly DriveSync $driveSync,
   ) {
     parent::__construct();
   }
@@ -46,6 +48,30 @@ final class KbChatCommands extends DrushCommands {
         isset($billed['amount']) ? sprintf('$%.2f as of %s', $billed['amount'], date('Y-m-d H:i', $billed['as_of'])) : ($billed['error'] ?? 'not reported yet'),
       ));
     }
+  }
+
+  /**
+   * Syncs Google Drive files into the kb chat's documents.
+   */
+  #[CLI\Command(name: 'kb-chat:drive-sync', aliases: ['kb-drive'])]
+  #[CLI\Option(name: 'time-limit', description: 'Seconds to keep reading files. The rest wait for the next run.')]
+  #[CLI\Usage(name: 'drush kb-drive --time-limit=1500', description: 'What Upsun cron runs every hour.')]
+  public function driveSync(array $options = ['time-limit' => 270]): void {
+    $counts = $this->driveSync->sync((int) $options['time-limit'], fn(string $message) => $this->output()->writeln($message));
+    if (!empty($counts['running'])) {
+      $this->logger()->notice(dt('Another Drive sync is already running.'));
+      return;
+    }
+    $this->logger()->success(dt('Drive: @listed files. @created new, @updated changed, @retiered relabeled, @deleted removed, @skipped too large, @failed failed, @remaining left for the next run.', [
+      '@listed' => $counts['listed'],
+      '@created' => $counts['created'],
+      '@updated' => $counts['updated'],
+      '@retiered' => $counts['retiered'],
+      '@deleted' => $counts['deleted'],
+      '@skipped' => $counts['skipped'],
+      '@failed' => $counts['failed'],
+      '@remaining' => $counts['remaining'],
+    ]));
   }
 
 }

@@ -3,7 +3,8 @@
 Supporting code for the kb staff chat, which is built on the AI module (Assistant, Chatbot and
 AI Search) with Claude for answers and Gemini for embeddings.
 
-So far it tracks AI costs. Access control for Google Drive documents is added in phase 2.
+It tracks AI costs, adds page links to search results, shows the chat inside the page
+when its block is in the Content region, and syncs Google Drive documents into the chat.
 
 ## Who sees what in the chat
 
@@ -66,3 +67,64 @@ drush cex
 ```
 
 Then place the block in the region of your choice under *Structure → Block layout*.
+
+## Google Drive documents
+
+Files in Google **shared drives** are synced into **KB chat document** entities, which the
+chat's search index covers alongside nodes. Answers link to the file in Drive.
+
+### Who sees what
+
+Two service accounts decide each file's tier, so Google's own sharing rules do the work:
+
+| Account | Group membership | Its files become |
+|---|---|---|
+| Staff indexer (`GOOGLE_DRIVE_SA_JSON`) | **allemployees@** only | **staff** documents |
+| Management indexer (`GOOGLE_DRIVE_MGMT_SA_JSON`) | **mgtteam@** only | **management** documents, if the staff account can't open them |
+
+A file the staff account can open is a staff document, even if mgtteam can open it too. A
+file in no shared drive either account can see isn't indexed. That includes files only in
+someone's My Drive, or shared with "anyone at faithcatholic.com".
+
+Viewing each tier needs a permission. AI Search checks it for every search result:
+
+- **View staff documents in the kb chat:** FAITH Staff and Management
+- **View management documents in the kb chat:** Management only
+
+### Sync
+
+`drush kb-drive` (`kb-chat:drive-sync`) runs hourly from Upsun cron with a 25-minute limit:
+
+- It **lists** every file both accounts can see. If either listing fails, nothing changes.
+- It **reads** new and changed files until the time limit; the rest wait for the next run.
+- It **relabels** files whose sharing changed.
+- It **deletes** documents for files that were removed or unshared.
+
+Supported types: Google Docs, Sheets (every sheet) and Slides, PDF (text layer only, not
+scanned images), Word (.docx), Excel (.xlsx), plain text, CSV and Markdown. Files over
+25 MB are skipped. Settings are in `$settings['kb_chat']['drive']`, including
+`exclude_drives` to leave whole shared drives out.
+
+### Setup
+
+1. **Second service account.** In the same Google Cloud project, create a service account
+   (for example `kb-drive-mgmt`), create a JSON key, and store it as a sensitive Upsun
+   variable `env:GOOGLE_DRIVE_MGMT_SA_JSON`.
+2. **Groups.** In Google Workspace, make sure:
+   - the **existing** indexer account is a member of **allemployees@ only** (remove it from
+     mgtteam@)
+   - the **new** account is a member of **mgtteam@ only**
+3. **PDF library.** Run `composer require smalot/pdfparser:^2.13`.
+4. **Deploy, then:**
+   ```bash
+   drush updb -y          # creates the document table
+   drush role:perm:add faith_staff 'view kb chat staff documents'
+   drush role:perm:add management 'view kb chat staff documents,view kb chat management documents'
+   drush kb-drive --time-limit=600
+   ```
+5. **Search index.** Edit the chat's index:
+   - add the **KB chat document** datasource
+   - add the **Title** and **Text** fields
+   - on the AI Search fields tab, set **Text** to *Main content* and **Title** to *Contextual
+     content*
+   - index

@@ -129,6 +129,11 @@ applications:
         spec: '*/5 * * * *'
         commands:
           start: 'cd web ; drush chargebee:process --time-limit=270'
+      # Syncs Google Drive documents into the kb chat (kb_chat module).
+      kbdrive:
+        spec: '7 * * * *'
+        commands:
+          start: 'cd web ; drush kb-chat:drive-sync --time-limit=1500'
 
 services:
   dbmysql:

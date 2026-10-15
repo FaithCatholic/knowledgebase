@@ -2,3 +2,13 @@ view ai costs:
   title: 'View AI costs'
   description: 'See the month-to-date cost of the kb chat: kb''s own estimate and the totals billed by Anthropic and Google.'
   restrict access: true
+view kb chat staff documents:
+  title: 'View staff documents in the kb chat'
+  description: 'Chat answers can use Google Drive documents shared with allemployees.'
+view kb chat management documents:
+  title: 'View management documents in the kb chat'
+  description: 'Chat answers can use Google Drive documents shared only with mgtteam.'
+  restrict access: true
+administer kb chat documents:
+  title: 'Administer KB chat documents'
+  restrict access: true

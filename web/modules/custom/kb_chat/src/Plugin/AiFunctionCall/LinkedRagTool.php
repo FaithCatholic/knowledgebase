@@ -4,6 +4,7 @@ namespace Drupal\kb_chat\Plugin\AiFunctionCall;
 
 use Drupal\ai_search\Plugin\AiFunctionCall\RagTool;
 use Drupal\Core\Entity\TranslatableInterface;
+use Drupal\kb_chat\Entity\KbChatDocument;
 
 /**
  * The RAG/Vector Search tool, with each result's page title and link.
@@ -56,7 +57,13 @@ class LinkedRagTool extends RagTool {
       if ($entity instanceof TranslatableInterface && $result['langcode'] && $entity->hasTranslation($result['langcode'])) {
         $entity = $entity->getTranslation($result['langcode']);
       }
-      $url = $entity->hasLinkTemplate('canonical') ? $entity->toUrl('canonical', ['absolute' => TRUE])->toString() : '';
+      // Google Drive documents link to Drive; nodes to their kb page.
+      if ($entity instanceof KbChatDocument) {
+        $url = $entity->getSourceUrl();
+      }
+      else {
+        $url = $entity->hasLinkTemplate('canonical') ? $entity->toUrl('canonical', ['absolute' => TRUE])->toString() : '';
+      }
       return [(string) $entity->label(), $url];
     }
     catch (\Exception) {

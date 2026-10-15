@@ -19,6 +19,11 @@ class GoogleDriveClient {
   const SCOPE = 'https://www.googleapis.com/auth/drive.readonly';
 
   /**
+   * Retries for temporary errors (5xx, 429, network) before giving up.
+   */
+  const RETRIES = 5;
+
+  /**
    * The current access token and when it expires.
    */
   protected ?string $token = NULL;
@@ -84,7 +89,7 @@ class GoogleDriveClient {
       'includeItemsFromAllDrives' => 'true',
       'supportsAllDrives' => 'true',
       'q' => "trashed = false and mimeType != 'application/vnd.google-apps.folder'",
-      'pageSize' => 1000,
+      'pageSize' => 200,
       'fields' => 'nextPageToken,files(id,name,mimeType,modifiedTime,webViewLink,size)',
     ];
     do {
@@ -126,16 +131,29 @@ class GoogleDriveClient {
    * GETs an API path and returns the body.
    */
   protected function request(string $path, array $query): string {
-    try {
-      $response = $this->httpClient->request('GET', self::API . $path, [
-        'query' => $query,
-        'headers' => ['Authorization' => 'Bearer ' . $this->accessToken()],
-        'timeout' => 120,
-        'http_errors' => FALSE,
-      ]);
-    }
-    catch (GuzzleException $e) {
-      throw new \RuntimeException('Could not reach Google Drive: ' . $e->getMessage(), 0, $e);
+    // Google asks for 5xx and 429 responses to be retried with exponential
+    // backoff: 1, 2, 4, 8 and 16 seconds, plus up to a second of jitter.
+    for ($attempt = 0; ; $attempt++) {
+      try {
+        $response = $this->httpClient->request('GET', self::API . $path, [
+          'query' => $query,
+          'headers' => ['Authorization' => 'Bearer ' . $this->accessToken()],
+          'timeout' => 120,
+          'http_errors' => FALSE,
+        ]);
+        $status = $response->getStatusCode();
+      }
+      catch (GuzzleException $e) {
+        if ($attempt >= self::RETRIES) {
+          throw new \RuntimeException('Could not reach Google Drive: ' . $e->getMessage(), 0, $e);
+        }
+        $status = 0;
+      }
+      if (($status === 0 || $status === 429 || $status >= 500) && $attempt < self::RETRIES) {
+        usleep((2 ** $attempt) * 1000000 + random_int(0, 1000000));
+        continue;
+      }
+      break;
     }
     $body = (string) $response->getBody();
     if ($response->getStatusCode() >= 400) {

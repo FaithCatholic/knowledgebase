@@ -143,3 +143,36 @@ excerpts.
 Setup: store the same token as `ARCHIVE_SEARCH_TOKEN` on the magazines project and
 `MAGAZINE_ARCHIVE_TOKEN` on kb (the URL is in `$settings['kb_chat']['magazine_archive']`).
 Then enable the tool on the KB Chat agent.
+
+## Data warehouse
+
+The **Query the data warehouse** agent tool (`kb_chat:warehouse_query`) answers statistics
+questions from the BigQuery project `faith-data-warehouse`, using views curated for the chat:
+
+- **`kb_chat`** (everyone with the chat): subscriptions, plans, invoices, renewals, trials,
+  pre-2024 subscription orders, store orders and items, diocese statistics, the parish
+  directory and Mass times churches.
+- **`kb_chat_management`** (Management): agency clients, jobs and billing from Advantage.
+
+Called with no SQL, the tool returns the views' descriptions and columns, read live from
+BigQuery and cached for an hour. Called with SQL, it dry-runs the query first and refuses it
+unless:
+
+- it is a single `SELECT`
+- it names no dataset other than the chat's
+- it scans at most 1 GB
+
+Then it runs the query (BigQuery enforces the same byte limit) and returns up to 200 rows.
+
+Queries run as the Drive service accounts:
+
+- Users with *View management documents in the kb chat* use the management account, which
+  can read `kb_chat_management`.
+- Everyone else uses the staff account, which can't read that dataset, so Google enforces
+  the split.
+
+Both accounts have **BigQuery Data Viewer** on the chat datasets and the source datasets the
+views read, and need **BigQuery Job User** on the project. The views leave out customer
+names, emails, phone numbers and street addresses. View and column descriptions double as
+the chat's instructions, so keep them accurate when changing a view. Settings are in
+`$settings['kb_chat']['warehouse']`.

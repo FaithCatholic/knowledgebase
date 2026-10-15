@@ -84,6 +84,20 @@ $settings['kb_chat'] = [
   'google_billing_token' => getenv('GOOGLE_BILLING_PUSH_TOKEN'),
   // Seconds between Anthropic cost report refreshes on cron.
   'refresh_interval' => 3600,
+  // The data warehouse query tool: BigQuery views curated for the chat. Queries
+  // run as the Drive service accounts below, staff or management by the user's
+  // permissions; each may only read its datasets.
+  'warehouse' => [
+    'project' => 'faith-data-warehouse',
+    'location' => 'US',
+    'datasets' => [
+      'staff' => ['kb_chat'],
+      'management' => ['kb_chat', 'kb_chat_management'],
+    ],
+    // BigQuery refuses queries that would scan more (1 GB costs about $0.006).
+    'max_bytes' => 1000000000,
+    'max_rows' => 200,
+  ],
   // The magazine archive search tool: catholicmagazines.org's archive_search_api
   // endpoint. MAGAZINE_ARCHIVE_TOKEN matches ARCHIVE_SEARCH_TOKEN there.
   'magazine_archive' => [

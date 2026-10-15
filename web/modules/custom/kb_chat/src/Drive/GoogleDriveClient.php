@@ -3,13 +3,14 @@
 namespace Drupal\kb_chat\Drive;
 
 use GuzzleHttp\ClientInterface;
+use Drupal\kb_chat\Google\ServiceAccountToken;
 use GuzzleHttp\Exception\GuzzleException;
 
 /**
  * Minimal read-only Google Drive client for one service account.
  *
- * Signs in with the service account's JSON key (a signed JWT exchanged for an
- * access token, scope drive.readonly) and lists and reads files. One instance
+ * Signs in as the service account (ServiceAccountToken, scope drive.readonly)
+ * and lists and reads files. One instance
  * per account; DriveSync creates them from $settings['kb_chat']['drive'].
  */
 class GoogleDriveClient {
@@ -30,16 +31,9 @@ class GoogleDriveClient {
   const RATE_LIMIT_REASONS = ['rateLimitExceeded', 'userRateLimitExceeded'];
 
   /**
-   * The current access token and when it expires.
+   * Access tokens for the service account.
    */
-  protected ?string $token = NULL;
-
-  protected int $expires = 0;
-
-  /**
-   * The decoded service account key.
-   */
-  protected array $key;
+  protected ServiceAccountToken $auth;
 
   /**
    * @param \GuzzleHttp\ClientInterface $httpClient
@@ -55,18 +49,14 @@ class GoogleDriveClient {
     string $keyJson,
     protected ?\Closure $tick = NULL,
   ) {
-    $key = json_decode($keyJson, TRUE);
-    if (!is_array($key) || empty($key['client_email']) || empty($key['private_key'])) {
-      throw new \InvalidArgumentException('The Google service account key is missing or not valid JSON.');
-    }
-    $this->key = $key;
+    $this->auth = new ServiceAccountToken($httpClient, $keyJson, self::SCOPE);
   }
 
   /**
    * The service account's email address.
    */
   public function email(): string {
-    return $this->key['client_email'];
+    return $this->auth->email();
   }
 
   /**
@@ -157,7 +147,7 @@ class GoogleDriveClient {
       try {
         $response = $this->httpClient->request('GET', self::API . $path, [
           'query' => $query,
-          'headers' => ['Authorization' => 'Bearer ' . $this->accessToken()],
+          'headers' => ['Authorization' => 'Bearer ' . $this->auth->token()],
           'timeout' => 120,
           'http_errors' => FALSE,
         ]);
@@ -222,48 +212,6 @@ class GoogleDriveClient {
     if ($this->tick) {
       ($this->tick)();
     }
-  }
-
-  /**
-   * A valid access token, exchanging a signed JWT for a new one as needed.
-   */
-  protected function accessToken(): string {
-    if ($this->token && time() < $this->expires - 60) {
-      return $this->token;
-    }
-    $now = time();
-    $encode = fn(string $data) => rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
-    $unsigned = $encode(json_encode(['alg' => 'RS256', 'typ' => 'JWT']))
-      . '.' . $encode(json_encode([
-        'iss' => $this->key['client_email'],
-        'scope' => self::SCOPE,
-        'aud' => $this->key['token_uri'] ?? 'https://oauth2.googleapis.com/token',
-        'iat' => $now,
-        'exp' => $now + 3600,
-      ]));
-    if (!openssl_sign($unsigned, $signature, $this->key['private_key'], OPENSSL_ALGO_SHA256)) {
-      throw new \RuntimeException('Could not sign the Google service account token. Is the private key valid?');
-    }
-    try {
-      $response = $this->httpClient->request('POST', $this->key['token_uri'] ?? 'https://oauth2.googleapis.com/token', [
-        'form_params' => [
-          'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-          'assertion' => $unsigned . '.' . $encode($signature),
-        ],
-        'timeout' => 30,
-        'http_errors' => FALSE,
-      ]);
-    }
-    catch (GuzzleException $e) {
-      throw new \RuntimeException('Could not reach Google sign-in: ' . $e->getMessage(), 0, $e);
-    }
-    $data = json_decode((string) $response->getBody(), TRUE);
-    if (empty($data['access_token'])) {
-      throw new \RuntimeException('Google sign-in failed for ' . $this->key['client_email'] . ': ' . ($data['error_description'] ?? $data['error'] ?? 'no token returned'));
-    }
-    $this->token = $data['access_token'];
-    $this->expires = $now + (int) ($data['expires_in'] ?? 3600);
-    return $this->token;
   }
 
 }

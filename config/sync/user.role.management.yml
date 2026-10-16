@@ -31,4 +31,6 @@ permissions:
   - 'use advanced search'
   - 'use text format full_html'
   - 'view ai costs'
+  - 'view kb chat management documents'
+  - 'view kb chat staff documents'
   - 'view the administration theme'

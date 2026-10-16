@@ -13,3 +13,6 @@ services:
   Drupal\kb_chat\Drive\DriveSync:
     arguments:
       $lock: '@lock'
+  Drupal\kb_chat\EventSubscriber\AnthropicSettingsSubscriber:
+    tags:
+      - { name: event_subscriber }

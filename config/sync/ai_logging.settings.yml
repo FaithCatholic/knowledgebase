@@ -2,8 +2,8 @@ _core:
   default_config_hash: 8RZujQWKk5S8ynmP86muIHUOm4sRlJ4-unrkVPs8ImI
 prompt_logging: true
 prompt_logging_output: true
-prompt_logging_tags: ''
-prompt_logging_excluded_tags: ''
+prompt_logging_tags: ai_agents_kb_chat
+prompt_logging_excluded_tags: indexing
 prompt_logging_max_messages: 1000
 prompt_logging_max_age: 30
 thread_tag_prefixes:

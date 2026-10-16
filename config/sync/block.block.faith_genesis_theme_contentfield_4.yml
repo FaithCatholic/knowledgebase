@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - fieldblock
+    - system
   theme:
     - faith_genesis_theme
 id: faith_genesis_theme_contentfield_4
@@ -24,4 +25,8 @@ settings:
     future_format: '@interval hence'
     past_format: '@interval ago'
     granularity: 2
-visibility: {  }
+visibility:
+  request_path:
+    id: request_path
+    negate: true
+    pages: /welcome

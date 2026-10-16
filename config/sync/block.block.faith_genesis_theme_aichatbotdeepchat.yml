@@ -16,7 +16,7 @@ provider: null
 plugin: ai_deepchat_block
 settings:
   id: ai_deepchat_block
-  label: 'FAITH Catholic KB Chatbot'
+  label: 'FAITH Catholic AI Agent'
   label_display: visible
   provider: ai_chatbot
   bot_name: 'KB Assistant'
@@ -25,7 +25,7 @@ settings:
   default_username: ''
   use_avatar: 1
   default_avatar: ''
-  first_message: "Hi! Ask me anything about FAITH procedures and resources. I'll answer from the knowledge base and link the pages I used."
+  first_message: 'Hi! Ask me anything about FAITH. I have access to the KB, Google Shared Drives, Catholic Magazines and the Data Warehouse. '
   loading_message: ''
   agent_delegation_message: ''
   stream: 0

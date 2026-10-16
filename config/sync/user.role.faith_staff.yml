@@ -11,6 +11,7 @@ dependencies:
     - content_moderation
     - contextual
     - filter
+    - kb_chat
     - node
     - path
     - search
@@ -40,6 +41,7 @@ permissions:
   - 'use editorial transition publish'
   - 'use text format full_html'
   - 'view all revisions'
+  - 'view kb chat staff documents'
   - 'view latest version'
   - 'view own unpublished content'
   - 'view page revisions'

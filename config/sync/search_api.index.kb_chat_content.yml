@@ -7,6 +7,7 @@ dependencies:
     - search_api.server.kb_chat_vectors
   module:
     - ai_search
+    - kb_chat
     - node
 id: kb_chat_content
 name: 'KB chat content'
@@ -21,6 +22,9 @@ field_settings:
       roles:
         - faith_staff
       view_mode:
+        'entity:kb_chat_document':
+          ':default': default
+          kb_chat_document: default
         'entity:node':
           ':default': full
           article: ':default'
@@ -35,6 +39,14 @@ field_settings:
     dependencies:
       module:
         - node
+  title_1:
+    label: Title
+    datasource_id: 'entity:kb_chat_document'
+    property_path: title
+    type: string
+    dependencies:
+      module:
+        - kb_chat
   url:
     label: URI
     property_path: search_api_url
@@ -42,6 +54,7 @@ field_settings:
     configuration:
       absolute: true
 datasource_settings:
+  'entity:kb_chat_document': {  }
   'entity:node':
     bundles:
       default: false

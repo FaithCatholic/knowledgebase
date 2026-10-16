@@ -140,7 +140,8 @@ class DriveSync {
     }
 
     foreach ($files as $id => $file) {
-      if (!$this->extractor->supports($file['mimeType'])) {
+      // Office lock files ("~$Report.docx") are left behind by open documents.
+      if (!$this->extractor->supports($file['mimeType']) || str_starts_with($file['name'] ?? '', '~$')) {
         continue;
       }
       $counts['listed']++;
@@ -208,7 +209,7 @@ class DriveSync {
     // supported type) is gone or unshared.
     $delete = [];
     foreach ($existing as $id => $row) {
-      if (!isset($files[$id]) || !$this->extractor->supports($files[$id]['mimeType'])) {
+      if (!isset($files[$id]) || !$this->extractor->supports($files[$id]['mimeType']) || str_starts_with($files[$id]['name'] ?? '', '~$')) {
         $delete[] = $row['id'];
       }
     }

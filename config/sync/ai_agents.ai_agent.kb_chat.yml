@@ -60,11 +60,7 @@ orchestration_agent: true
 triage_agent: false
 max_loops: 8
 max_loops_message: ''
-default_information_tools: |
-  unnamed_tool:
-    label: ''
-    description: ''
-    tool: ''
+default_information_tools: ''
 tool_usage_limits:
   'ai_search:rag_search':
     index:

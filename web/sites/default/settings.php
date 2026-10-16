@@ -98,6 +98,41 @@ $settings['kb_chat'] = [
     'max_bytes' => 1000000000,
     'max_rows' => 200,
   ],
+  // The Trello search tool: live, read-only, limited to these boards (names as
+  // shown in Trello, or board IDs). The account behind the key and token must
+  // be a member of them; TRELLO_API_KEY and TRELLO_TOKEN are sensitive
+  // variables. "management" boards are added for users with the management
+  // documents permission.
+  'trello' => [
+    'key' => getenv('TRELLO_API_KEY'),
+    'token' => getenv('TRELLO_TOKEN'),
+    'boards' => [
+      'staff' => [
+        'Strategic Planning 2025-2028',
+        'Web & Digital Directory',
+        'Web & Digital Hotsheet',
+        'Parish Products',
+        'Parish Products New Store (2022)',
+        'Technology Hotsheet',
+        'Catholic Schools/Integrated Marketing',
+        'Catholic Magazines Development',
+        'Digital Pub Production Schedule',
+        'Digital Pub E-News and Social Media Planning',
+        'Digital Publishing Development Tracker',
+        'Product & Service Hotsheet',
+        'Product & Service Operations Ideas',
+        'Digital Subscription Stor-e-Board',
+        'Digital Subscription Portal - Project Board',
+        'Subscription Emails',
+        'Custom Pub Clients',
+        'Custom Pub Sales',
+        'Web & Digital Strategic Plan',
+        'Web & Digital Service Tiers',
+        'Intern / Freelance Services',
+      ],
+      'management' => [],
+    ],
+  ],
   // The magazine archive search tool: catholicmagazines.org's archive_search_api
   // endpoint. MAGAZINE_ARCHIVE_TOKEN matches ARCHIVE_SEARCH_TOKEN there.
   'magazine_archive' => [

@@ -176,3 +176,25 @@ views read, and need **BigQuery Job User** on the project. The views leave out c
 names, emails, phone numbers and street addresses. View and column descriptions double as
 the chat's instructions, so keep them accurate when changing a view. Settings are in
 `$settings['kb_chat']['warehouse']`.
+
+## Trello
+
+The **Search Trello** agent tool (`kb_chat:trello_search`) searches FAITH's Trello boards
+live. For each card it returns the board, list (status), due date, members, labels,
+description, recent comments and link. It can also list one board's open cards by list.
+
+It only reads the boards in `$settings['kb_chat']['trello']['boards']`:
+
+- the **staff** list, for everyone with the chat
+- the **management** list, added for users with *View management documents in the kb chat*
+
+Cards from any other board are dropped, even if the Trello account can see them.
+
+Setup:
+
+1. Use a dedicated Trello account and add it to every board on the list.
+2. Create an API key in Trello's Power-Up admin portal, then generate a read token for that
+   account.
+3. Store them as the sensitive Upsun variables `env:TRELLO_API_KEY` and `env:TRELLO_TOKEN`.
+4. Check with `drush kb-trello`, which lists any board the account can't see.
+5. Enable the tool on the KB Chat agent.

@@ -4,7 +4,9 @@ namespace Drupal\kb_chat\Drush\Commands;
 
 use Drupal\kb_chat\AnthropicCostReport;
 use Drupal\kb_chat\CostTracker;
+use Drupal\Core\Site\Settings;
 use Drupal\kb_chat\Drive\DriveSync;
+use Drupal\kb_chat\Trello\TrelloClient;
 use Drush\Attributes as CLI;
 use Drush\Commands\AutowireTrait;
 use Drush\Commands\DrushCommands;
@@ -83,6 +85,36 @@ final class KbChatCommands extends DrushCommands {
       '@failed' => $counts['failed'],
       '@remaining' => $counts['remaining'],
     ]));
+  }
+
+  /**
+   * Shows which configured Trello boards the chat's Trello account can see.
+   */
+  #[CLI\Command(name: 'kb-chat:trello-check', aliases: ['kb-trello'])]
+  #[CLI\Usage(name: 'drush kb-trello', description: 'Check the Trello key, token and board allowlist.')]
+  public function trelloCheck(): void {
+    $settings = Settings::get('kb_chat')['trello'] ?? [];
+    if (empty($settings['key']) || empty($settings['token'])) {
+      $this->logger()->error(dt('Set TRELLO_API_KEY and TRELLO_TOKEN.'));
+      return;
+    }
+    foreach (['staff', 'management'] as $tier) {
+      $names = $settings['boards'][$tier] ?? [];
+      if (!$names) {
+        continue;
+      }
+      $client = new TrelloClient(\Drupal::httpClient(), $settings['key'], $settings['token'], $names);
+      $this->output()->writeln(sprintf('%s boards found (%d of %d):', ucfirst($tier), count($client->boards()), count($names)));
+      $boards = $client->boards();
+      $counts = array_count_values(array_map('mb_strtolower', $boards));
+      foreach ($boards as $id => $name) {
+        $duplicate = $counts[mb_strtolower($name)] > 1 ? '  <- SAME NAME AS ANOTHER BOARD: use the ID of the right one in settings' : '';
+        $this->output()->writeln("  $name ($id)$duplicate");
+      }
+      foreach ($client->missingBoards() as $name) {
+        $this->output()->writeln("  NOT FOUND: $name (add the Trello account to this board, or fix the name)");
+      }
+    }
   }
 
 }

@@ -57,6 +57,8 @@ use Drupal\kb_chat\KbChatWebSourceListBuilder;
     'frequency',
     'tier',
     'max_pages',
+    'owner',
+    'guidance',
   ],
 )]
 class KbChatWebSource extends ConfigEntityBase {
@@ -87,6 +89,16 @@ class KbChatWebSource extends ConfigEntityBase {
   protected int $max_pages = 200;
 
   /**
+   * Who runs the website: faith or third_party.
+   */
+  protected string $owner = 'third_party';
+
+  /**
+   * What the website is the authority for, passed to the chat with its pages.
+   */
+  protected string $guidance = '';
+
+  /**
    * The crawl settings WebSync uses.
    */
   public function toSource(): array {
@@ -98,6 +110,16 @@ class KbChatWebSource extends ConfigEntityBase {
       'tier' => $this->tier,
       'max_pages' => $this->max_pages,
     ];
+  }
+
+  /**
+   * How search results from this website describe where they come from.
+   */
+  public function origin(): string {
+    $origin = $this->owner === 'faith'
+      ? $this->label() . ' (FAITH website)'
+      : $this->label() . ' (third-party website, maintained by them, not FAITH)';
+    return $this->guidance !== '' ? $origin . '. Note: ' . $this->guidance : $origin;
   }
 
   /**

@@ -68,7 +68,7 @@ class LinkedRagTool extends RagTool {
         $url = $entity->getSourceUrl();
         $location = (string) $entity->get('location')->value;
         $origin = $entity->get('source')->value === 'web'
-          ? "$location (outside website, maintained by them)"
+          ? $this->websiteOrigin($location)
           : "$location (Google Drive)";
       }
       else {
@@ -80,6 +80,19 @@ class LinkedRagTool extends RagTool {
     catch (\Exception) {
       return ['', '', ''];
     }
+  }
+
+  /**
+   * How a trusted website's pages are described, from its settings.
+   */
+  protected function websiteOrigin(string $label): string {
+    static $origins = [];
+    if (!isset($origins[$label])) {
+      $sources = $this->entityTypeManager->getStorage('kb_chat_web_source')->loadByProperties(['label' => $label]);
+      $source = reset($sources);
+      $origins[$label] = $source ? $source->origin() : "$label (outside website)";
+    }
+    return $origins[$label];
   }
 
 }

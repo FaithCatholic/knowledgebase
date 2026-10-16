@@ -30,3 +30,9 @@ kb_chat.web_source.*:
     max_pages:
       type: integer
       label: 'Most pages to index'
+    owner:
+      type: string
+      label: 'Who runs it: faith or third_party'
+    guidance:
+      type: text
+      label: 'What it is the authority for (shown to the chat)'

@@ -53,6 +53,24 @@ class KbChatWebSourceForm extends EntityForm {
       '#title' => $this->t('Include linked PDF, Word and Excel files on the same site'),
       '#default_value' => $source->get('documents') ?? TRUE,
     ];
+    $form['owner'] = [
+      '#type' => 'radios',
+      '#title' => $this->t('Who runs it'),
+      '#options' => [
+        'faith' => $this->t('FAITH website'),
+        'third_party' => $this->t('Third-party website'),
+      ],
+      '#default_value' => $source->get('owner') ?? 'third_party',
+      '#description' => $this->t('Answers say whether information comes from FAITH or from an outside organization.'),
+    ];
+    $form['guidance'] = [
+      '#type' => 'textarea',
+      '#title' => $this->t('What it is the authority for'),
+      '#description' => $this->t('One or two sentences given to the chat with every result from this website, e.g. "Official source for employee benefit plans, eligibility and enrollment; FAITH does not set these." Use it to say when to prefer or not rely on this site.'),
+      '#default_value' => $source->get('guidance') ?? '',
+      '#rows' => 2,
+      '#maxlength' => 500,
+    ];
     $form['frequency'] = [
       '#type' => 'select',
       '#title' => $this->t('How often the information changes'),
@@ -119,6 +137,8 @@ class KbChatWebSourceForm extends EntityForm {
     $entity->set('frequency', (string) $form_state->getValue('frequency'));
     $entity->set('tier', (string) $form_state->getValue('tier'));
     $entity->set('max_pages', (int) $form_state->getValue('max_pages'));
+    $entity->set('owner', (string) $form_state->getValue('owner'));
+    $entity->set('guidance', trim((string) $form_state->getValue('guidance')));
     $entity->setStatus((bool) $form_state->getValue('status'));
   }
 

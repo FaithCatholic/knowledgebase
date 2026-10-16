@@ -107,11 +107,19 @@ class KbChatWebSourceForm extends EntityForm {
    * {@inheritdoc}
    */
   public function copyFormValuesToEntity($entity, array $form, FormStateInterface $form_state): void {
-    parent::copyFormValuesToEntity($entity, $form, $form_state);
+    // Not the parent's: it copies every value as submitted, and the URL
+    // lists arrive as text but are stored as arrays.
+    if ($entity->isNew()) {
+      $entity->set('id', (string) $form_state->getValue('id'));
+    }
+    $entity->set('label', trim((string) $form_state->getValue('label')));
     $entity->set('start_urls', $this->lines($form_state->getValue('start_urls')));
     $entity->set('include_prefixes', $this->lines($form_state->getValue('include_prefixes')));
     $entity->set('documents', (bool) $form_state->getValue('documents'));
+    $entity->set('frequency', (string) $form_state->getValue('frequency'));
+    $entity->set('tier', (string) $form_state->getValue('tier'));
     $entity->set('max_pages', (int) $form_state->getValue('max_pages'));
+    $entity->setStatus((bool) $form_state->getValue('status'));
   }
 
   /**

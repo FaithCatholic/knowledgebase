@@ -12,3 +12,7 @@ view kb chat management documents:
 administer kb chat documents:
   title: 'Administer shared drive documents'
   restrict access: true
+administer kb chat websites:
+  title: 'Administer KB chat trusted websites'
+  description: 'Add, change and remove the outside websites the kb chat indexes and cites.'
+  restrict access: true

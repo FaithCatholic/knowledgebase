@@ -1,0 +1,5 @@
+entity.kb_chat_web_source.add_form:
+  route_name: entity.kb_chat_web_source.add_form
+  title: 'Add trusted website'
+  appears_on:
+    - entity.kb_chat_web_source.collection

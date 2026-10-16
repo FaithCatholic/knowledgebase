@@ -29,10 +29,13 @@ class LinkedRagTool extends RagTool {
     $output = "Results from searching the knowledge base for: " . $this->searchString . ".\n"
       . "Each result has its page title and URL. Link the pages you use with Markdown links.\n\n";
     foreach ($this->results as $i => $result) {
-      [$title, $url] = $this->source($result);
+      [$title, $url, $origin] = $this->source($result);
       $output .= 'Search result #' . ($i + 1) . "\n";
       if ($title !== '') {
         $output .= "Title: $title\n";
+      }
+      if ($origin !== '') {
+        $output .= "From: $origin\n";
       }
       if ($url !== '') {
         $output .= "URL: $url\n";
@@ -43,11 +46,14 @@ class LinkedRagTool extends RagTool {
   }
 
   /**
-   * A result's page title and absolute URL, or empty strings.
+   * A result's title, absolute URL and origin, or empty strings.
+   *
+   * The origin says where the text comes from: a kb page, a Google Drive
+   * shared drive, or an outside website, so answers can say so.
    */
   protected function source(array $result): array {
     if (empty($result['entity_type']) || empty($result['entity_id'])) {
-      return ['', ''];
+      return ['', '', ''];
     }
     try {
       $entity = $this->entityTypeManager->getStorage($result['entity_type'])->load($result['entity_id']);
@@ -60,14 +66,19 @@ class LinkedRagTool extends RagTool {
       // Google Drive documents link to Drive; nodes to their kb page.
       if ($entity instanceof KbChatDocument) {
         $url = $entity->getSourceUrl();
+        $location = (string) $entity->get('location')->value;
+        $origin = $entity->get('source')->value === 'web'
+          ? "$location (outside website, maintained by them)"
+          : "$location (Google Drive)";
       }
       else {
         $url = $entity->hasLinkTemplate('canonical') ? $entity->toUrl('canonical', ['absolute' => TRUE])->toString() : '';
+        $origin = 'FAITH knowledge base page';
       }
-      return [(string) $entity->label(), $url];
+      return [(string) $entity->label(), $url, $origin];
     }
     catch (\Exception) {
-      return ['', ''];
+      return ['', '', ''];
     }
   }
 

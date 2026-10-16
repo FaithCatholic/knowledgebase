@@ -134,6 +134,11 @@ applications:
         spec: '7 * * * *'
         commands:
           start: 'cd web ; drush kb-chat:drive-sync --time-limit=1500'
+      # Re-crawls the kb chat's trusted websites that are due (kb_chat module).
+      kbweb:
+        spec: '37 * * * *'
+        commands:
+          start: 'cd web ; drush kb-chat:web-sync --due'
 
 services:
   dbmysql:

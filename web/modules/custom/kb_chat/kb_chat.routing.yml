@@ -8,3 +8,11 @@ kb_chat.google_billing:
     _access: 'TRUE'
   options:
     no_cache: TRUE
+
+kb_chat.web_source_crawl:
+  path: '/admin/config/search/kb-chat-websites/{kb_chat_web_source}/crawl'
+  defaults:
+    _controller: '\Drupal\kb_chat\Controller\WebSourceController::crawl'
+  requirements:
+    _permission: 'administer kb chat websites'
+    _csrf_token: 'TRUE'

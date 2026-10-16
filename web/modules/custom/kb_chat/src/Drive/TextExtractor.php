@@ -62,9 +62,24 @@ class TextExtractor {
    *   Text beyond this many characters is dropped.
    */
   public function extract(GoogleDriveClient $drive, array $file, int $max_chars): string {
-    [$method, $export] = self::TYPES[$file['mimeType']];
+    [, $export] = self::TYPES[$file['mimeType']];
     $content = $export ? $drive->export($file['id'], $export) : $drive->download($file['id']);
-    $text = match ($method) {
+    return $this->fromContent($export ?? $file['mimeType'], $content, $max_chars);
+  }
+
+  /**
+   * Turns file content of a supported type into plain text.
+   *
+   * @param string $mime_type
+   *   The content's type: one of TYPES, or the exported type for Google's own
+   *   formats (text/plain, or the Excel type for Sheets).
+   * @param string $content
+   *   The file's bytes.
+   * @param int $max_chars
+   *   Text beyond this many characters is dropped.
+   */
+  public function fromContent(string $mime_type, string $content, int $max_chars): string {
+    $text = match (self::TYPES[$mime_type][0] ?? 'plain') {
       'pdf' => $this->pdf($content),
       'docx' => $this->docx($content),
       'xlsx' => $this->xlsx($content),

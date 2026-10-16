@@ -58,7 +58,7 @@ class KbChatHooks {
   #[Hook('search_api_datasource_info_alter')]
   public function describeDocuments(array &$infos): void {
     if (isset($infos['entity:kb_chat_document'])) {
-      $infos['entity:kb_chat_document']['description'] = new TranslatableMarkup('Documents from Google Drive shared drives and on-premises file locations (such as the Synology drive), synced for the kb chat.');
+      $infos['entity:kb_chat_document']['description'] = new TranslatableMarkup('Documents from Google Drive shared drives, trusted outside websites and on-premises file locations (such as the Synology drive), synced for the kb chat.');
     }
   }
 

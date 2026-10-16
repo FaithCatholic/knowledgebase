@@ -16,3 +16,4 @@ services:
   Drupal\kb_chat\EventSubscriber\AnthropicSettingsSubscriber:
     tags:
       - { name: event_subscriber }
+  Drupal\kb_chat\Web\WebSync: ~

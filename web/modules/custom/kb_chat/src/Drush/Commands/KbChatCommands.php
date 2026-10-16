@@ -7,6 +7,7 @@ use Drupal\kb_chat\CostTracker;
 use Drupal\Core\Site\Settings;
 use Drupal\kb_chat\Drive\DriveSync;
 use Drupal\kb_chat\Trello\TrelloClient;
+use Drupal\kb_chat\Web\WebSync;
 use Drush\Attributes as CLI;
 use Drush\Commands\AutowireTrait;
 use Drush\Commands\DrushCommands;
@@ -22,6 +23,7 @@ final class KbChatCommands extends DrushCommands {
     private readonly CostTracker $costs,
     private readonly AnthropicCostReport $anthropicCosts,
     private readonly DriveSync $driveSync,
+    private readonly WebSync $webSync,
   ) {
     parent::__construct();
   }
@@ -114,6 +116,33 @@ final class KbChatCommands extends DrushCommands {
       foreach ($client->missingBoards() as $name) {
         $this->output()->writeln("  NOT FOUND: $name (add the Trello account to this board, or fix the name)");
       }
+    }
+  }
+
+  /**
+   * Crawls the trusted websites into the kb chat's documents.
+   */
+  #[CLI\Command(name: 'kb-chat:web-sync', aliases: ['kb-web'])]
+  #[CLI\Argument(name: 'source', description: 'Only this trusted website (its machine name).')]
+  #[CLI\Option(name: 'due', description: 'Only websites due by their change frequency, or queued with Crawl now.')]
+  #[CLI\Usage(name: 'drush kb-web --due', description: 'What Upsun cron runs every hour.')]
+  #[CLI\Usage(name: 'drush kb-web mcc_benefits', description: 'Crawl one website now.')]
+  public function webSync(?string $source = NULL, array $options = ['due' => FALSE]): void {
+    $results = $this->webSync->sync($source, (bool) $options['due'], fn(string $message) => $this->output()->writeln($message));
+    if (!empty($results['running'])) {
+      $this->logger()->notice(dt('Another website sync is already running.'));
+      return;
+    }
+    foreach ($results as $key => $counts) {
+      $this->logger()->success(dt('@key: @pages pages read. @created new, @updated changed, @unchanged unchanged, @deleted removed, @failed failed.', [
+        '@key' => $key,
+        '@pages' => $counts['pages'],
+        '@created' => $counts['created'],
+        '@updated' => $counts['updated'],
+        '@unchanged' => $counts['unchanged'],
+        '@deleted' => $counts['deleted'],
+        '@failed' => $counts['failed'],
+      ]));
     }
   }
 

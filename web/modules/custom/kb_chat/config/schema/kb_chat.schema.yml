@@ -1,0 +1,32 @@
+kb_chat.web_source.*:
+  type: config_entity
+  label: 'KB chat trusted website'
+  mapping:
+    id:
+      type: machine_name
+      label: 'ID'
+    label:
+      type: label
+      label: 'Name'
+    start_urls:
+      type: sequence
+      label: 'Start URLs'
+      sequence:
+        type: uri
+    include_prefixes:
+      type: sequence
+      label: 'URL prefixes the crawl may follow'
+      sequence:
+        type: uri
+    documents:
+      type: boolean
+      label: 'Include linked PDF, Word and Excel files'
+    frequency:
+      type: string
+      label: 'How often it changes: daily, weekly or monthly'
+    tier:
+      type: string
+      label: 'Who can see it: staff or management'
+    max_pages:
+      type: integer
+      label: 'Most pages to index'

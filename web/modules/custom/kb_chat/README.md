@@ -198,3 +198,32 @@ Setup:
 3. Store them as the sensitive Upsun variables `env:TRELLO_API_KEY` and `env:TRELLO_TOKEN`.
 4. Check with `drush kb-trello`, which lists any board the account can't see.
 5. Enable the tool on the KB Chat agent.
+
+## Trusted websites
+
+Outside websites the chat should search and cite are managed at **Configuration → Search →
+KB chat trusted websites** (`/admin/config/search/kb-chat-websites`). This needs the
+*Administer KB chat trusted websites* permission.
+
+Each website has:
+
+- a name, used to cite it
+- start URLs
+- the URL prefixes the crawl may follow, which keep it to the trusted section
+- whether linked PDF, Word and Excel files are included
+- **how often it changes** (daily, weekly or monthly)
+- who can see it (all staff or management)
+- a page limit
+
+The list shows each website's indexed page count and last crawl.
+
+How it works:
+
+- **Crawling:** `drush kb-web --due` runs hourly from Upsun cron. It re-crawls enabled
+  websites whose interval has passed, and **Crawl now** queues one for the next run. It
+  follows robots.txt and fetches one page per second.
+- **Storage:** pages are stored as shared drive documents with source `web`. They're indexed
+  with everything else, and answers link to the website and say it's an outside source. kb
+  doesn't copy their content.
+- **Removal:** pages that disappear from a complete crawl are removed. Deleting a website
+  removes its pages.

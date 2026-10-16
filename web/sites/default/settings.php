@@ -149,10 +149,22 @@ $settings['kb_chat'] = [
       'staff' => getenv('GOOGLE_DRIVE_SA_JSON'),
       'management' => getenv('GOOGLE_DRIVE_MGMT_SA_JSON'),
     ],
+    // Seconds between full listings of the drives. New or changed files are
+    // queued then, and read in small batches every 5 minutes by cron.
+    'list_interval' => 6 * 3600,
     // Shared drive names or IDs to leave out of the chat.
     'exclude_drives' => ['Accounts Payable', 'Magazines'],
-    // Larger files are skipped.
+    // Larger files are skipped. PDFs have a lower limit: they're unpacked in
+    // memory to read, and big ones are usually print proofs full of images.
     'max_file_bytes' => 25 * 1024 * 1024,
+    'max_pdf_bytes' => 10 * 1024 * 1024,
+    // Files whose names contain any of these (case-insensitive) are not
+    // indexed, and are removed if they were. For lists of people's contact
+    // details and similar files that shouldn't be easy to query in the chat.
+    'exclude_names' => [
+      'CONTACTS DATABASE',
+      'Christmas card list',
+    ],
     // Text beyond this is not indexed.
     'max_text_chars' => 300000,
   ],

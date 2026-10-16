@@ -93,17 +93,27 @@ Viewing each tier needs a permission. AI Search checks it for every search resul
 
 ### Sync
 
-`drush kb-drive` (`kb-chat:drive-sync`) runs hourly from Upsun cron with a 25-minute limit:
+The sync runs from Upsun cron every 5 minutes as `drush kb-drive --time-limit=240
+--max-items=100`, in two parts:
 
-- It **lists** every file both accounts can see. If either listing fails, nothing changes.
-- It **reads** new and changed files until the time limit; the rest wait for the next run.
-- It **relabels** files whose sharing changed.
-- It **deletes** documents for files that were removed or unshared.
+- **Listing:** every 6 hours (`list_interval`), or on demand with `--list`. It goes through
+  the drives one at a time and puts **new or changed** files on the `kb_chat_drive` queue. It
+  relabels files whose name, drive or sharing changed, and deletes documents for files that
+  were removed, unshared or excluded. If either account's listing fails, nothing is deleted.
+- **Reading:** every run. It takes up to 100 files or 4 minutes from the queue, reads them and
+  saves them. Files that can't be read, such as protected or damaged PDFs, are logged and
+  dropped. They're queued again if they change.
 
-Supported types: Google Docs, Sheets (every sheet) and Slides, PDF (text layer only, not
-scanned images), Word (.docx), Excel (.xlsx), plain text, CSV and Markdown. Files over
-25 MB are skipped. Settings are in `$settings['kb_chat']['drive']`, including
-`exclude_drives` to leave whole shared drives out.
+`drush kb-drive --drives` shows the shared drives each account can see.
+
+Supported types: Google Docs, Sheets (every sheet) and Slides, PDF (text layer only, up to
+`max_pdf_bytes`, 10 MB), Word (.docx), Excel (.xlsx), plain text, CSV and Markdown. Other
+files over 25 MB are skipped.
+
+Settings are in `$settings['kb_chat']['drive']`:
+
+- `exclude_drives`: leave whole shared drives out
+- `exclude_names`: skip files whose names contain these words, such as contact lists
 
 ### Setup
 

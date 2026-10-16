@@ -55,14 +55,21 @@ final class KbChatCommands extends DrushCommands {
   }
 
   /**
-   * Syncs Google Drive files into the kb chat's documents.
+   * Syncs Google Drive files into the kb chat's documents, in small batches.
+   *
+   * Lists the drives when due (every few hours), queuing new or changed
+   * files, then reads a batch from the queue.
    */
   #[CLI\Command(name: 'kb-chat:drive-sync', aliases: ['kb-drive'])]
-  #[CLI\Option(name: 'time-limit', description: 'Seconds to keep reading files. The rest wait for the next run.')]
+  #[CLI\Option(name: 'time-limit', description: 'Seconds to keep reading files.')]
+  #[CLI\Option(name: 'max-items', description: 'Most files to read this run.')]
+  #[CLI\Option(name: 'list', description: 'List the drives and queue changes now, without reading.')]
+  #[CLI\Option(name: 'read', description: 'Only read queued files; don\'t list even if due.')]
   #[CLI\Option(name: 'drives', description: 'Only show which shared drives each account can see.')]
-  #[CLI\Usage(name: 'drush kb-drive --time-limit=1500', description: 'What Upsun cron runs every hour.')]
+  #[CLI\Usage(name: 'drush kb-drive --time-limit=240 --max-items=100', description: 'What Upsun cron runs every 5 minutes.')]
+  #[CLI\Usage(name: 'drush kb-drive --list', description: 'Re-list the drives now.')]
   #[CLI\Usage(name: 'drush kb-drive --drives', description: 'List the shared drives each account can see.')]
-  public function driveSync(array $options = ['time-limit' => 270, 'drives' => FALSE]): void {
+  public function driveSync(array $options = ['time-limit' => 240, 'max-items' => 100, 'list' => FALSE, 'read' => FALSE, 'drives' => FALSE]): void {
     if ($options['drives']) {
       foreach ($this->driveSync->drives() as $tier => $drives) {
         $this->output()->writeln(sprintf('%s account sees %d shared drives:', ucfirst($tier), count($drives)));
@@ -72,17 +79,19 @@ final class KbChatCommands extends DrushCommands {
       }
       return;
     }
-    $counts = $this->driveSync->sync((int) $options['time-limit'], fn(string $message) => $this->output()->writeln($message));
+    $mode = $options['list'] ? 'list' : ($options['read'] ? 'read' : 'auto');
+    $counts = $this->driveSync->sync((int) $options['time-limit'], (int) $options['max-items'], $mode, fn(string $message) => $this->output()->writeln($message));
     if (!empty($counts['running'])) {
       $this->logger()->notice(dt('Another Drive sync is already running.'));
       return;
     }
-    $this->logger()->success(dt('Drive: @listed files. @created new, @updated changed, @retiered relabeled, @deleted removed, @skipped too large, @failed failed, @remaining left for the next run.', [
+    $this->logger()->success(dt('Drive: @listed listed, @queued queued, @relabeled relabeled, @deleted removed; read @created new, @updated changed, @skipped too large, @failed failed. @remaining waiting in the queue.', [
       '@listed' => $counts['listed'],
+      '@queued' => $counts['queued'],
+      '@relabeled' => $counts['relabeled'],
+      '@deleted' => $counts['deleted'],
       '@created' => $counts['created'],
       '@updated' => $counts['updated'],
-      '@retiered' => $counts['retiered'],
-      '@deleted' => $counts['deleted'],
       '@skipped' => $counts['skipped'],
       '@failed' => $counts['failed'],
       '@remaining' => $counts['remaining'],

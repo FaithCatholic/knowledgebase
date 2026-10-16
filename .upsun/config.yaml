@@ -129,11 +129,12 @@ applications:
         spec: '*/5 * * * *'
         commands:
           start: 'cd web ; drush chargebee:process --time-limit=270'
-      # Syncs Google Drive documents into the kb chat (kb_chat module).
+      # Syncs Google Drive documents into the kb chat (kb_chat module): lists
+      # the drives every few hours, and reads queued files in small batches.
       kbdrive:
-        spec: '7 * * * *'
+        spec: '*/5 * * * *'
         commands:
-          start: 'cd web ; drush kb-chat:drive-sync --time-limit=1500'
+          start: 'cd web ; drush kb-chat:drive-sync --time-limit=240 --max-items=100'
       # Re-crawls the kb chat's trusted websites that are due (kb_chat module).
       kbweb:
         spec: '37 * * * *'

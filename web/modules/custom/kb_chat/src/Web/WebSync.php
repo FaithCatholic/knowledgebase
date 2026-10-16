@@ -122,7 +122,9 @@ class WebSync {
       ->fetchAllKeyed(1, 0);
 
     $queue = array_map([$this, 'normalize'], $source['start']);
-    $seen = array_fill_keys($queue, TRUE);
+    // Visited pages, ignoring "www." so a site linking both ways isn't
+    // indexed twice.
+    $seen = array_fill_keys(array_map([$this, 'compareKey'], $queue), TRUE);
     $found = [];
     $complete = TRUE;
 
@@ -153,8 +155,9 @@ class WebSync {
         [$title, $text, $links] = $this->parseHtml($body, $final);
         foreach ($links as $link) {
           $link = $this->normalize($link);
-          if (!isset($seen[$link]) && $this->allowed($link, $prefixes, $disallowed, !empty($source['documents']))) {
-            $seen[$link] = TRUE;
+          $key = $this->compareKey($link);
+          if (!isset($seen[$key]) && $this->allowed($link, $prefixes, $disallowed, !empty($source['documents']))) {
+            $seen[$key] = TRUE;
             $queue[] = $link;
           }
         }
@@ -286,14 +289,15 @@ class WebSync {
       }
     }
     foreach ($prefixes as $prefix) {
-      if (str_starts_with($url, $this->normalize($prefix))) {
+      if (str_starts_with($this->compareKey($url), $this->compareKey($this->normalize($prefix)))) {
         return TRUE;
       }
     }
     // Documents linked from allowed pages may live elsewhere on the same site
     // (e.g. /wp-content/uploads/...).
     if ($documents && preg_match('/\.(pdf|docx|xlsx)$/i', $path)) {
-      return parse_url($url, PHP_URL_HOST) === parse_url($prefixes[0], PHP_URL_HOST);
+      $host = fn(string $u) => preg_replace('/^www\./', '', strtolower((string) parse_url($u, PHP_URL_HOST)));
+      return $host($url) === $host($prefixes[0]);
     }
     return FALSE;
   }
@@ -354,14 +358,23 @@ class WebSync {
   }
 
   /**
-   * A URL without fragment or query, with "www." and http removed so one page
-   * has one key.
+   * A URL to fetch and store: https, lowercase host, no fragment or query.
+   *
+   * The host keeps any "www.": some sites refuse the bare domain (USCCB
+   * answers usccb.org with 403 but serves www.usccb.org).
    */
   protected function normalize(string $url): string {
     $parts = parse_url($url);
-    $host = preg_replace('/^www\./', '', strtolower($parts['host'] ?? ''));
+    $host = strtolower($parts['host'] ?? '');
     $path = $parts['path'] ?? '/';
     return 'https://' . $host . $path;
+  }
+
+  /**
+   * A URL for comparing against prefixes: "www." doesn't matter there.
+   */
+  protected function compareKey(string $url): string {
+    return preg_replace('#^https://www\.#', 'https://', $url);
   }
 
 }

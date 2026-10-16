@@ -135,6 +135,12 @@ applications:
         spec: '*/5 * * * *'
         commands:
           start: 'cd web ; drush kb-chat:drive-sync --time-limit=240 --max-items=100'
+      # Indexes new and changed kb chat content (pages, Drive files, websites)
+      # in small batches, so saving content never waits on embedding.
+      kbindex:
+        spec: '*/5 * * * *'
+        commands:
+          start: 'cd web ; drush search-api:index kb_chat_content --limit=100 --batch-size=25'
       # Re-crawls the kb chat's trusted websites that are due (kb_chat module).
       kbweb:
         spec: '37 * * * *'

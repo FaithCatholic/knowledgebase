@@ -103,6 +103,9 @@ body.gin-login .user-login-form .kb-social-login .button {
   display: flex;
   align-items: center;
   justify-content: center;
+  /* The Microsoft 365 module floats its button right, which collapses its
+     wrapper and pulls the next button up against it. */
+  float: none;
   width: 100%;
   margin: 0;
 }
@@ -113,15 +116,22 @@ body.gin-login .user-login-form .kb-google-login {
   gap: .6rem;
 }
 
+/* No taller than the text, so the Google button matches the others' height. */
 body.gin-login .kb-google-badge {
   display: inline-flex;
   flex: none;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
+  margin-block: -2px;
   border-radius: 4px;
   background: #fff;
+}
+
+body.gin-login .kb-google-icon {
+  width: 14px;
+  height: 14px;
 }
 
 body.gin-login .kb-google-icon {

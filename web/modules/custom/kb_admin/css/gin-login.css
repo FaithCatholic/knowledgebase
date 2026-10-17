@@ -1,0 +1,72 @@
+/**
+ * @file
+ * Overrides for the Gin Login pages (login, password reset, register).
+ *
+ * Loaded after Gin and Gin Login styles. Useful hooks:
+ * - .user-form-page: page wrapper.
+ * - .user-form-page__user-form: the form column.
+ * - .user-form-page__wallpaper: the background image column.
+ * - .user-form-page__page-title: the page heading.
+ * - .toolbar-logo / .toolbar-icon-home: the logo link and image.
+ * - --gin-color-primary, --gin-bg-layer, --gin-color-text: Gin color tokens.
+ */
+
+/**
+ * FAITH colors: the charcoal of the FAITH wordmark (#342e2e) with neutral
+ * greys.
+ *
+ * Gin sets its accent tokens on <body data-gin-accent>, and derives
+ * --gin-color-primary, --gin-color-primary-light, --gin-bg-item etc. from
+ * the *-rgb values on the same element, so overriding the RGB values here
+ * recolors buttons, links, focus states and the header in one go.
+ * "body.gin-login" outranks Gin's [data-gin-accent=...] presets.
+ */
+body.gin-login {
+  --gin-color-primary-rgb: 52, 46, 46;
+  --gin-color-primary-hover: #4a4242;
+  --gin-color-primary-active: #1f1b1b;
+  --gin-color-primary-light-rgb: 226, 224, 224;
+  --gin-bg-app-rgb: 248, 247, 247;
+  --gin-bg-header: #ecebeb;
+  --gin-color-sticky-rgb: 241, 240, 240;
+  --gin-color-focus: rgba(52, 46, 46, .5);
+}
+
+/* Charcoal disappears on Gin's dark background, so use a light grey. */
+.gin--dark-mode body.gin-login {
+  --gin-color-primary-rgb: 200, 196, 196;
+  --gin-color-primary-hover: #d8d5d5;
+  --gin-color-primary-active: #e6e4e4;
+  --gin-color-focus: rgba(200, 196, 196, .6);
+}
+
+/* The charcoal wordmark, inverted to white in dark mode. */
+.gin--dark-mode body.gin-login .user-form-page__user-form .toolbar-icon-home {
+  filter: invert(1) brightness(1.2);
+}
+
+/* Logo: a custom logo is capped at 40px by Gin Login. The wordmark is wide,
+   so size it by height and let the width follow. */
+body.gin-login .user-form-page__user-form .toolbar-icon-home {
+  max-height: 56px;
+  width: auto;
+}
+
+@media (min-width: 800px) {
+  body.gin-login .user-form-page__user-form .toolbar-icon-home {
+    max-height: 96px;
+  }
+}
+
+/* Logo: Gin's default icon, used when no custom logo is set. */
+body.gin-login .toolbar-icon-default::before {
+  width: 56px;
+  height: 56px;
+}
+
+@media (min-width: 800px) {
+  body.gin-login .toolbar-icon-default::before {
+    width: 72px;
+    height: 72px;
+  }
+}

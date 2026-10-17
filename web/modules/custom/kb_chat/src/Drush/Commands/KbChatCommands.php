@@ -66,10 +66,20 @@ final class KbChatCommands extends DrushCommands {
   #[CLI\Option(name: 'list', description: 'List the drives and queue changes now, without reading.')]
   #[CLI\Option(name: 'read', description: 'Only read queued files; don\'t list even if due.')]
   #[CLI\Option(name: 'drives', description: 'Only show which shared drives each account can see.')]
+  #[CLI\Option(name: 'folders', description: 'Only show indexable files per folder (two levels deep) of this shared drive.')]
   #[CLI\Usage(name: 'drush kb-drive --time-limit=240 --max-items=100', description: 'What Upsun cron runs every 5 minutes.')]
   #[CLI\Usage(name: 'drush kb-drive --list', description: 'Re-list the drives now.')]
   #[CLI\Usage(name: 'drush kb-drive --drives', description: 'List the shared drives each account can see.')]
-  public function driveSync(array $options = ['time-limit' => 240, 'max-items' => 100, 'list' => FALSE, 'read' => FALSE, 'drives' => FALSE]): void {
+  #[CLI\Usage(name: 'drush kb-drive --folders="Custom Publishing"', description: 'Files per folder, to choose exclude_folders.')]
+  public function driveSync(array $options = ['time-limit' => 240, 'max-items' => 100, 'list' => FALSE, 'read' => FALSE, 'drives' => FALSE, 'folders' => '']): void {
+    if (!empty($options['folders'])) {
+      $counts = $this->driveSync->folderSummary($options['folders']);
+      $this->output()->writeln(sprintf('%s: %d indexable files', $options['folders'], array_sum($counts)));
+      foreach ($counts as $path => $count) {
+        $this->output()->writeln(sprintf('%8d  %s', $count, $path));
+      }
+      return;
+    }
     if ($options['drives']) {
       foreach ($this->driveSync->drives() as $tier => $drives) {
         $this->output()->writeln(sprintf('%s account sees %d shared drives:', ucfirst($tier), count($drives)));
@@ -134,10 +144,11 @@ final class KbChatCommands extends DrushCommands {
   #[CLI\Command(name: 'kb-chat:web-sync', aliases: ['kb-web'])]
   #[CLI\Argument(name: 'source', description: 'Only this trusted website (its machine name).')]
   #[CLI\Option(name: 'due', description: 'Only websites due by their change frequency, or queued with Crawl now.')]
-  #[CLI\Usage(name: 'drush kb-web --due', description: 'What Upsun cron runs every hour.')]
+  #[CLI\Option(name: 'time-limit', description: 'Seconds after which no new website is started (0 for no limit).')]
+  #[CLI\Usage(name: 'drush kb-web --due --time-limit=240', description: 'What Upsun cron runs every 10 minutes.')]
   #[CLI\Usage(name: 'drush kb-web mcc_benefits', description: 'Crawl one website now.')]
-  public function webSync(?string $source = NULL, array $options = ['due' => FALSE]): void {
-    $results = $this->webSync->sync($source, (bool) $options['due'], fn(string $message) => $this->output()->writeln($message));
+  public function webSync(?string $source = NULL, array $options = ['due' => FALSE, 'time-limit' => 0]): void {
+    $results = $this->webSync->sync($source, (bool) $options['due'], fn(string $message) => $this->output()->writeln($message), (int) $options['time-limit']);
     if (!empty($results['running'])) {
       $this->logger()->notice(dt('Another website sync is already running.'));
       return;

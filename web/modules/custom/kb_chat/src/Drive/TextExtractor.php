@@ -2,6 +2,7 @@
 
 namespace Drupal\kb_chat\Drive;
 
+use Smalot\PdfParser\Config;
 use Smalot\PdfParser\Parser;
 
 /**
@@ -99,7 +100,15 @@ class TextExtractor {
     if (!class_exists(Parser::class)) {
       throw new \RuntimeException('PDF support needs smalot/pdfparser: composer require smalot/pdfparser');
     }
-    return (new Parser())->parseContent($content)->getText();
+    $config = new Config();
+    // Image data is never needed for text and is the bulk of most PDFs' size.
+    $config->setRetainImageContent(FALSE);
+    // Cap the memory used to unpack any one stream.
+    $config->setDecodeMemoryLimit(16 * 1024 * 1024);
+    // Many "secured" PDFs only restrict printing or copying; their text is
+    // still readable. Truly password-protected files fail as before.
+    $config->setIgnoreEncryption(TRUE);
+    return (new Parser([], $config))->parseContent($content)->getText();
   }
 
   /**

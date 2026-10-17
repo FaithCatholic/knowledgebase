@@ -70,19 +70,26 @@ class WebSync {
    *   (or that were queued with "Crawl now"). What the hourly cron uses.
    * @param callable|null $progress
    *   Called with a message per page, for drush output.
+   * @param int $time_limit
+   *   Seconds after which no new website is started (0 for no limit). The
+   *   website in progress finishes, so cron runs stay short.
    *
    * @return array
    *   Counts per website: pages, created, updated, unchanged, deleted,
    *   failed. ['running' => TRUE] if another crawl holds the lock.
    */
-  public function sync(?string $only = NULL, bool $due_only = FALSE, ?callable $progress = NULL): array {
-    if (!$this->lock->acquire(self::LOCK, 3600)) {
+  public function sync(?string $only = NULL, bool $due_only = FALSE, ?callable $progress = NULL, int $time_limit = 0): array {
+    if (!$this->lock->acquire(self::LOCK, 1200)) {
       return ['running' => TRUE];
     }
     $progress ??= fn() => NULL;
     $results = [];
+    $start = time();
     try {
       foreach ($this->sources() as $id => $source) {
+        if ($time_limit && time() - $start >= $time_limit) {
+          break;
+        }
         if ($only !== NULL && $only !== $id) {
           continue;
         }

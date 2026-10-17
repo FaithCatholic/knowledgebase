@@ -113,6 +113,9 @@ files over 25 MB are skipped.
 Settings are in `$settings['kb_chat']['drive']`:
 
 - `exclude_drives`: leave whole shared drives out
+- `exclude_folders`: leave folders, with everything inside them, out. Give a path from the drive
+  (`Custom Publishing/Production`) or a folder ID. `drush kb-drive --folders="Custom Publishing"`
+  shows indexable files per folder to help choose.
 - `exclude_names`: skip files whose names contain these words, such as contact lists
 
 ### Setup
@@ -229,7 +232,7 @@ The list shows each website's indexed page count and last crawl.
 
 How it works:
 
-- **Crawling:** `drush kb-web --due` runs hourly from Upsun cron. It re-crawls enabled
+- **Crawling:** `drush kb-web --due --time-limit=240` runs every 10 minutes from Upsun cron. It re-crawls enabled
   websites whose interval has passed, and **Crawl now** queues one for the next run. It
   follows robots.txt and fetches one page per second.
 - **Storage:** pages are stored as shared drive documents with source `web`. They're indexed

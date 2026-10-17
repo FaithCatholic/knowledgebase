@@ -133,19 +133,24 @@ applications:
       # the drives every few hours, and reads queued files in small batches.
       kbdrive:
         spec: '*/5 * * * *'
+        # Deploys wait for running crons; keep them bounded. Reading runs
+        # take under 5 minutes, the 6-hourly listing several.
+        timeout: 1200
         commands:
           start: 'cd web ; drush kb-chat:drive-sync --time-limit=240 --max-items=100'
       # Indexes new and changed kb chat content (pages, Drive files, websites)
       # in small batches, so saving content never waits on embedding.
       kbindex:
         spec: '*/5 * * * *'
+        timeout: 300
         commands:
           start: 'cd web ; drush search-api:index kb_chat_content --limit=100 --batch-size=25'
       # Re-crawls the kb chat's trusted websites that are due (kb_chat module).
       kbweb:
-        spec: '37 * * * *'
+        spec: '*/10 * * * *'
+        timeout: 600
         commands:
-          start: 'cd web ; drush kb-chat:web-sync --due'
+          start: 'cd web ; drush kb-chat:web-sync --due --time-limit=240'
 
 services:
   dbmysql:

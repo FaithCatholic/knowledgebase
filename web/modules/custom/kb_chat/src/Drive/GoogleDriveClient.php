@@ -86,7 +86,8 @@ class GoogleDriveClient {
    *   design files quick to list.
    *
    * @return array
-   *   [file id => [id, name, mimeType, modifiedTime, webViewLink, size]].
+   *   [file id => [id, name, mimeType, modifiedTime, webViewLink, size,
+   *   parents]].
    */
   public function filesInDrive(string $drive_id, array $mime_types = []): array {
     $files = [];
@@ -100,7 +101,7 @@ class GoogleDriveClient {
       'supportsAllDrives' => 'true',
       'q' => "trashed = false and $types",
       'pageSize' => 200,
-      'fields' => 'nextPageToken,files(id,name,mimeType,modifiedTime,webViewLink,size)',
+      'fields' => 'nextPageToken,files(id,name,mimeType,modifiedTime,webViewLink,size,parents)',
     ];
     do {
       $data = $this->getJson('/files', $query);
@@ -110,6 +111,33 @@ class GoogleDriveClient {
       $query['pageToken'] = $data['nextPageToken'] ?? NULL;
     } while ($query['pageToken']);
     return $files;
+  }
+
+  /**
+   * Every folder in a shared drive (not trashed).
+   *
+   * @return array
+   *   [folder id => ['name' => name, 'parent' => parent folder or drive ID]].
+   */
+  public function foldersInDrive(string $drive_id): array {
+    $folders = [];
+    $query = [
+      'corpora' => 'drive',
+      'driveId' => $drive_id,
+      'includeItemsFromAllDrives' => 'true',
+      'supportsAllDrives' => 'true',
+      'q' => "trashed = false and mimeType = 'application/vnd.google-apps.folder'",
+      'pageSize' => 1000,
+      'fields' => 'nextPageToken,files(id,name,parents)',
+    ];
+    do {
+      $data = $this->getJson('/files', $query);
+      foreach ($data['files'] ?? [] as $folder) {
+        $folders[$folder['id']] = ['name' => $folder['name'], 'parent' => $folder['parents'][0] ?? $drive_id];
+      }
+      $query['pageToken'] = $data['nextPageToken'] ?? NULL;
+    } while ($query['pageToken']);
+    return $folders;
   }
 
   /**

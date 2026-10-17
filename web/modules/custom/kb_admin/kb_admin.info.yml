@@ -1,0 +1,7 @@
+name: 'KB admin'
+type: module
+description: 'Gin login page styling, and the login page as the start page for anonymous visitors.'
+package: Custom
+core_version_requirement: ^11.1
+dependencies:
+  - gin_login:gin_login

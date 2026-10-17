@@ -44,6 +44,23 @@ class DriveSync {
    */
   const LISTED = 'kb_chat.drive_listed';
 
+  /**
+   * State key: the file being read, cleared when done. Still set at the next
+   * run means reading it crashed the process (usually out of memory).
+   */
+  const READING = 'kb_chat.drive_reading';
+
+  /**
+   * State key: IDs of files that crashed a run, skipped from then on.
+   */
+  const CRASHED = 'kb_chat.drive_crashed';
+
+  /**
+   * Memory ceiling for a sync run. The container is shared with the website,
+   * so a runaway file must stop the sync, not get the container killed.
+   */
+  const MEMORY_LIMIT = '384M';
+
   public function __construct(
     protected ClientInterface $httpClient,
     protected EntityTypeManagerInterface $entityTypeManager,
@@ -110,6 +127,10 @@ class DriveSync {
    */
   public function sync(int $time_limit = 240, int $max_items = 100, string $mode = 'auto', ?callable $progress = NULL): array {
     $this->assertConfigured();
+    $limit = ini_get('memory_limit');
+    if ($limit === '-1' || $this->bytes($limit) > $this->bytes(self::MEMORY_LIMIT)) {
+      ini_set('memory_limit', self::MEMORY_LIMIT);
+    }
     // Listing a large drive set can take several minutes on its own.
     if (!$this->lock->acquire(self::LOCK, $time_limit + 1800)) {
       return ['running' => TRUE];
@@ -167,8 +188,9 @@ class DriveSync {
           continue;
         }
         $added = 0;
+        $excluded_folders = $this->excludedFolders($client, $drive_id, $drive_name);
         foreach ($client->filesInDrive($drive_id, $this->extractor->mimeTypes()) as $id => $file) {
-          if (isset($seen[$id]) || !$this->wanted($file)) {
+          if (isset($seen[$id]) || !$this->wanted($file) || array_intersect($file['parents'] ?? [], $excluded_folders)) {
             continue;
           }
           $seen[$id] = TRUE;
@@ -235,9 +257,26 @@ class DriveSync {
     $end = microtime(TRUE) + $time_limit;
     $read = 0;
 
+    // A file still marked as being read crashed the last run: never retry it.
+    $crashed = $this->state->get(self::CRASHED, []);
+    if ($reading = $this->state->get(self::READING)) {
+      $crashed[$reading['id']] = $reading['name'];
+      $this->state->set(self::CRASHED, $crashed);
+      $this->state->delete(self::READING);
+      $this->logger->error('Drive file @name (@id) crashed the sync, probably out of memory, and will be skipped.', [
+        '@name' => $reading['name'],
+        '@id' => $reading['id'],
+      ]);
+    }
+
     while ($read < $max_items && microtime(TRUE) < $end && ($item = $queue->claimItem(600))) {
       $file = $item->data;
       $read++;
+      if (isset($crashed[$file['id']])) {
+        $counts['skipped']++;
+        $queue->deleteItem($item);
+        continue;
+      }
       $limit = $file['mimeType'] === 'application/pdf' ? min($max_bytes, $max_pdf_bytes) : $max_bytes;
       if (isset($file['size']) && (int) $file['size'] > $limit) {
         $counts['skipped']++;
@@ -246,9 +285,13 @@ class DriveSync {
       }
       try {
         $clients[$file['tier']] ??= new GoogleDriveClient($this->httpClient, $settings['accounts'][$file['tier']], $this->keepAlive(...));
+        $this->state->set(self::READING, ['id' => $file['id'], 'name' => $file['name']]);
         $text = $this->extractor->extract($clients[$file['tier']], $file, $max_chars);
+        $this->state->delete(self::READING);
+        gc_collect_cycles();
       }
       catch (\Throwable $e) {
+        $this->state->delete(self::READING);
         $counts['failed']++;
         $this->logger->warning('Could not read Drive file @name (@id): @message', [
           '@name' => $file['name'],
@@ -305,6 +348,109 @@ class DriveSync {
   }
 
   /**
+   * IDs of a drive's excluded folders and every folder inside them.
+   *
+   * Entries of exclude_folders are a path from the drive, such as
+   * "Custom Publishing/Production/2024" (case-insensitive), or a folder ID
+   * (the end of the folder's Drive URL).
+   */
+  protected function excludedFolders(GoogleDriveClient $client, string $drive_id, string $drive_name): array {
+    $entries = $this->settings()['exclude_folders'] ?? [];
+    if (!$entries) {
+      return [];
+    }
+    $folders = $client->foldersInDrive($drive_id);
+    $paths = $this->folderPaths($folders, $drive_id, $drive_name);
+    $by_path = array_flip(array_map('mb_strtolower', $paths));
+    $roots = [];
+    foreach ($entries as $entry) {
+      $entry = trim($entry, " /");
+      if (isset($folders[$entry])) {
+        $roots[] = $entry;
+      }
+      elseif (isset($by_path[mb_strtolower($entry)])) {
+        $roots[] = $by_path[mb_strtolower($entry)];
+      }
+    }
+    if (!$roots) {
+      return [];
+    }
+    // Everything inside the excluded folders.
+    $children = [];
+    foreach ($folders as $id => $folder) {
+      $children[$folder['parent']][] = $id;
+    }
+    $excluded = [];
+    while ($roots) {
+      $id = array_pop($roots);
+      if (!isset($excluded[$id])) {
+        $excluded[$id] = $id;
+        array_push($roots, ...($children[$id] ?? []));
+      }
+    }
+    return array_values($excluded);
+  }
+
+  /**
+   * Each folder's path from the drive: [folder id => "Drive/Folder/Sub"].
+   */
+  protected function folderPaths(array $folders, string $drive_id, string $drive_name): array {
+    $paths = [];
+    $path = function (string $id, int $depth = 0) use (&$path, &$paths, $folders, $drive_id, $drive_name): string {
+      if ($id === $drive_id || !isset($folders[$id]) || $depth > 50) {
+        return $drive_name;
+      }
+      return $paths[$id] ??= $path($folders[$id]['parent'], $depth + 1) . '/' . $folders[$id]['name'];
+    };
+    foreach (array_keys($folders) as $id) {
+      $path($id);
+    }
+    return $paths;
+  }
+
+  /**
+   * Indexable files per folder of a drive, two levels deep, for choosing
+   * folders to exclude.
+   *
+   * @return array
+   *   [folder path => file count], largest first, with excluded folders
+   *   marked. Files deeper down count towards their level-two folder.
+   */
+  public function folderSummary(string $drive_name): array {
+    $this->assertConfigured();
+    $settings = $this->settings();
+    foreach (KbChatDocument::TIERS as $tier) {
+      $client = new GoogleDriveClient($this->httpClient, $settings['accounts'][$tier]);
+      $drive_id = array_search(mb_strtolower($drive_name), array_map('mb_strtolower', $client->sharedDrives()), TRUE);
+      if ($drive_id !== FALSE) {
+        break;
+      }
+    }
+    if (empty($drive_id)) {
+      throw new \RuntimeException("Neither account can see a shared drive named \"$drive_name\".");
+    }
+    $folders = $client->foldersInDrive($drive_id);
+    $paths = $this->folderPaths($folders, $drive_id, $drive_name);
+    $excluded = array_flip($this->excludedFolders($client, $drive_id, $drive_name));
+    $counts = [];
+    foreach ($client->filesInDrive($drive_id, $this->extractor->mimeTypes()) as $file) {
+      if (!$this->wanted($file)) {
+        continue;
+      }
+      $parent = $file['parents'][0] ?? $drive_id;
+      $path = $paths[$parent] ?? $drive_name;
+      // Group by the first two folder levels below the drive.
+      $key = implode('/', array_slice(explode('/', $path), 0, 3));
+      if (isset($excluded[$parent])) {
+        $key .= '  (excluded)';
+      }
+      $counts[$key] = ($counts[$key] ?? 0) + 1;
+    }
+    arsort($counts);
+    return $counts;
+  }
+
+  /**
    * Whether a shared drive is in exclude_drives, by ID or name.
    */
   protected function driveExcluded(string $id, string $name): bool {
@@ -325,6 +471,19 @@ class DriveSync {
       $last = time();
       $this->database->query('SELECT 1');
     }
+  }
+
+  /**
+   * A php.ini size such as "384M" in bytes.
+   */
+  protected function bytes(string $size): int {
+    $value = (int) $size;
+    return match (strtoupper(substr(trim($size), -1))) {
+      'G' => $value * 1024 ** 3,
+      'M' => $value * 1024 ** 2,
+      'K' => $value * 1024,
+      default => $value,
+    };
   }
 
   /**

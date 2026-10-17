@@ -152,6 +152,11 @@ $settings['kb_chat'] = [
     // Seconds between full listings of the drives. New or changed files are
     // queued then, and read in small batches every 5 minutes by cron.
     'list_interval' => 6 * 3600,
+    // Folders to leave out, with everything inside them: a path from the
+    // drive ("Custom Publishing/Production/2024", case-insensitive) or a
+    // folder ID (the end of the folder's Drive URL). See which folders hold
+    // the most files with: drush kb-drive --folders="Custom Publishing"
+    'exclude_folders' => [],
     // Shared drive names or IDs to leave out of the chat.
     'exclude_drives' => ['Accounts Payable', 'Magazines'],
     // Larger files are skipped. PDFs have a lower limit: they're unpacked in

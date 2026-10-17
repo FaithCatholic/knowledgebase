@@ -88,12 +88,14 @@ body.gin-login .user-form-page__user-form .content-header .layout-container::aft
   }
 }
 
-/* Sign-in buttons: Log in, then Microsoft 365, then Google, evenly spaced. */
+/* Sign-in buttons: password, then Microsoft 365, then Google, the same
+   12px apart. Padding rather than margin, so no Gin margin rule can collapse
+   or override the gap. */
 body.gin-login .user-login-form .o365-login-links,
 body.gin-login .user-login-form .kb-social-login {
   display: block;
-  margin-top: .75rem;
-  margin-bottom: 0;
+  margin: 0;
+  padding-top: 12px;
 }
 
 body.gin-login .user-login-form .o365-login-links .button,
@@ -105,29 +107,54 @@ body.gin-login .user-login-form .kb-social-login .button {
   margin: 0;
 }
 
-/* Google's button guidelines: white with a grey border and the color G. */
+/* Google: the same button as the others, with Google's colored G on a small
+   white badge so it stays recognizable on the dark button. */
 body.gin-login .user-login-form .kb-google-login {
-  gap: .75rem;
-  border: 1px solid #dadce0;
+  gap: .6rem;
+}
+
+body.gin-login .kb-google-badge {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
   background: #fff;
-  color: #3c4043;
-}
-
-body.gin-login .user-login-form .kb-google-login:hover,
-body.gin-login .user-login-form .kb-google-login:focus {
-  border-color: #c6c9ce;
-  background: #f7f8f8;
-  color: #202124;
-}
-
-.gin--dark-mode body.gin-login .user-login-form .kb-google-login {
-  border-color: #5f6368;
-  background: #131314;
-  color: #e3e3e3;
 }
 
 body.gin-login .kb-google-icon {
   flex: none;
+}
+
+/* Password fields fold away until "Log in with Password" is clicked
+   (js/login-form.js adds .is-collapsed only when JavaScript runs). */
+body.gin-login .user-login-form .kb-password-fields {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows .25s ease, opacity .25s ease;
+  opacity: 1;
+}
+
+body.gin-login .user-login-form .kb-password-fields__inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Closed: no height, invisible, and out of the tab order. Visibility flips
+   after the closing animation, and straight away when opening. */
+body.gin-login .user-login-form.is-collapsed .kb-password-fields {
+  grid-template-rows: 0fr;
+  opacity: 0;
+  visibility: hidden;
+  transition: grid-template-rows .25s ease, opacity .25s ease, visibility 0s .25s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.gin-login .user-login-form .kb-password-fields {
+    transition: none;
+  }
 }
 
 /* "Forgot your password?" below the sign-in buttons, clear of them. */
@@ -138,4 +165,30 @@ body.gin-login .user-login-form .more-links {
 
 body.gin-login .user-login-form .more-links .link--more {
   margin-top: 0;
+}
+
+/* Login page heading: a modest prompt rather than a big "Log in" title
+   (templates/page--user--login.html.twig). */
+body.gin-login .user-form-page__page-title.kb-login-title {
+  margin-bottom: 1.25rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+@media (min-width: 800px) {
+  body.gin-login .user-form-page__page-title.kb-login-title {
+    font-size: 1.5rem;
+  }
+}
+
+/* Staff-only notice at the bottom of the form column. */
+body.gin-login .kb-login-notice {
+  margin: 2.5rem 0 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--gin-border-color, #e1e1e1);
+  color: var(--gin-color-text-light, #6b6464);
+  font-size: .875rem;
+  line-height: 1.5;
+  text-align: center;
 }

@@ -28,9 +28,24 @@ class KbAdminHooks {
   ) {}
 
   /**
+   * Implements hook_theme_registry_alter().
+   *
+   * Uses kb_admin's copy of Gin Login's login page template, which has a
+   * lighter heading and the staff-only notice.
+   */
+  #[Hook('theme_registry_alter', order: Order::Last)]
+  public function themeRegistryAlter(array &$theme_registry): void {
+    if (isset($theme_registry['page__user__login'])) {
+      $theme_registry['page__user__login']['path'] = $this->moduleList->getPath('kb_admin') . '/templates';
+    }
+  }
+
+  /**
    * Implements hook_form_FORM_ID_alter() for user_login_form.
    *
    * Runs after Gin Login and Microsoft 365 SSO have added their parts, then:
+   * - renames the submit button "Log in with Password"; with JavaScript the
+   *   username and password fields stay folded until it is clicked;
    * - adds a "Sign in with Google" button (Social Auth Google), returning to
    *   the page the user was going to;
    * - orders the form as Log in, Microsoft 365, Google, then Gin Login's
@@ -40,6 +55,11 @@ class KbAdminHooks {
   #[Hook('form_user_login_form_alter', order: Order::Last)]
   public function userLoginFormAlter(array &$form, FormStateInterface $form_state): void {
     $form['actions']['#weight'] = 90;
+    // The password fields start folded away (kb_admin/login-form): this
+    // button opens them, then signs in.
+    $form['actions']['submit']['#value'] = t('Log in with Password');
+    $form['#attributes']['class'][] = 'kb-password-login';
+    $form['#attached']['library'][] = 'kb_admin/login-form';
     if (isset($form['o365_actions'])) {
       $form['o365_actions']['#weight'] = 91;
     }
@@ -52,9 +72,9 @@ class KbAdminHooks {
         '#weight' => 92,
         'google' => [
           '#type' => 'link',
-          '#title' => Markup::create(self::GOOGLE_ICON . '<span>' . t('Sign in with Google') . '</span>'),
+          '#title' => Markup::create('<span class="kb-google-badge">' . self::GOOGLE_ICON . '</span><span>' . t('Log in with Google') . '</span>'),
           '#url' => Url::fromRoute('social_auth.network.redirect', ['network' => 'google'], $destination ? ['query' => ['destination' => $destination]] : []),
-          '#attributes' => ['class' => ['button', 'kb-google-login']],
+          '#attributes' => ['class' => ['button', 'button--primary', 'kb-google-login']],
         ],
       ];
     }

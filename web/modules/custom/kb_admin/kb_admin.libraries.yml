@@ -1,0 +1,6 @@
+login-form:
+  js:
+    js/login-form.js: {}
+  dependencies:
+    - core/drupal
+    - core/once

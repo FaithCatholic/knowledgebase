@@ -1,6 +1,6 @@
 _core:
   default_config_hash: '--gJY4SG2aCyYL-lpxoOaKbiudksIdFmnE8AHqYJNc0'
-link_text: 'Login with @connector'
+link_text: 'Log in with @connector'
 link_position: 1
 hide_login_form: 0
 auto_redirect: 0

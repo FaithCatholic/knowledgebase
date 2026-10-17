@@ -40,6 +40,21 @@ $settings['o365'] = [
     'tenant_id' => getenv('O365_TENANT_ID'),
   ]
 ];
+// Google sign-in (social_auth_google). GOOGLE_CLIENT_ID and
+// GOOGLE_CLIENT_SECRET are Upsun variables without the "env:" prefix, so they
+// arrive in PLATFORM_VARIABLES (base64-encoded JSON) rather than as
+// environment variables; either form works. The values stay out of config
+// and git. Saving the Google settings form would store them in config again,
+// so change them on Upsun instead.
+$upsun_variables = getenv('PLATFORM_VARIABLES') ? (json_decode(base64_decode(getenv('PLATFORM_VARIABLES')), TRUE) ?: []) : [];
+foreach (['client_id' => 'GOOGLE_CLIENT_ID', 'client_secret' => 'GOOGLE_CLIENT_SECRET'] as $key => $name) {
+  $value = getenv($name) ?: ($upsun_variables[$name] ?? $upsun_variables['env:' . $name] ?? '');
+  if ($value !== '') {
+    $config['social_auth_google.settings'][$key] = $value;
+  }
+}
+unset($upsun_variables, $key, $name, $value);
+
 // Upsun dashboard (upsun_dashboard module). UPSUN_API_TOKEN is a sensitive
 // project-level variable on Upsun; see the module README.
 $settings['upsun_dashboard'] = [

@@ -70,3 +70,72 @@ body.gin-login .toolbar-icon-default::before {
     height: 72px;
   }
 }
+
+/* "Company Knowledge Base" under the logo. Change the wording here. */
+body.gin-login .user-form-page__user-form .content-header .layout-container::after {
+  content: "Company Knowledge Base";
+  display: block;
+  margin-top: .5rem;
+  color: var(--gin-color-text-light, #6b6464);
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+
+@media (min-width: 800px) {
+  body.gin-login .user-form-page__user-form .content-header .layout-container::after {
+    font-size: 1.375rem;
+  }
+}
+
+/* Sign-in buttons: Log in, then Microsoft 365, then Google, evenly spaced. */
+body.gin-login .user-login-form .o365-login-links,
+body.gin-login .user-login-form .kb-social-login {
+  display: block;
+  margin-top: .75rem;
+  margin-bottom: 0;
+}
+
+body.gin-login .user-login-form .o365-login-links .button,
+body.gin-login .user-login-form .kb-social-login .button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 0;
+}
+
+/* Google's button guidelines: white with a grey border and the color G. */
+body.gin-login .user-login-form .kb-google-login {
+  gap: .75rem;
+  border: 1px solid #dadce0;
+  background: #fff;
+  color: #3c4043;
+}
+
+body.gin-login .user-login-form .kb-google-login:hover,
+body.gin-login .user-login-form .kb-google-login:focus {
+  border-color: #c6c9ce;
+  background: #f7f8f8;
+  color: #202124;
+}
+
+.gin--dark-mode body.gin-login .user-login-form .kb-google-login {
+  border-color: #5f6368;
+  background: #131314;
+  color: #e3e3e3;
+}
+
+body.gin-login .kb-google-icon {
+  flex: none;
+}
+
+/* "Forgot your password?" below the sign-in buttons, clear of them. */
+body.gin-login .user-login-form .more-links {
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+body.gin-login .user-login-form .more-links .link--more {
+  margin-top: 0;
+}

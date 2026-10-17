@@ -156,6 +156,15 @@ $settings['kb_chat'] = [
     // Results per search.
     'limit' => 8,
   ],
+  // FAITH publications on the mothership (faithmagazine project, Platform.sh):
+  // its kb_search_api endpoint searches every domain. The token is
+  // KB_SEARCH_TOKEN there and MOTHERSHIP_SEARCH_TOKEN here.
+  'mothership' => [
+    'url' => 'https://faithsyndicated.org',
+    'token' => getenv('MOTHERSHIP_SEARCH_TOKEN'),
+    // Results per search.
+    'limit' => 8,
+  ],
   // Google Drive sync (kb-chat:drive-sync). Two service accounts decide each
   // file's tier: the staff one is only in allemployees@, the management one
   // only in mgtteam@. Their JSON keys are sensitive Upsun variables.

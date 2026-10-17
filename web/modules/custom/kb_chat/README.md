@@ -164,6 +164,22 @@ Setup: store the same token as `ARCHIVE_SEARCH_TOKEN` on the magazines project a
 `MAGAZINE_ARCHIVE_TOKEN` on kb (the URL is in `$settings['kb_chat']['magazine_archive']`).
 Then enable the tool on the KB Chat agent.
 
+## FAITH publications
+
+The **Search FAITH publications** agent tool (`kb_chat:publications_search`) searches the
+articles on every domain of the mothership (the faithmagazine project): Faith Syndicated,
+Content Evangelist, FAITH Magazine and the diocesan publications. It calls the mothership's
+`/api/kb-search` endpoint (the `kb_search_api` module in the faithmagazine repo), which
+queries that site's Solr `default_index` as an anonymous visitor, so only published, public
+articles come back. Claude can pass keywords, optional publications and a year range, and
+gets back each article's publications, date, author, link and an excerpt. Links point at
+the publication the article is on (the one asked for, if it's on several).
+
+Setup: store the same token as `KB_SEARCH_TOKEN` on the faithmagazine project and
+`MOTHERSHIP_SEARCH_TOKEN` on kb (the URL is in `$settings['kb_chat']['mothership']`).
+Then enable the tool on the KB Chat agent. This replaces crawling faithsyndicated.org and
+contentevangelist.com as trusted websites.
+
 ## Data warehouse
 
 The **Query the data warehouse** agent tool (`kb_chat:warehouse_query`) answers statistics

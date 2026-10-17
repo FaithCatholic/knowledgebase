@@ -141,3 +141,18 @@ function kb_chat_update_11002(): string {
     ->save();
   return 'Moved the Google Drive exclusions and limits from settings.php to configuration.';
 }
+
+/**
+ * Register the trusted website entity type as installed.
+ *
+ * It was added after kb_chat was enabled. Being a config entity it needs no
+ * tables, but the status report lists it until it is registered.
+ */
+function kb_chat_update_11003(): string {
+  $manager = \Drupal::entityDefinitionUpdateManager();
+  if (!$manager->getEntityType('kb_chat_web_source')) {
+    $manager->installEntityType(\Drupal::entityTypeManager()->getDefinition('kb_chat_web_source'));
+    return 'Registered the trusted website entity type.';
+  }
+  return 'The trusted website entity type was already registered.';
+}

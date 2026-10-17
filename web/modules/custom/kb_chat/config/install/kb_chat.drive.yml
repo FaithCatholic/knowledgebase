@@ -1,0 +1,6 @@
+exclude_drives: []
+exclude_folders: []
+exclude_names: []
+list_interval: 21600
+max_file_bytes: 26214400
+max_pdf_bytes: 10485760

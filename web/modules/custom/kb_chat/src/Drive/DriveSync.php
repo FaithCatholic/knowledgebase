@@ -2,6 +2,7 @@
 
 namespace Drupal\kb_chat\Drive;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Lock\LockBackendInterface;
@@ -56,6 +57,18 @@ class DriveSync {
   const CRASHED = 'kb_chat.drive_crashed';
 
   /**
+   * Exclusions and limits used before the kb_chat.drive config exists.
+   */
+  const FALLBACK = [
+    'exclude_drives' => ['Accounts Payable', 'Magazines'],
+    'exclude_folders' => [],
+    'exclude_names' => ['CONTACTS DATABASE', 'Christmas card list'],
+    'list_interval' => 21600,
+    'max_file_bytes' => 26214400,
+    'max_pdf_bytes' => 10485760,
+  ];
+
+  /**
    * Memory ceiling for a sync run. The container is shared with the website,
    * so a runaway file must stop the sync, not get the container killed.
    */
@@ -68,6 +81,7 @@ class DriveSync {
     protected TextExtractor $extractor,
     protected QueueFactory $queueFactory,
     protected StateInterface $state,
+    protected ConfigFactoryInterface $configFactory,
     #[Autowire(service: 'lock')]
     protected LockBackendInterface $lock,
     #[Autowire(service: 'logger.channel.kb_chat')]
@@ -503,10 +517,27 @@ class DriveSync {
   }
 
   /**
-   * $settings['kb_chat']['drive'].
+   * The sync's settings.
+   *
+   * The service account keys come from $settings['kb_chat']['drive'] in
+   * settings.php (secrets stay out of config). Exclusions and limits come
+   * from the kb_chat.drive config, edited at Configuration > Search > KB chat
+   * Google Drive.
    */
   protected function settings(): array {
-    return Settings::get('kb_chat')['drive'] ?? [];
+    $config = $this->configFactory->get('kb_chat.drive');
+    $settings = Settings::get('kb_chat')['drive'] ?? [];
+    // Until kb_chat_update_11002 has created the config, keep the exclusions
+    // that used to be in settings.php, so nothing private slips in.
+    if ($config->isNew()) {
+      return $settings + self::FALLBACK;
+    }
+    foreach (array_keys(self::FALLBACK) as $key) {
+      if ($config->get($key) !== NULL) {
+        $settings[$key] = $config->get($key);
+      }
+    }
+    return $settings;
   }
 
 }

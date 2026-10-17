@@ -16,3 +16,11 @@ kb_chat.web_source_crawl:
   requirements:
     _permission: 'administer kb chat websites'
     _csrf_token: 'TRUE'
+
+kb_chat.drive_settings:
+  path: '/admin/config/search/kb-chat-drive'
+  defaults:
+    _form: '\Drupal\kb_chat\Form\DriveSettingsForm'
+    _title: 'KB chat Google Drive'
+  requirements:
+    _permission: 'administer kb chat websites'

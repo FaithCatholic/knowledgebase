@@ -116,3 +116,28 @@ function kb_chat_update_11001(): string {
   }
   return 'The shared drive document entity type was already installed.';
 }
+
+/**
+ * Move the Drive sync's exclusions and limits from settings.php to config.
+ *
+ * They are now edited at Configuration > Search > KB chat Google Drive. The
+ * service account keys stay in settings.php.
+ */
+function kb_chat_update_11002(): string {
+  // settings.php no longer has these by the time this runs, so fall back to
+  // the values it had.
+  $old = (\Drupal\Core\Site\Settings::get('kb_chat')['drive'] ?? []) + [
+    'exclude_drives' => ['Accounts Payable', 'Magazines'],
+    'exclude_folders' => [],
+    'exclude_names' => ['CONTACTS DATABASE', 'Christmas card list'],
+  ];
+  \Drupal::configFactory()->getEditable('kb_chat.drive')
+    ->set('exclude_drives', array_values($old['exclude_drives']))
+    ->set('exclude_folders', array_values($old['exclude_folders']))
+    ->set('exclude_names', array_values($old['exclude_names']))
+    ->set('list_interval', (int) ($old['list_interval'] ?? 21600))
+    ->set('max_file_bytes', (int) ($old['max_file_bytes'] ?? 26214400))
+    ->set('max_pdf_bytes', (int) ($old['max_pdf_bytes'] ?? 10485760))
+    ->save();
+  return 'Moved the Google Drive exclusions and limits from settings.php to configuration.';
+}

@@ -36,3 +36,32 @@ kb_chat.web_source.*:
     guidance:
       type: text
       label: 'What it is the authority for (shown to the chat)'
+
+kb_chat.drive:
+  type: config_object
+  label: 'KB chat Google Drive sync'
+  mapping:
+    exclude_drives:
+      type: sequence
+      label: 'Shared drives to leave out (names or IDs)'
+      sequence:
+        type: string
+    exclude_folders:
+      type: sequence
+      label: 'Folders to leave out, with everything inside (paths or IDs)'
+      sequence:
+        type: string
+    exclude_names:
+      type: sequence
+      label: 'Skip files whose names contain these'
+      sequence:
+        type: string
+    list_interval:
+      type: integer
+      label: 'Seconds between full listings of the drives'
+    max_file_bytes:
+      type: integer
+      label: 'Largest file to read, in bytes'
+    max_pdf_bytes:
+      type: integer
+      label: 'Largest PDF to read, in bytes'

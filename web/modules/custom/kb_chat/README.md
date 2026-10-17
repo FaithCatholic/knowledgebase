@@ -110,13 +110,20 @@ Supported types: Google Docs, Sheets (every sheet) and Slides, PDF (text layer o
 `max_pdf_bytes`, 10 MB), Word (.docx), Excel (.xlsx), plain text, CSV and Markdown. Other
 files over 25 MB are skipped.
 
-Settings are in `$settings['kb_chat']['drive']`:
+**What to leave out and limits** are set at **Configuration → Search → KB chat Google Drive**
+(`/admin/config/search/kb-chat-drive`), stored in the `kb_chat.drive` config:
 
-- `exclude_drives`: leave whole shared drives out
-- `exclude_folders`: leave folders, with everything inside them, out. Give a path from the drive
+- shared drives to leave out
+- folders to leave out, with everything inside them: a path from the drive
   (`Custom Publishing/Production`) or a folder ID. `drush kb-drive --folders="Custom Publishing"`
-  shows indexable files per folder to help choose.
-- `exclude_names`: skip files whose names contain these words, such as contact lists
+  shows indexable files per folder.
+- file names to skip, such as contact lists
+- how often to re-list the drives
+- the file and PDF size limits
+
+The page also shows when the drives were last listed, how many files are waiting, and any
+files that crashed the sync. **Re-list the drives on the next run** applies changes within
+5 minutes. The service account keys stay in `settings.php`.
 
 ### Setup
 

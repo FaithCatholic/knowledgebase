@@ -3,3 +3,8 @@ entity.kb_chat_web_source.collection:
   description: 'Outside websites the kb chat indexes and cites.'
   route_name: entity.kb_chat_web_source.collection
   parent: system.admin_config_search
+kb_chat.drive_settings:
+  title: 'KB chat Google Drive'
+  description: 'What the chat leaves out of Google Drive, and sync limits.'
+  route_name: kb_chat.drive_settings
+  parent: system.admin_config_search

@@ -38,6 +38,18 @@ class KbChatHooks {
   }
 
   /**
+   * Implements hook_gin_ignore_sticky_form_actions().
+   *
+   * Gin moves form buttons into its sticky top bar and puts any not named
+   * save, submit or preview into a "more actions" menu there, hiding them on
+   * the page. The indexed files page's buttons belong under its tables.
+   */
+  #[Hook('gin_ignore_sticky_form_actions')]
+  public function ginKeepButtons(): array {
+    return ['kb_chat_drive_files'];
+  }
+
+  /**
    * Implements hook_ENTITY_TYPE_presave() for ai_agent.
    *
    * The agent form edits instructions in a rich-text Markdown editor

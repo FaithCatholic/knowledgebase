@@ -5,6 +5,7 @@ namespace Drupal\kb_chat\Form;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Datetime\DateFormatterInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Queue\QueueFactory;
@@ -39,6 +40,8 @@ class DriveSettingsForm extends ConfigFormBase {
     protected StateInterface $state,
     protected QueueFactory $queueFactory,
     protected DateFormatterInterface $dateFormatter,
+    protected DriveSync $driveSync,
+    protected EntityTypeManagerInterface $entityTypeManager,
   ) {
     parent::__construct($config_factory, $typed_config_manager);
   }
@@ -53,6 +56,8 @@ class DriveSettingsForm extends ConfigFormBase {
       $container->get('state'),
       $container->get('queue'),
       $container->get('date.formatter'),
+      $container->get(DriveSync::class),
+      $container->get('entity_type.manager'),
     );
   }
 
@@ -117,6 +122,32 @@ class DriveSettingsForm extends ConfigFormBase {
       ];
     }
 
+    $form['priority_documents'] = [
+      '#type' => 'textarea',
+      '#title' => $this->t('Priority documents'),
+      '#description' => $this->t('Documents the chat should check before others, such as production schedules or meeting notes. One per line: the Drive link (or file ID), then <em>|</em> and what it is for, e.g. <code>https://docs.google.com/spreadsheets/d/1AbC.../edit | Production schedule for all magazines: print, mail and ad deadlines</code>. The chat reads these from Drive as they are now (at most 10 minutes old), and only shows each to people who can see it: a management document stays management-only. A document must be in a synced shared drive.'),
+      '#default_value' => implode("\n", $config->get('priority_documents') ?? []),
+      '#rows' => 4,
+    ];
+    if ($priority = $this->driveSync->priorityDocuments()) {
+      $found = $this->entityTypeManager->getStorage('kb_chat_document')->loadByProperties([
+        'source' => DriveSync::SOURCE,
+        'source_id' => array_keys($priority),
+      ]);
+      $titles = [];
+      foreach ($found as $document) {
+        $titles[$document->get('source_id')->value] = $this->t('@title (@drive, @tier)', [
+          '@title' => $document->label(),
+          '@drive' => $document->get('location')->value,
+          '@tier' => $document->getTier() === 'management' ? $this->t('management only') : $this->t('all staff'),
+        ]);
+      }
+      $form['priority_status'] = [
+        '#theme' => 'item_list',
+        '#title' => $this->t('Priority documents found'),
+        '#items' => array_map(fn($id) => $titles[$id] ?? $this->t('@id: not in the synced drives yet (excluded, not shared with the chat, or waiting for the next listing)', ['@id' => $id]), array_keys($priority)),
+      ];
+    }
     $form['exclude_drives'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Shared drives to leave out'),
@@ -174,12 +205,25 @@ class DriveSettingsForm extends ConfigFormBase {
   /**
    * {@inheritdoc}
    */
+  public function validateForm(array &$form, FormStateInterface $form_state): void {
+    parent::validateForm($form, $form_state);
+    foreach ($this->lines($form_state->getValue('priority_documents')) as $line) {
+      if (!DriveSync::fileId(trim(explode('|', $line, 2)[0]))) {
+        $form_state->setErrorByName('priority_documents', $this->t('"@line" doesn\'t start with a Drive link or file ID.', ['@line' => $line]));
+      }
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $this->config('kb_chat.drive')
       ->set('exclude_drives', $this->lines($form_state->getValue('exclude_drives')))
       ->set('exclude_folders', array_map(fn($line) => trim($line, " /"), $this->lines($form_state->getValue('exclude_folders'))))
       ->set('exclude_names', $this->lines($form_state->getValue('exclude_names')))
       ->set('exclude_files', $this->lines($form_state->getValue('exclude_files')))
+      ->set('priority_documents', $this->lines($form_state->getValue('priority_documents')))
       ->set('list_interval', (int) $form_state->getValue('list_interval'))
       ->set('max_file_bytes', (int) $form_state->getValue('max_file_mb') * 1048576)
       ->set('max_pdf_bytes', (int) $form_state->getValue('max_pdf_mb') * 1048576)

@@ -174,12 +174,30 @@ The page also shows when the drives were last listed, how many files are waiting
 files that crashed the sync. **Re-list the drives on the next run** applies changes within
 5 minutes. The service account keys stay in `settings.php`.
 
+**Priority documents** (top of the Drive settings) are the documents the chat should check
+before others, such as the production schedules and the management meeting notes: one per
+line, the Drive link (or file ID), then `|` and what it's for. The page lists which document
+each line found. They're used two ways:
+
+- The **Read priority documents** agent tool (`kb_chat:priority_documents`) lists them with
+  what each is for, and reads one: in full (up to 40,000 characters), or only the lines
+  matching keywords, which suits long schedules and running notes. In a spreadsheet each
+  match keeps its sheet's name and heading row. It reads the file from Drive as it is now,
+  reused for 10 minutes, and falls back to the synced copy if Drive can't be read.
+- In knowledge base search results, a priority document is flagged with its note and told
+  to take precedence.
+
+Only documents the user may see are listed or read, so a management document stays
+management-only. A priority document must be in a synced shared drive.
+
 **Indexed files** (the second tab, `/admin/config/search/kb-chat-drive/files`) lists every
 Drive file in the chat, 50 to a page, with its drive, type, who can see it, when it changed
 and how much text it has. Filter by name, drive, type or tier, and sort by any column (by
-Text to find huge spreadsheets). **Remove selected files from the chat** deletes them from
-the search index at once and adds them to "Files to leave out", so neither the next listing
-nor a copy still waiting in the read queue brings them back.
+Text to find huge spreadsheets). Tick files and **Ignore selected files**: they come out of
+the search index at once and are added to "Files to leave out", so neither the next listing
+nor a copy still waiting in the read queue brings them back. They're listed under **Ignored
+files** on the same page; **Stop ignoring selected files** takes them off the list and
+re-lists the drives, so they're back within one sync.
 
 ### Setup
 

@@ -2,6 +2,7 @@
 
 namespace Drupal\kb_chat\Drive;
 
+use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -64,6 +65,7 @@ class DriveSync {
     'exclude_folders' => [],
     'exclude_names' => ['CONTACTS DATABASE', 'Christmas card list'],
     'exclude_files' => [],
+    'priority_documents' => [],
     'list_interval' => 21600,
     'max_file_bytes' => 26214400,
     'max_pdf_bytes' => 10485760,
@@ -92,7 +94,83 @@ class DriveSync {
     protected LockBackendInterface $lock,
     #[Autowire(service: 'logger.channel.kb_chat')]
     protected LoggerInterface $logger,
+    #[Autowire(service: 'cache.default')]
+    protected CacheBackendInterface $cache,
   ) {}
+
+  /**
+   * Seconds a live read of a priority document is reused.
+   */
+  const LIVE_CACHE = 600;
+
+  /**
+   * The priority documents: file ID => what it's for.
+   *
+   * Entries of priority_documents are a file ID or Drive link, then
+   * optionally "|" and a note on what the document is for.
+   */
+  public function priorityDocuments(): array {
+    $documents = [];
+    foreach ($this->settings()['priority_documents'] ?? [] as $entry) {
+      $parts = array_map('trim', explode('|', (string) $entry, 2));
+      if ($id = self::fileId($parts[0])) {
+        $documents[$id] = $parts[1] ?? '';
+      }
+    }
+    return $documents;
+  }
+
+  /**
+   * The file ID in a Drive link, or the ID itself; NULL if neither.
+   */
+  public static function fileId(string $value): ?string {
+    $value = trim($value);
+    if (preg_match('#/d/([A-Za-z0-9_-]{10,})#', $value, $match) || preg_match('#[?&]id=([A-Za-z0-9_-]{10,})#', $value, $match)) {
+      return $match[1];
+    }
+    return preg_match('/^[A-Za-z0-9_-]{10,}$/', $value) ? $value : NULL;
+  }
+
+  /**
+   * A document's current text, read from Drive and reused for 10 minutes.
+   *
+   * For priority documents such as production schedules, which change more
+   * often than the drives are listed. Falls back to the synced text if Drive
+   * can't be read.
+   *
+   * @return array
+   *   ['text' => string, 'as_of' => Unix time, 'live' => bool].
+   */
+  public function currentText(KbChatDocument $document): array {
+    $file_id = (string) $document->get('source_id')->value;
+    $cid = 'kb_chat:live:' . $file_id;
+    if ($cached = $this->cache->get($cid)) {
+      return $cached->data;
+    }
+    try {
+      $this->assertConfigured();
+      $settings = $this->settings();
+      $client = new GoogleDriveClient($this->httpClient, $settings['accounts'][$document->getTier()]);
+      $text = $this->extractor->extract($client, [
+        'id' => $file_id,
+        'mimeType' => (string) $document->get('mime_type')->value,
+      ], (int) ($settings['max_text_chars'] ?? 300000));
+      $result = ['text' => $text, 'as_of' => time(), 'live' => TRUE];
+      $this->cache->set($cid, $result, time() + self::LIVE_CACHE);
+      return $result;
+    }
+    catch (\Throwable $e) {
+      $this->logger->warning('Could not read @title from Drive, using the synced copy: @message', [
+        '@title' => $document->label(),
+        '@message' => $e->getMessage(),
+      ]);
+      return [
+        'text' => (string) $document->get('text')->value,
+        'as_of' => (int) $document->get('synced')->value,
+        'live' => FALSE,
+      ];
+    }
+  }
 
   /**
    * Whether both service account keys are configured.

@@ -56,6 +56,11 @@ kb_chat.drive:
       label: 'Skip files whose names contain these'
       sequence:
         type: string
+    priority_documents:
+      type: sequence
+      label: 'Priority documents: a file ID or Drive link, then "|" and what it is for'
+      sequence:
+        type: string
     exclude_files:
       type: sequence
       label: 'Files to leave out: a file ID, then optionally its title as a note'

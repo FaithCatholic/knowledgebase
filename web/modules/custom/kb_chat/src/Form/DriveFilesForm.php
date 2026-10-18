@@ -10,6 +10,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
+use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
 use Drupal\kb_chat\Drive\DriveSync;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -17,7 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Lists the Google Drive files in the chat, to find ones to leave out.
  *
- * Removing files deletes their documents, which takes them out of the search
+ * Ignoring files deletes their documents, which takes them out of the search
  * index at once, and adds them to exclude_files so the next listing doesn't
  * bring them back.
  */
@@ -45,6 +46,7 @@ class DriveFilesForm extends FormBase {
     protected Connection $database,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected DateFormatterInterface $dateFormatter,
+    protected StateInterface $state,
   ) {}
 
   /**
@@ -55,6 +57,7 @@ class DriveFilesForm extends FormBase {
       $container->get('database'),
       $container->get('entity_type.manager'),
       $container->get('date.formatter'),
+      $container->get('state'),
     );
   }
 
@@ -149,7 +152,7 @@ class DriveFilesForm extends FormBase {
 
     $form['summary'] = [
       '#markup' => '<p>' . $this->formatPlural($total, '1 file in the chat matches.', '@count files in the chat match.') . ' '
-        . $this->t('Removing files takes them out of the chat now and adds them to "Files to leave out" in the <a href=":settings">Google Drive settings</a>, so the sync doesn\'t bring them back. To leave out a whole folder, add it to "Folders to leave out" there instead.', [
+        . $this->t('Ignoring files takes them out of the chat now, and the sync won\'t bring them back; they move to "Ignored files" below. To leave out a whole folder, add it to "Folders to leave out" in the <a href=":settings">Google Drive settings</a> instead.', [
           ':settings' => Url::fromRoute('kb_chat.drive_settings')->toString(),
         ]) . '</p>',
     ];
@@ -164,9 +167,45 @@ class DriveFilesForm extends FormBase {
     $form['actions'] = ['#type' => 'actions'];
     $form['actions']['remove'] = [
       '#type' => 'submit',
-      '#value' => $this->t('Remove selected files from the chat'),
+      '#value' => $this->t('Ignore selected files'),
       '#button_type' => 'danger',
     ];
+
+    // Ignored files have no document any more: only their exclude_files line.
+    $ignored = [];
+    foreach ($this->configFactory()->get('kb_chat.drive')->get('exclude_files') ?? [] as $entry) {
+      $file_id = DriveSync::fileIds([$entry])[0] ?? NULL;
+      if ($file_id) {
+        $name = trim(mb_substr(trim($entry), strlen($file_id)));
+        $ignored[$file_id] = [
+          'name' => $name !== '' ? $name : $file_id,
+          'link' => ['data' => Link::fromTextAndUrl($this->t('Open in Drive'), Url::fromUri('https://drive.google.com/open', [
+            'query' => ['id' => $file_id],
+            'attributes' => ['target' => '_blank'],
+          ]))->toRenderable()],
+        ];
+      }
+    }
+    uasort($ignored, fn($a, $b) => strnatcasecmp($a['name'], $b['name']));
+    $form['ignored'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Ignored files (@count)', ['@count' => count($ignored)]),
+      '#open' => (bool) $ignored,
+    ];
+    $form['ignored']['ignored_files'] = [
+      '#type' => 'tableselect',
+      '#header' => ['name' => $this->t('Name'), 'link' => ''],
+      '#options' => $ignored,
+      '#empty' => $this->t('No files are ignored.'),
+      '#js_select' => TRUE,
+    ];
+    if ($ignored) {
+      $form['ignored']['unignore'] = [
+        '#type' => 'submit',
+        '#value' => $this->t('Stop ignoring selected files'),
+        '#submit' => ['::unignore'],
+      ];
+    }
     return $form;
   }
 
@@ -174,15 +213,19 @@ class DriveFilesForm extends FormBase {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state): void {
-    if ($form_state->getTriggeringElement()['#parents'] === ['remove'] && !array_filter($form_state->getValue('files') ?? [])) {
-      $form_state->setErrorByName('files', $this->t('Select the files to remove.'));
+    $button = $form_state->getTriggeringElement()['#parents'];
+    if ($button === ['remove'] && !array_filter($form_state->getValue('files') ?? [])) {
+      $form_state->setErrorByName('files', $this->t('Select the files to ignore.'));
+    }
+    if ($button === ['unignore'] && !array_filter($form_state->getValue('ignored_files') ?? [])) {
+      $form_state->setErrorByName('ignored_files', $this->t('Select the ignored files to bring back.'));
     }
   }
 
   /**
    * {@inheritdoc}
    *
-   * Removes the selected files: excludes them, then deletes their documents.
+   * Ignores the selected files: excludes them, then deletes their documents.
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $ids = array_keys(array_filter($form_state->getValue('files')));
@@ -206,11 +249,28 @@ class DriveFilesForm extends FormBase {
     $storage->delete($documents);
 
     $this->messenger()->addStatus($this->formatPlural(count($documents),
-      'Removed 1 file from the chat. To let it back in, delete its line from "Files to leave out" in the <a href=":settings">Google Drive settings</a>.',
-      'Removed @count files from the chat. To let one back in, delete its line from "Files to leave out" in the <a href=":settings">Google Drive settings</a>.',
-      [':settings' => Url::fromRoute('kb_chat.drive_settings')->toString()],
+      'Ignored 1 file: it is out of the chat. To bring it back, use "Ignored files" below.',
+      'Ignored @count files: they are out of the chat. To bring one back, use "Ignored files" below.',
     ));
     // Stay on the same filters and page.
+    $form_state->setRedirect('kb_chat.drive_files', [], ['query' => $this->getRequest()->query->all()]);
+  }
+
+  /**
+   * Stops ignoring the selected files, and re-lists the drives to add them.
+   */
+  public function unignore(array &$form, FormStateInterface $form_state): void {
+    $selected = array_flip(array_keys(array_filter($form_state->getValue('ignored_files'))));
+    $config = $this->configFactory()->getEditable('kb_chat.drive');
+    $entries = $config->get('exclude_files') ?? [];
+    $kept = array_values(array_filter($entries, fn($entry) => !isset($selected[DriveSync::fileIds([$entry])[0] ?? ''])));
+    $config->set('exclude_files', $kept)->save();
+    $this->state->set(DriveSync::LISTED, 0);
+
+    $this->messenger()->addStatus($this->formatPlural(count($entries) - count($kept),
+      'Stopped ignoring 1 file. The drives will be listed again within 5 minutes, and it will be back in the chat once it has been read.',
+      'Stopped ignoring @count files. The drives will be listed again within 5 minutes, and they will be back in the chat once they have been read.',
+    ));
     $form_state->setRedirect('kb_chat.drive_files', [], ['query' => $this->getRequest()->query->all()]);
   }
 

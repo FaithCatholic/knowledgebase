@@ -63,6 +63,7 @@ class DriveSync {
     'exclude_drives' => ['Accounts Payable', 'Magazines'],
     'exclude_folders' => [],
     'exclude_names' => ['CONTACTS DATABASE', 'Christmas card list'],
+    'exclude_files' => [],
     'list_interval' => 21600,
     'max_file_bytes' => 26214400,
     'max_pdf_bytes' => 10485760,
@@ -73,6 +74,11 @@ class DriveSync {
    * so a runaway file must stop the sync, not get the container killed.
    */
   const MEMORY_LIMIT = '384M';
+
+  /**
+   * exclude_files as file ID => TRUE, parsed once per listing.
+   */
+  protected ?array $excludedFiles = NULL;
 
   public function __construct(
     protected ClientInterface $httpClient,
@@ -173,6 +179,7 @@ class DriveSync {
    */
   protected function listAndQueue(callable $progress): array {
     $settings = $this->settings();
+    $this->excludedFiles = NULL;
     $queue = $this->queueFactory->get(self::QUEUE);
     // The listing decides what's outstanding, so start the queue afresh.
     $queue->deleteQueue();
@@ -264,6 +271,7 @@ class DriveSync {
     $max_pdf_bytes = (int) ($settings['max_pdf_bytes'] ?? 10 * 1024 * 1024);
     $max_chars = (int) ($settings['max_text_chars'] ?? 300000);
     $counts = ['created' => 0, 'updated' => 0, 'skipped' => 0, 'failed' => 0];
+    $this->excludedFiles = NULL;
 
     $queue = $this->queueFactory->get(self::QUEUE);
     $storage = $this->entityTypeManager->getStorage('kb_chat_document');
@@ -286,7 +294,8 @@ class DriveSync {
     while ($read < $max_items && microtime(TRUE) < $end && ($item = $queue->claimItem(600))) {
       $file = $item->data;
       $read++;
-      if (isset($crashed[$file['id']])) {
+      // Crashed before, or excluded since it was queued.
+      if (isset($crashed[$file['id']]) || !$this->wanted($file)) {
         $counts['skipped']++;
         $queue->deleteItem($item);
         continue;
@@ -344,13 +353,17 @@ class DriveSync {
   /**
    * Whether a listed file should be indexed.
    *
-   * Leaves out unsupported types, Office lock files ("~$Report.docx") and
+   * Leaves out unsupported types, Office lock files ("~$Report.docx"),
    * files whose names contain an entry of exclude_names (case-insensitive),
-   * such as contact lists.
+   * such as contact lists, and files listed in exclude_files.
    */
   protected function wanted(array $file): bool {
     $name = mb_strtolower($file['name'] ?? '');
     if (!$this->extractor->supports($file['mimeType']) || str_starts_with($name, '~$')) {
+      return FALSE;
+    }
+    $this->excludedFiles ??= array_flip(self::fileIds($this->settings()['exclude_files'] ?? []));
+    if (isset($this->excludedFiles[$file['id'] ?? ''])) {
       return FALSE;
     }
     foreach ($this->settings()['exclude_names'] ?? [] as $fragment) {
@@ -359,6 +372,13 @@ class DriveSync {
       }
     }
     return TRUE;
+  }
+
+  /**
+   * The file IDs in exclude_files entries ("ID  title": the title is a note).
+   */
+  public static function fileIds(array $entries): array {
+    return array_values(array_filter(array_map(fn($entry) => strtok(trim((string) $entry), " \t") ?: '', $entries)));
   }
 
   /**

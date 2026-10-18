@@ -9,6 +9,7 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Queue\QueueFactory;
 use Drupal\Core\State\StateInterface;
+use Drupal\Core\Url;
 use Drupal\kb_chat\Drive\DriveSync;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -137,6 +138,15 @@ class DriveSettingsForm extends ConfigFormBase {
       '#default_value' => implode("\n", $config->get('exclude_names') ?? []),
       '#rows' => 4,
     ];
+    $form['exclude_files'] = [
+      '#type' => 'textarea',
+      '#title' => $this->t('Files to leave out'),
+      '#description' => $this->t('One per line: the file ID from its Drive URL, optionally followed by its name as a note. The easiest way to add files is <a href=":url">Indexed files</a>, which removes them from the chat at once and adds them here. Delete a line to let the file back in at the next listing.', [
+        ':url' => Url::fromRoute('kb_chat.drive_files')->toString(),
+      ]),
+      '#default_value' => implode("\n", $config->get('exclude_files') ?? []),
+      '#rows' => 6,
+    ];
     $form['list_interval'] = [
       '#type' => 'select',
       '#title' => $this->t('List the drives for changes'),
@@ -169,6 +179,7 @@ class DriveSettingsForm extends ConfigFormBase {
       ->set('exclude_drives', $this->lines($form_state->getValue('exclude_drives')))
       ->set('exclude_folders', array_map(fn($line) => trim($line, " /"), $this->lines($form_state->getValue('exclude_folders'))))
       ->set('exclude_names', $this->lines($form_state->getValue('exclude_names')))
+      ->set('exclude_files', $this->lines($form_state->getValue('exclude_files')))
       ->set('list_interval', (int) $form_state->getValue('list_interval'))
       ->set('max_file_bytes', (int) $form_state->getValue('max_file_mb') * 1048576)
       ->set('max_pdf_bytes', (int) $form_state->getValue('max_pdf_mb') * 1048576)

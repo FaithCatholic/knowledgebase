@@ -166,12 +166,20 @@ files over 25 MB are skipped.
   (`Custom Publishing/Production`) or a folder ID. `drush kb-drive --folders="Custom Publishing"`
   shows indexable files per folder.
 - file names to skip, such as contact lists
+- single files to leave out (`exclude_files`): a file ID, then its name as a note
 - how often to re-list the drives
 - the file and PDF size limits
 
 The page also shows when the drives were last listed, how many files are waiting, and any
 files that crashed the sync. **Re-list the drives on the next run** applies changes within
 5 minutes. The service account keys stay in `settings.php`.
+
+**Indexed files** (the second tab, `/admin/config/search/kb-chat-drive/files`) lists every
+Drive file in the chat, 50 to a page, with its drive, type, who can see it, when it changed
+and how much text it has. Filter by name, drive, type or tier, and sort by any column (by
+Text to find huge spreadsheets). **Remove selected files from the chat** deletes them from
+the search index at once and adds them to "Files to leave out", so neither the next listing
+nor a copy still waiting in the read queue brings them back.
 
 ### Setup
 

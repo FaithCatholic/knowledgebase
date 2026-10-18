@@ -1,0 +1,9 @@
+kb_chat.drive_settings:
+  title: 'Settings'
+  route_name: kb_chat.drive_settings
+  base_route: kb_chat.drive_settings
+kb_chat.drive_files:
+  title: 'Indexed files'
+  route_name: kb_chat.drive_files
+  base_route: kb_chat.drive_settings
+  weight: 10

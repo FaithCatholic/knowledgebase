@@ -56,6 +56,11 @@ kb_chat.drive:
       label: 'Skip files whose names contain these'
       sequence:
         type: string
+    exclude_files:
+      type: sequence
+      label: 'Files to leave out: a file ID, then optionally its title as a note'
+      sequence:
+        type: string
     list_interval:
       type: integer
       label: 'Seconds between full listings of the drives'

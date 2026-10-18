@@ -1,0 +1,211 @@
+<p>This guide is for knowledge base administrators. It covers how KB Chat works, every setting, the background jobs that keep it current, and what to do when something goes wrong. Staff see the chat as <strong>FAITH Search Agent</strong>; in the admin pages, the agent, assistant and settings are named KB Chat. For how staff use it, see the FAITH Search Agent user guide. The technical reference for developers is the <code>kb_chat</code> module's README in the kb code repository.</p>
+
+<h2 id="how-it-works">How it works</h2>
+<p>KB Chat is built on Drupal's AI modules. A question goes to the <strong>KB Chat</strong> AI agent, which runs on Claude (Anthropic). The agent decides which tools to use, calls them, and writes an answer from what they return, with links to its sources.</p>
+<ul>
+  <li><strong>Knowledge base search</strong> covers kb pages, Google shared drive files and trusted website pages. They're all held in one search index, <code>kb_chat_content</code>, stored as vectors in a PostgreSQL database (<code>vectordb</code>) on Upsun. Google's Gemini model turns text into vectors.</li>
+  <li><strong>Live tools</strong> ask other systems at question time: Trello, the BigQuery data warehouse, the magazine archive (catholicmagazines.org), FAITH publications (the faithmagazine "mothership" site), and the priority documents in Google Drive.</li>
+  <li><strong>Access:</strong> every search result is checked against the asking user's permissions before Claude sees it, and the live tools apply the same staff and management split.</li>
+</ul>
+
+<h2 id="permissions">Roles and permissions</h2>
+<dl>
+  <dt><strong>View staff documents in the kb chat</strong></dt>
+  <dd>Google Drive files shared with allemployees@. Granted to FAITH Staff and Management.</dd>
+  <dt><strong>View management documents in the kb chat</strong></dt>
+  <dd>Drive files shared only with mgtteam@, plus the management data warehouse views. Management only.</dd>
+  <dt><strong>Administer KB chat sources</strong></dt>
+  <dd>The Google Drive settings, the indexed files list and the trusted websites.</dd>
+  <dt><strong>View KB costs</strong></dt>
+  <dd>The KB costs this month block.</dd>
+  <dt><strong>View KB chat status</strong></dt>
+  <dd>The KB chat status block.</dd>
+</dl>
+<p>kb pages follow the site's normal content access: a page staff can't open never reaches the chat for them. Keep <strong>Allow access bypass</strong> switched off in the assistant's search settings, or this check is skipped.</p>
+
+<h2 id="agent">The KB Chat agent</h2>
+<p><strong>Configuration → AI → AI Agents → KB Chat</strong> (<code>/admin/config/ai/agents</code>).</p>
+<ul>
+  <li><strong>Agent Instructions</strong> tell Claude which tools to use when, which sources to prefer, and how to cite. Type them as plain text. The editor saves typed Markdown with escape characters, and kb removes them automatically on save, so a citation example like [Title](URL) reaches Claude intact.</li>
+  <li><strong>Tools:</strong> the agent can only use enabled tools. They are RAG/Vector Search (the knowledge base), Read priority documents, Search the magazine archive, Search FAITH publications, Query the data warehouse and Search Trello. When you enable a tool, describe it in the instructions too.</li>
+  <li>Leave <strong>Default information tools</strong> empty. A blank entry there breaks the chat.</li>
+</ul>
+<p>The <strong>KB Chat AI assistant</strong> (Configuration → AI → AI Assistants) wraps the agent. Don't set temperature or top-k on it: Claude Opus 5.5 rejects them, and kb strips them as a safeguard.</p>
+<p>The assistant's memory keeps <strong>one conversation per user for 7 days</strong>, sending the last 10 exchanges to Claude as context. The conversation reopens in the chat box until it expires or the user chooses Clear history.</p>
+<p>The chat box is the <strong>AI DeepChat</strong> block. In the Content region it shows inline on the page, with a link to <strong>My searches</strong> (<code>/my-searches</code>) underneath, where each user sees their own past conversations from the last 30 days. In the block settings, keep both <strong>streaming</strong> options switched off, or answers hang on the three dots.</p>
+<p><strong>Trusted Domains</strong> (Configuration → AI → AI Settings, advanced settings) lists the websites answers may link to. The AI module deletes links to any other site from answers, to stop a hidden instruction in a document from sending data to an outside site. It lists kb, Google Docs and Drive, Trello, Catholic Magazines, every digital publishing site and each trusted website. When you add a trusted website or a new publication domain, add its domain here too, or answers can't link to it.</p>
+
+<h2 id="drive">Google Drive</h2>
+<p><strong>Configuration → Search → KB chat Google Drive</strong> (<code>/admin/config/search/kb-chat-drive</code>) has two tabs: Settings and Indexed files.</p>
+
+<h3 id="drive-tiers">Which files, and who sees them</h3>
+<p>Two Google service accounts read the shared drives. One is a member of allemployees@ only, the other of mgtteam@ only. A file the staff account can open becomes a <strong>staff</strong> document. A file only the management account can open becomes a <strong>management</strong> document. Google's sharing decides the tier, so to change who sees a file in the chat, change its sharing in Drive.</p>
+<p>Only files in <strong>shared drives</strong> are included. My Drive files, and files shared only with individuals or with "anyone at faithcatholic.com", are not. Supported types are Google Docs, Sheets (every sheet) and Slides, PDF (text only, not scanned images), Word (.docx), Excel (.xlsx), plain text, CSV and Markdown.</p>
+
+<h3 id="drive-settings">Settings tab</h3>
+<dl>
+  <dt><strong>Status</strong></dt>
+  <dd>When the drives were last listed, how many files are waiting to be read, and any files skipped because they crashed the sync. <strong>Re-list the drives on the next run</strong> applies your changes within 5 minutes. <strong>Try these files again</strong> retries crashed files.</dd>
+  <dt><strong>Priority documents</strong></dt>
+  <dd>Documents the chat checks before others, such as the production schedules and management meeting notes. Enter one per line: the Drive link, then <code>|</code> and what it's for, for example <code>https://docs.google.com/spreadsheets/d/…/edit | Production schedule for all magazines: print, mail and ad deadlines</code>. The note tells Claude when to use the document, so make it descriptive. Under the box, the page shows which document each line found. The chat reads priority documents live from Drive (reused for up to 10 minutes) and still respects their tier. Each one must be in a synced shared drive.</dd>
+  <dt><strong>Shared drives to leave out</strong></dt>
+  <dd>One drive name or ID per line. Accounts Payable and Magazines are left out.</dd>
+  <dt><strong>Folders to leave out</strong></dt>
+  <dd>One per line, with everything inside: a path starting with the drive name, like <code>Custom Publishing/Production/2024</code>, or the folder ID from the end of its Drive link. Capitals don't matter, and names with spaces need no quotes.</dd>
+  <dt><strong>Skip files whose names contain</strong></dt>
+  <dd>Words or phrases, one per line, for files that shouldn't be easy to query, such as contact or donor lists.</dd>
+  <dt><strong>Files to leave out</strong></dt>
+  <dd>Single files, one per line: the file ID, then its name as a note. The Indexed files tab fills this in for you.</dd>
+  <dt><strong>List the drives for changes</strong></dt>
+  <dd>How often the drives are checked for new, changed and removed files. The default is every 6 hours.</dd>
+  <dt><strong>Largest file / Largest PDF to read</strong></dt>
+  <dd>Bigger files are skipped. Large PDFs are usually print proofs, and they can run the sync out of memory.</dd>
+</dl>
+
+<h3 id="drive-files">Indexed files tab</h3>
+<p>Lists every Drive file in the chat, 50 to a page, with its shared drive, type, who can see it, when it last changed, and how much text it has. Filter by name, drive, type or tier, and sort by any column. Sorting by Text finds huge spreadsheets that can crowd out better results.</p>
+<ul>
+  <li><strong>Ignore selected files</strong> takes the ticked files out of the chat immediately and keeps them out.</li>
+  <li><strong>Ignored files</strong>, at the bottom, lists everything ignored. <strong>Stop ignoring selected files</strong> brings files back within one sync.</li>
+  <li>To leave out a whole folder, use <strong>Folders to leave out</strong> on the Settings tab instead.</li>
+</ul>
+
+<h3 id="drive-sync">How the sync runs</h3>
+<p>Every 5 minutes a background job checks whether the drives are due for listing. A listing walks every shared drive and queues new and changed files. It also removes files that were deleted, unshared or excluded, but only after a complete listing, so a Google outage never removes anything. Every run then reads up to 100 queued files, for at most 4 minutes. A large first sync, or a big new folder, can take many hours to work through. The status block estimates how long.</p>
+
+<h2 id="websites">Trusted websites</h2>
+<p><strong>Configuration → Search → KB chat trusted websites</strong> (<code>/admin/config/search/kb-chat-websites</code>). These are outside websites the chat searches and cites. Their pages are indexed, not copied into kb, and answers link back to the website.</p>
+<dl>
+  <dt><strong>Name</strong></dt>
+  <dd>Who runs the site and what it covers. Answers cite the site by this name.</dd>
+  <dt><strong>Start URLs</strong> and <strong>Only follow links under</strong></dt>
+  <dd>Where the crawl starts, and the URL prefixes it may follow. Use the prefixes to keep the crawl to the section you trust.</dd>
+  <dt><strong>Include linked PDF, Word and Excel files</strong></dt>
+  <dd>Also reads documents on the same site that the pages link to.</dd>
+  <dt><strong>Who runs it</strong></dt>
+  <dd>FAITH or a third party. Answers say which.</dd>
+  <dt><strong>What it is the authority for</strong></dt>
+  <dd>One or two sentences given to Claude with every result from the site, saying when to rely on it.</dd>
+  <dt><strong>How often the information changes</strong>, <strong>Who can see it</strong>, <strong>Most pages to index</strong>, <strong>Enabled</strong></dt>
+  <dd>The re-crawl interval (daily, weekly or monthly), all staff or management, the page cap, and whether it is still crawled.</dd>
+</dl>
+<p>The list shows each site's indexed pages and last crawl. <strong>Crawl now</strong> queues a site for the next run, within 10 minutes. The crawler follows robots.txt and reads one page per second.</p>
+<p>Some sites block automated readers. USCCB, for example, shows a "Checking connection" challenge on every page except the home page. Those can't be crawled; save the documents you need into a shared drive instead. Sites built entirely with JavaScript may also index few or no pages.</p>
+
+<h2 id="other-sources">Other sources</h2>
+<dl>
+  <dt><strong>Trello</strong></dt>
+  <dd>Live search of an approved list of boards, read with a read-only Trello token. Cards from boards not on the list are never shown. The board list is in kb's <code>settings.php</code>. To check which boards the account can see, run <code>drush kb-trello</code>.</dd>
+  <dt><strong>Data warehouse</strong></dt>
+  <dd>Read-only queries on BigQuery (<code>faith-data-warehouse</code>), limited to views made for the chat: <code>kb_chat</code> for everyone, <code>kb_chat_management</code> for Management. Each query must be a single SELECT that scans at most 1 GB, and returns at most 200 rows. The views leave out customer names and contact details. Their descriptions double as Claude's instructions, so keep them accurate when you change a view.</dd>
+  <dt><strong>Magazine archive</strong></dt>
+  <dd>Full-text search of every issue on catholicmagazines.org, through that site's search API.</dd>
+  <dt><strong>FAITH publications</strong></dt>
+  <dd>Search across every publication on the faithmagazine site: Faith Syndicated, Content Evangelist, FAITH Magazine and the diocesan sites. Only published, public articles are returned.</dd>
+</dl>
+
+<h2 id="index">The search index</h2>
+<p><strong>Configuration → Search and metadata → Search API → KB chat content</strong> (<code>/admin/config/search/search-api/index/kb_chat_content</code>) indexes kb pages (Article, Diagram, Basic page and Resource) and Drive and website documents.</p>
+<ul>
+  <li>Keep <strong>Index items immediately</strong> switched off. A background job indexes changes every 5 minutes. With it on, saving a page waits for Gemini and can time out.</li>
+  <li><strong>Rendered HTML output</strong> must stay the only Main content field, using the Default view mode for shared drive documents.</li>
+  <li>To rebuild everything, use <strong>Rebuild tracking information</strong> or <strong>Queue all items for reindexing</strong>, then let the background job work through it. Several thousand items take hours, and the chat keeps working meanwhile.</li>
+</ul>
+
+<h2 id="monitoring">Monitoring</h2>
+<h3 id="status-block">KB chat status block</h3>
+<p>One screen with everything that feeds the chat. At the top it lists anything that needs a look, worst first, or says everything is running normally. Below that:</p>
+<ul>
+  <li><strong>Content index:</strong> items indexed and waiting, by source.</li>
+  <li><strong>Google Drive:</strong> documents per tier, last listing, files waiting (with a rough time to finish), and crashed files.</li>
+  <li><strong>Trusted websites:</strong> pages per site and last crawl. It warns on sites with no pages or overdue for a crawl.</li>
+  <li><strong>Cron jobs:</strong> the last run, duration, result and last success of each background job. "Never finished" means the run was stopped by Upsun's time limit or ran out of memory.</li>
+</ul>
+
+<h3 id="costs-block">KB costs this month block</h3>
+<ul>
+  <li><strong>AI:</strong> kb's live estimate and each provider's billed figure for Claude (Anthropic) and Gemini (Google), plus chat requests and the average cost per request.</li>
+  <li><strong>Upsun hosting:</strong> this month's open invoice for the FAITH Flex organization, next to last month's. kb is its only project. Resources are billed for the whole month from day one; usage grows until month end.</li>
+  <li><strong>Total this month:</strong> AI plus hosting.</li>
+</ul>
+<p>If kb's estimate and a provider's billed figure drift far apart, something else may be using the same key, or a price in <code>settings.php</code> is out of date.</p>
+
+<h3 id="logs">Chat logs</h3>
+<p><strong>Configuration → AI → AI Logging</strong> (<code>/admin/config/ai/logging</code>) keeps every chat question and answer for 30 days, including which tools were called. It's the first place to look when an answer is wrong. Indexing isn't logged, because it would fill the database.</p>
+
+<h2 id="jobs">Background jobs</h2>
+<p>These run on Upsun's cron:</p>
+<dl>
+  <dt><code>kbindex</code>, every 5 minutes</dt>
+  <dd>Indexes up to 100 new or changed items.</dd>
+  <dt><code>kbdrive</code>, every 5 minutes</dt>
+  <dd>Lists the drives when due, then reads up to 100 queued files.</dd>
+  <dt><code>kbweb</code>, every 10 minutes</dt>
+  <dd>Crawls the trusted websites that are due.</dd>
+  <dt><code>drupal</code>, every 19 minutes</dt>
+  <dd>Refreshes the Anthropic cost figure and the Upsun billing figures hourly.</dd>
+</dl>
+<p>Each job has a time limit, so code deploys never wait long for a running job.</p>
+
+<h2 id="commands">Drush commands</h2>
+<p>Run these on production with <code>upsun drush -e main -- &lt;command&gt;</code>.</p>
+<dl>
+  <dt><code>kb-drive --drives</code></dt>
+  <dd>The shared drives each account can see, and which are excluded.</dd>
+  <dt><code>kb-drive --folders="Drive Name"</code></dt>
+  <dd>Indexable files per folder, to decide what to exclude.</dd>
+  <dt><code>kb-drive --list</code></dt>
+  <dd>List the drives now.</dd>
+  <dt><code>kb-index</code></dt>
+  <dd>Index a batch now.</dd>
+  <dt><code>kb-web &lt;website machine name&gt;</code></dt>
+  <dd>Crawl one website now.</dd>
+  <dt><code>kb-trello</code></dt>
+  <dd>Check the Trello key, token and board list.</dd>
+  <dt><code>kb-costs</code></dt>
+  <dd>Refresh and print this month's AI costs.</dd>
+</dl>
+
+<h2 id="secrets">Keys and secrets</h2>
+<p>These are sensitive Upsun environment variables, never stored in configuration:</p>
+<ul>
+  <li><code>ANTHROPIC_API_KEY</code>: Claude, for answers.</li>
+  <li><code>GEMINI_API_KEY</code>: Gemini, for the search index.</li>
+  <li><code>ANTHROPIC_ADMIN_API_KEY</code>: Anthropic cost reporting.</li>
+  <li><code>GOOGLE_DRIVE_SA_JSON</code>: the staff Drive and warehouse account.</li>
+  <li><code>GOOGLE_DRIVE_MGMT_SA_JSON</code>: the management Drive and warehouse account.</li>
+  <li><code>TRELLO_API_KEY</code> and <code>TRELLO_TOKEN</code>: Trello.</li>
+  <li><code>MAGAZINE_ARCHIVE_TOKEN</code>: the magazine archive search.</li>
+  <li><code>MOTHERSHIP_SEARCH_TOKEN</code>: the FAITH publications search.</li>
+  <li><code>GOOGLE_BILLING_PUSH_TOKEN</code>: Google's billing notifications.</li>
+  <li><code>UPSUN_API_TOKEN</code>: the Upsun dashboard and hosting costs.</li>
+</ul>
+<p>The magazine archive and FAITH publications sites hold the matching tokens: <code>ARCHIVE_SEARCH_TOKEN</code> and <code>KB_SEARCH_TOKEN</code>. When you rotate a token, change it on both sites.</p>
+
+<h2 id="troubleshooting">Troubleshooting</h2>
+<dl>
+  <dt><strong>The chat shows an error for every question</strong></dt>
+  <dd>Check the most recent log message. Common causes are a temperature or top-k value saved on the assistant, a blank Default information tools entry on the agent, or an expired or out-of-credit API key.</dd>
+  <dt><strong>The chat hangs on the three dots</strong></dt>
+  <dd>One of the DeepChat block's streaming options is on.</dd>
+  <dt><strong>A Drive file isn't found</strong></dt>
+  <dd>Check, in order:
+    <ul>
+      <li>Is it in a shared drive, shared with allemployees@ or mgtteam@?</li>
+      <li>Is its drive or folder excluded, or its name skipped?</li>
+      <li>Is it on Indexed files, or listed under Ignored files?</li>
+      <li>Is it over the size limit, scanned, or protected?</li>
+    </ul>
+    New files can take up to 6 hours, plus queue time.</dd>
+  <dt><strong>A staff member sees management information</strong></dt>
+  <dd>Check the file's sharing in Drive: if allemployees@ can open it, it's a staff document. For a kb page, check its access settings.</dd>
+  <dt><strong>Answers have no links</strong></dt>
+  <dd>Check that the source's domain is in <strong>Trusted Domains</strong>: links to any other site are deleted from answers. Then check that the agent instructions ask for Markdown links using each result's URL.</dd>
+  <dt><strong>A website shows few or no pages</strong></dt>
+  <dd>The site may block automated readers or build its pages with JavaScript. Check the start URLs and link prefixes, then try Crawl now.</dd>
+  <dt><strong>A deploy is waiting</strong></dt>
+  <dd>Deploys wait for running cron jobs. The status block shows what's running; every job stops within its time limit.</dd>
+</dl>
+
+<h2 id="changes">Making changes safely</h2>
+<p>Settings changed in the admin pages live in production's database until exported. After changing the agent, assistant, blocks, index or permissions, export the configuration and commit it, so the next deploy or a sandbox copy doesn't lose it. Google Drive settings and trusted websites are configuration too.</p>

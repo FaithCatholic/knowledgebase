@@ -1,0 +1,14 @@
+--- a/modules/ai_chatbot/src/Plugin/Block/DeepChatFormBlock.php
++++ b/modules/ai_chatbot/src/Plugin/Block/DeepChatFormBlock.php
+@@ -1097,8 +1097,9 @@
+     $converter = $this->commonMarkConverterFactory->fromOptions(['html_input' => 'escape']);
+     $messages = [];
+     foreach ($history as $message) {
+-      // Only show messages newer than one day.
+-      if (isset($message['timestamp']) && $message['timestamp'] > strtotime('-1 day')) {
++      // Only show messages newer than seven days, the expiry kb gives the
++      // assistant's chat memory, so a conversation reopens until it expires.
++      if (isset($message['timestamp']) && $message['timestamp'] > strtotime('-7 days')) {
+         $html = $converter->convert($message['message'])->getContent();
+         $messages[] = [
+           'role' => $message['role'],

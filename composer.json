@@ -276,7 +276,8 @@
                 "patches/we_megamenu-menu-item-insert-null-column.patch"
             },
             "drupal/ai": {
-            "Allow tables in DeepChat answers (kb_chat adds GitHub-style tables to the Markdown converter)": "patches/ai_chatbot-allow-table-tags.patch"
+            "Allow tables in DeepChat answers (kb_chat adds GitHub-style tables to the Markdown converter)": "patches/ai_chatbot-allow-table-tags.patch",
+            "Reload chat history for 7 days, not 1, to match kb's chat memory expiry": "patches/ai_chatbot-history-follow-memory-expiry.patch"
         },
         "drupal/search_api": {
                 "Index::__sleep() serializes the WeakReference added to entities in Drupal 11.4":

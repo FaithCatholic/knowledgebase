@@ -9,6 +9,7 @@ use Drupal\ai\OperationType\Chat\ChatOutput;
 use Drupal\ai\OperationType\Chat\StreamedChatMessageIteratorInterface;
 use Drupal\ai\OperationType\Embeddings\EmbeddingsInput;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\kb_chat\ConversationLog;
 use Drupal\kb_chat\CostTracker;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -33,6 +34,7 @@ class UsageSubscriber implements EventSubscriberInterface {
     protected AccountProxyInterface $currentUser,
     #[Autowire(service: 'logger.channel.kb_chat')]
     protected LoggerInterface $logger,
+    protected ConversationLog $conversations,
   ) {}
 
   /**
@@ -58,6 +60,13 @@ class UsageSubscriber implements EventSubscriberInterface {
     }
     catch (\Throwable $e) {
       $this->logger->warning('Could not record AI usage: @message', ['@message' => $e->getMessage()]);
+    }
+    // So is noting the question for "My searches".
+    try {
+      $this->conversations->capture($event);
+    }
+    catch (\Throwable $e) {
+      $this->logger->warning('Could not note the chat question: @message', ['@message' => $e->getMessage()]);
     }
   }
 

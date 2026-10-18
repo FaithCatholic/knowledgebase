@@ -8,8 +8,13 @@ use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\Core\Link;
+use Drupal\Core\Url;
 use Drupal\kb_chat\AnthropicCostReport;
+use Drupal\kb_chat\ConversationLog;
 use Drupal\kb_chat\Plugin\AiFunctionCall\LinkedRagTool;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Hook implementations for KB Chat.
@@ -19,6 +24,9 @@ class KbChatHooks {
   public function __construct(
     protected AnthropicCostReport $anthropicCosts,
     protected StateInterface $state,
+    protected ConversationLog $conversations,
+    #[Autowire(service: 'logger.channel.kb_chat')]
+    protected LoggerInterface $logger,
   ) {}
 
   /**
@@ -35,6 +43,26 @@ class KbChatHooks {
       $this->state->set('kb_chat.anthropic_checked', time());
       $this->anthropicCosts->refresh();
     }
+    $this->conversations->purge();
+  }
+
+  /**
+   * Implements hook_deepchat_prepend_message().
+   *
+   * Saves each answered question of the FAITH Search Agent for "My
+   * searches". Returns nothing to add to the answer.
+   */
+  #[Hook('deepchat_prepend_message')]
+  public function saveConversation($message, $type, $assistant_id, $thread_id): string {
+    if ($assistant_id === 'kb_chat' && is_string($message)) {
+      try {
+        $this->conversations->save((string) $thread_id, $message);
+      }
+      catch (\Throwable $e) {
+        $this->logger->warning('Could not save the conversation: @message', ['@message' => $e->getMessage()]);
+      }
+    }
+    return '';
   }
 
   /**
@@ -107,6 +135,12 @@ class KbChatHooks {
     if (isset($build['#block']) && $build['#block']->getRegion() === 'content') {
       $build['#attributes']['class'][] = 'kb-chat-inline';
       $build['#attached']['library'][] = 'kb_chat/inline-chat';
+      $url = Url::fromRoute('kb_chat.my_searches');
+      if ($url->access()) {
+        $build['#suffix'] = ($build['#suffix'] ?? '') . '<p class="kb-chat-my-searches">'
+          . Link::fromTextAndUrl(new TranslatableMarkup('My searches: your past conversations'), $url)->toString()
+          . '</p>';
+      }
     }
   }
 

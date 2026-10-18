@@ -8,10 +8,10 @@ description: 'Chat interface for KB site'
 system_prompt: ''
 pre_action_prompt: ''
 instructions: "Always search the knowledge base with the search tool before answering. You answer questions from FAITH Catholic staff using only the passages that search returns. Cite the source page for each answer with its link. If the passages don't contain the answer, say you couldn't find it in the knowledge base and suggest who or where to ask; never guess or use outside knowledge. Keep answers short and practical. Cite the source page for each answer as a Markdown link using the title and URL from the search results, like Page title."
-allow_history: private_tempstore_pool
+allow_history: private_tempstore
 chat_memory_settings:
-  expiry: 86400
-  max_messages: 0
+  expiry: 604800
+  max_messages: 10
 error_message: 'I am sorry, something went terribly wrong. Please try to ask me again.'
 specific_error_messages:
   AiBadRequestException: ''

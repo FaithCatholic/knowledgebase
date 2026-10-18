@@ -1,0 +1,37 @@
+/* "My searches" (MySearchesController). */
+.kb-my-searches__day h2 {
+  font-size: 1.1rem;
+  margin: 1.5rem 0 0.5rem;
+}
+.kb-my-searches__item {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.kb-my-searches__meta {
+  font-size: 0.85em;
+  opacity: 0.7;
+}
+.kb-my-searches__exchange {
+  margin: 1.5rem 0;
+}
+.kb-my-searches__question {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.05);
+  margin-bottom: 0.75rem;
+}
+.kb-my-searches__answer table {
+  border-collapse: collapse;
+  display: block;
+  overflow-x: auto;
+}
+.kb-my-searches__answer th,
+.kb-my-searches__answer td {
+  border: 1px solid #d0d0d0;
+  padding: 4px 8px;
+  vertical-align: top;
+}
+.kb-chat-my-searches {
+  margin-top: 0.5rem;
+  font-size: 0.9em;
+}

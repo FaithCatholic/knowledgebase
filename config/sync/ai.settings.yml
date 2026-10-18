@@ -20,6 +20,37 @@ default_providers:
     model_id: claude-opus-4-5-20251101
 default_vdb_provider: postgres
 request_timeout: 60
-allowed_hosts: {  }
+allowed_hosts:
+  - 'kb.faithcatholic.com'
+  - 'docs.google.com'
+  - 'drive.google.com'
+  - 'trello.com'
+  - 'catholicmagazines.org'
+  - '*.catholicmagazines.org'
+  - 'faithsyndicated.org'
+  - '*.faithsyndicated.org'
+  - 'contentevangelist.com'
+  - '*.contentevangelist.com'
+  - 'faithmag.com'
+  - '*.faithmag.com'
+  - 'austindiocese.news'
+  - 'bimissions.org'
+  - 'thenortherncross.org'
+  - 'greatlakesbaycatholic.com'
+  - 'gulfcoastcatholic.org'
+  - 'harvestmagazinemaine.org'
+  - 'madisoncatholicherald.org'
+  - 'neohiocatholic.org'
+  - 'onevoicebhm.org'
+  - 'themiscellany.org'
+  - 'thevalleycatholic.org'
+  - 'faithcatholic.com'
+  - '*.faithcatholic.com'
+  - 'faithcatholicsubscriptions.com'
+  - 'faithcatholicproducts.com'
+  - 'catholicmediaassociation.org'
+  - 'catholicmediaconference.org'
+  - 'micatholic.org'
+  - '*.micatholic.org'
 allowed_hosts_rewrite_links: false
 global_guardrails: {  }

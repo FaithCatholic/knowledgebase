@@ -94,6 +94,23 @@ Then place the block in the region of your choice under *Structure → Block lay
   (`\[Title]\(URL)`), which kept the model from following the citation format. An
   `ai_agent` presave hook removes the escapes on every save.
 
+## Conversations and links
+
+- **Memory:** the KB Chat assistant keeps one conversation per user (`private_tempstore`)
+  for 7 days, with the last 10 exchanges as context, so the chat box reopens it until
+  **Clear history**. `patches/ai_chatbot-history-follow-memory-expiry.patch` makes the
+  block show 7 days of it instead of 1.
+- **My searches** (`/my-searches`, permission *access deepchat api*): each user's own
+  conversations from the last 30 days, linked under the inline chat. `ConversationLog`
+  stores one row per answered question in `kb_chat_conversation`: `UsageSubscriber` notes
+  the question and whether a response is final (no tool calls), and the
+  `deepchat_prepend_message` hook saves it with the thread ID. Cron deletes rows older than
+  30 days. Users can delete a conversation.
+- **Links:** the AI module deletes links in AI output to any host not in **Trusted
+  Domains** (`ai.settings:allowed_hosts`), to stop prompt-injected links sending data out.
+  It lists kb, Google Docs and Drive, Trello, catholicmagazines.org, the mothership's
+  domains and the trusted websites. Add a domain there when adding a source.
+
 ## Status
 
 The **KB chat status** block (category KB Chat, permission **View KB chat status**) puts

@@ -9,6 +9,7 @@
  * Implements hook_schema().
  */
 function kb_chat_schema(): array {
+  $schema['kb_chat_conversation'] = _kb_chat_conversation_schema();
   $schema['kb_chat_usage'] = [
     'description' => 'One AI provider call (chat or embeddings) and its estimated cost.',
     'fields' => [
@@ -173,4 +174,78 @@ function kb_chat_update_11004(): string {
     }
   }
   return $cleaned ? 'Removed Markdown escapes from the instructions of: ' . implode(', ', $cleaned) . '.' : 'No agent instructions needed cleaning.';
+}
+
+/**
+ * The table of "My searches" conversations.
+ */
+function _kb_chat_conversation_schema(): array {
+  return [
+    'description' => 'One question and its answer from the FAITH Search Agent, for the asker\'s "My searches".',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'uid' => [
+        'description' => 'The user who asked.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'thread' => [
+        'description' => 'The chat thread ID: one conversation.',
+        'type' => 'varchar_ascii',
+        'length' => 128,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'question' => [
+        'type' => 'text',
+        'size' => 'medium',
+        'not null' => TRUE,
+      ],
+      'answer' => [
+        'description' => 'The answer as Markdown, as shown in the chat.',
+        'type' => 'text',
+        'size' => 'medium',
+        'not null' => TRUE,
+      ],
+      'created' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+    ],
+    'primary key' => ['id'],
+    'indexes' => [
+      'uid_thread' => ['uid', 'thread'],
+      'created' => ['created'],
+    ],
+  ];
+}
+
+/**
+ * Add "My searches", and keep each user's conversation for 7 days.
+ *
+ * Creates the conversation table. Switches the KB Chat assistant from
+ * "multiple threads" memory, which started a new thread on every page load,
+ * to a single ongoing thread per user that lasts 7 days (until Clear
+ * history), with the last 10 exchanges sent to Claude as context.
+ */
+function kb_chat_update_11005(): string {
+  $schema = \Drupal::database()->schema();
+  if (!$schema->tableExists('kb_chat_conversation')) {
+    $schema->createTable('kb_chat_conversation', _kb_chat_conversation_schema());
+  }
+  $config = \Drupal::configFactory()->getEditable('ai_assistant_api.ai_assistant.kb_chat');
+  if ($config->isNew()) {
+    return 'Created the My searches table. The KB Chat assistant was not found, so its memory was not changed.';
+  }
+  $config->set('allow_history', 'private_tempstore')
+    ->set('chat_memory_settings', ['expiry' => 604800, 'max_messages' => 10])
+    ->save();
+  return 'Created the My searches table, and set the KB Chat assistant to keep one conversation per user for 7 days.';
 }

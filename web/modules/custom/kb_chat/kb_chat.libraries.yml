@@ -12,3 +12,7 @@ status-block:
   css:
     theme:
       css/status-block.css: {}
+my-searches:
+  css:
+    theme:
+      css/my-searches.css: {}

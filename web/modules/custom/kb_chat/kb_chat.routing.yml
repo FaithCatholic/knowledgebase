@@ -32,3 +32,32 @@ kb_chat.drive_files:
     _title: 'Indexed Google Drive files'
   requirements:
     _permission: 'administer kb chat websites'
+
+kb_chat.my_searches:
+  path: '/my-searches'
+  defaults:
+    _controller: '\Drupal\kb_chat\Controller\MySearchesController::list'
+    _title: 'My searches'
+  requirements:
+    _permission: 'access deepchat api'
+    _user_is_logged_in: 'TRUE'
+
+kb_chat.my_search:
+  path: '/my-searches/{thread}'
+  defaults:
+    _controller: '\Drupal\kb_chat\Controller\MySearchesController::view'
+    _title_callback: '\Drupal\kb_chat\Controller\MySearchesController::title'
+  requirements:
+    _permission: 'access deepchat api'
+    _user_is_logged_in: 'TRUE'
+    thread: '[^/]+'
+
+kb_chat.my_search_delete:
+  path: '/my-searches/{thread}/delete'
+  defaults:
+    _controller: '\Drupal\kb_chat\Controller\MySearchesController::delete'
+  requirements:
+    _permission: 'access deepchat api'
+    _user_is_logged_in: 'TRUE'
+    _csrf_token: 'TRUE'
+    thread: '[^/]+'

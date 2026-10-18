@@ -156,3 +156,21 @@ function kb_chat_update_11003(): string {
   }
   return 'The trusted website entity type was already registered.';
 }
+
+/**
+ * Remove the instructions editor's Markdown escapes from the AI agents.
+ *
+ * Saving runs kb_chat's ai_agent presave hook, which turns "\[Title]\(URL)"
+ * back into "[Title](URL)" so the model sees the citation format as meant.
+ */
+function kb_chat_update_11004(): string {
+  $cleaned = [];
+  foreach (\Drupal::entityTypeManager()->getStorage('ai_agent')->loadMultiple() as $agent) {
+    $before = (string) $agent->get('system_prompt');
+    $agent->save();
+    if ((string) $agent->get('system_prompt') !== $before) {
+      $cleaned[] = $agent->label();
+    }
+  }
+  return $cleaned ? 'Removed Markdown escapes from the instructions of: ' . implode(', ', $cleaned) . '.' : 'No agent instructions needed cleaning.';
+}

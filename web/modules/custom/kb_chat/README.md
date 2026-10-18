@@ -83,6 +83,17 @@ drush cex
 
 Then place the block in the region of your choice under *Structure → Block layout*.
 
+## Chat formatting
+
+- **Tables:** the AI module's Markdown converter is plain CommonMark, so tables showed as
+  raw pipes. `KbChatServiceProvider` swaps in `Markdown\GfmConverterFactory`, which adds
+  GitHub-style tables, strikethrough and bare-URL links. DeepChat's tag filter is patched
+  to keep table tags (`patches/ai_chatbot-allow-table-tags.patch`), and `js/inline-chat.js`
+  styles tables inside the chat's shadow DOM.
+- **Agent instructions:** the agent form's rich-text editor saves typed Markdown escaped
+  (`\[Title]\(URL)`), which kept the model from following the citation format. An
+  `ai_agent` presave hook removes the escapes on every save.
+
 ## Status
 
 The **KB chat status** block (category KB Chat, permission **View KB chat status**) puts

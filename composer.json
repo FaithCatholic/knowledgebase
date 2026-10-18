@@ -275,7 +275,10 @@
                 "Fix fatal error when adding a link under an item with no menu-link column":
                 "patches/we_megamenu-menu-item-insert-null-column.patch"
             },
-            "drupal/search_api": {
+            "drupal/ai": {
+            "Allow tables in DeepChat answers (kb_chat adds GitHub-style tables to the Markdown converter)": "patches/ai_chatbot-allow-table-tags.patch"
+        },
+        "drupal/search_api": {
                 "Index::__sleep() serializes the WeakReference added to entities in Drupal 11.4":
                 "patches/search_api-index-sleep-typeddata.patch"
             },

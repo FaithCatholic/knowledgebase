@@ -1,0 +1,15 @@
+--- a/modules/ai_chatbot/src/Controller/DeepChatApi.php
++++ b/modules/ai_chatbot/src/Controller/DeepChatApi.php
+@@ -74,6 +74,12 @@
+     'p',
+     'pre',
+     'strong',
++    'table',
++    'tbody',
++    'td',
++    'th',
++    'thead',
++    'tr',
+     'ul',
+   ];
+ 

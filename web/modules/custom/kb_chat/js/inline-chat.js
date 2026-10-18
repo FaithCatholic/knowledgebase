@@ -28,6 +28,16 @@
           header.removeAttribute('role');
           header.removeAttribute('tabindex');
         }
+        // Answers are rendered inside the chat's shadow DOM, out of reach of
+        // the theme: give tables borders and room, and let wide ones scroll.
+        const chat = container.querySelector('deep-chat');
+        if (chat) {
+          chat.auxiliaryStyle = `
+            table { border-collapse: collapse; margin: 0.5em 0; display: block; overflow-x: auto; max-width: 100%; }
+            th, td { border: 1px solid #d0d0d0; padding: 4px 8px; text-align: left; vertical-align: top; }
+            th { background: rgba(0, 0, 0, 0.05); }
+          `;
+        }
         // Load the chat library now rather than waiting for a click.
         if (Drupal.aiDeepchat && Drupal.aiDeepchat.load) {
           Drupal.aiDeepchat.load();

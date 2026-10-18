@@ -3,6 +3,7 @@
 namespace Drupal\kb_chat\Hook;
 
 use Drupal\Core\Block\BlockPluginInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\State\StateInterface;
@@ -33,6 +34,26 @@ class KbChatHooks {
     if ($this->anthropicCosts->isConfigured() && time() - $last >= $interval) {
       $this->state->set('kb_chat.anthropic_checked', time());
       $this->anthropicCosts->refresh();
+    }
+  }
+
+  /**
+   * Implements hook_ENTITY_TYPE_presave() for ai_agent.
+   *
+   * The agent form edits instructions in a rich-text Markdown editor
+   * (MDXEditor), which saves typed Markdown as literal text: "[Title](URL)"
+   * becomes "\[Title]\(URL)", "1." becomes "1\." and trailing spaces
+   * "&#x20;". The model then reads the escapes, and copies or ignores the
+   * examples. The instructions are text for the model, not rendered
+   * Markdown, so the escapes are removed.
+   */
+  #[Hook('ai_agent_presave')]
+  public function unescapeInstructions(EntityInterface $agent): void {
+    $prompt = (string) $agent->get('system_prompt');
+    $clean = preg_replace('/\\\\([\\[\\]()\\.:*_#+!`>|~-])/', '$1', $prompt);
+    $clean = preg_replace('/[ \t]+$/m', '', str_replace('&#x20;', ' ', $clean));
+    if ($clean !== $prompt) {
+      $agent->set('system_prompt', $clean);
     }
   }
 

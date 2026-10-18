@@ -8,3 +8,7 @@ inline-chat:
     - core/drupal
     - core/once
     - ai_chatbot/sticky-chatbot
+status-block:
+  css:
+    theme:
+      css/status-block.css: {}

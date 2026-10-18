@@ -144,7 +144,7 @@ applications:
         spec: '*/5 * * * *'
         timeout: 300
         commands:
-          start: 'cd web ; drush search-api:index kb_chat_content --limit=100 --batch-size=25'
+          start: 'cd web ; drush kb-chat:index --limit=100 --batch-size=25 --time-limit=240'
       # Re-crawls the kb chat's trusted websites that are due (kb_chat module).
       kbweb:
         spec: '*/10 * * * *'

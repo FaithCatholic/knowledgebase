@@ -13,9 +13,12 @@ asking user's view access. Drupal pages are filtered by kb's existing Node acces
 a management-only page never reaches Claude for a staff user. **The assistant's RAG setting
 "Allow access bypass" must stay off**, or this check is skipped.
 
-## AI costs
+## Costs
 
-The **AI costs this month** block (category KB Chat) shows, for Claude and Gemini:
+The **KB costs this month** block (category KB Chat) has three parts: AI, Upsun hosting,
+and a total of the two.
+
+**AI**, for Claude and Gemini:
 
 - **Live estimate:** kb's own figure. Every AI call's token counts are saved in the
   `kb_chat_usage` table and priced with `$settings['kb_chat']['prices']` in `settings.php`.
@@ -27,8 +30,20 @@ The **AI costs this month** block (category KB Chat) shows, for Claude and Gemin
   - **Google:** the month-to-date cost from the project's budget. Google pushes it to kb
     several times a day. It's an estimate and a few hours behind.
 
-Only roles with **View AI costs** see the block. Months are calendar months in UTC, the way
-both providers bill.
+**Upsun hosting:** the open invoice of the FAITH Flex organization's billing profile
+(`$settings['kb_chat']['upsun_billing_profile']`), next to last month's. kb is the only
+project there, so the whole invoice counts: the KB project, plus the organization's
+support, user licenses and discounts. The figures come from the **upsun_dashboard**
+module's hourly snapshot, so there's no second Upsun token or API call. On a flexible plan,
+resources are priced for the whole month from day one, and usage (requests, bandwidth,
+builds) grows until month end.
+
+**Total this month:** AI plus hosting. For AI it uses each provider's billed figure where
+one has been reported, otherwise kb's live estimate.
+
+Only roles with **View KB costs** (machine name `view ai costs`) see the block. Months are
+calendar months in UTC, the way the providers bill. The block's plugin ID is still
+`kb_chat_ai_costs`, so the placed block keeps working.
 
 If the estimate and the billed figure drift far apart, something other than kb is using the
 same key or project, or a price in settings is out of date.
@@ -67,6 +82,28 @@ drush cex
 ```
 
 Then place the block in the region of your choice under *Structure → Block layout*.
+
+## Status
+
+The **KB chat status** block (category KB Chat, permission **View KB chat status**) puts
+the health of everything that feeds the chat on one screen:
+
+- **Summary:** anything that needs a look, worst first, or "Everything is running normally".
+- **Content index:** items indexed and waiting, for kb pages and for Drive files and website
+  pages; warns if the vector database is unavailable or "Index items immediately" is on.
+- **Google Drive:** documents per tier, when the drives were last listed, files waiting to
+  be read (with a rough time to finish at the last run's pace), and files skipped after
+  crashing the sync.
+- **Trusted websites:** pages indexed and last crawl per website; warns on a website with
+  no pages or overdue for a crawl.
+- **Cron jobs:** for `kbindex`, `kbdrive` and `kbweb`, when each last started, how long it
+  took, its result and its last success. A run that started and never finished was stopped
+  by the Upsun timeout or out of memory.
+
+The cron runs are recorded by the `kb-chat:index`, `kb-chat:drive-sync` and
+`kb-chat:web-sync` commands (`JobLog`, in state as `kb_chat.job.*`). `kbindex` runs
+`drush kb-index` rather than `search-api:index` so its runs are recorded. Crawling one
+website by name (`drush kb-web mcc_benefits`) isn't recorded as a `kbweb` run.
 
 ## Google Drive documents
 

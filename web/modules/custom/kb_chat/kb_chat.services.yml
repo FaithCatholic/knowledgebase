@@ -15,3 +15,4 @@ services:
     tags:
       - { name: event_subscriber }
   Drupal\kb_chat\Web\WebSync: ~
+  Drupal\kb_chat\JobLog: ~

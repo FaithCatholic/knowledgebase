@@ -4,13 +4,17 @@ namespace Drupal\kb_chat\Drush\Commands;
 
 use Drupal\kb_chat\AnthropicCostReport;
 use Drupal\kb_chat\CostTracker;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Lock\LockBackendInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\kb_chat\Drive\DriveSync;
+use Drupal\kb_chat\JobLog;
 use Drupal\kb_chat\Trello\TrelloClient;
 use Drupal\kb_chat\Web\WebSync;
 use Drush\Attributes as CLI;
 use Drush\Commands\AutowireTrait;
 use Drush\Commands\DrushCommands;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Drush commands for KB Chat.
@@ -24,6 +28,10 @@ final class KbChatCommands extends DrushCommands {
     private readonly AnthropicCostReport $anthropicCosts,
     private readonly DriveSync $driveSync,
     private readonly WebSync $webSync,
+    private readonly JobLog $jobLog,
+    private readonly EntityTypeManagerInterface $entityTypeManager,
+    #[Autowire(service: 'lock')]
+    private readonly LockBackendInterface $lock,
   ) {
     parent::__construct();
   }
@@ -90,12 +98,20 @@ final class KbChatCommands extends DrushCommands {
       return;
     }
     $mode = $options['list'] ? 'list' : ($options['read'] ? 'read' : 'auto');
-    $counts = $this->driveSync->sync((int) $options['time-limit'], (int) $options['max-items'], $mode, fn(string $message) => $this->output()->writeln($message));
+    $this->jobLog->start('drive');
+    try {
+      $counts = $this->driveSync->sync((int) $options['time-limit'], (int) $options['max-items'], $mode, fn(string $message) => $this->output()->writeln($message));
+    }
+    catch (\Throwable $e) {
+      $this->jobLog->finish('drive', $e->getMessage(), [], FALSE);
+      throw $e;
+    }
     if (!empty($counts['running'])) {
+      $this->jobLog->skipped('drive');
       $this->logger()->notice(dt('Another Drive sync is already running.'));
       return;
     }
-    $this->logger()->success(dt('Drive: @listed listed, @queued queued, @relabeled relabeled, @deleted removed; read @created new, @updated changed, @skipped too large, @failed failed. @remaining waiting in the queue.', [
+    $message = dt('Drive: @listed listed, @queued queued, @relabeled relabeled, @deleted removed; read @created new, @updated changed, @skipped too large, @failed failed. @remaining waiting in the queue.', [
       '@listed' => $counts['listed'],
       '@queued' => $counts['queued'],
       '@relabeled' => $counts['relabeled'],
@@ -105,7 +121,9 @@ final class KbChatCommands extends DrushCommands {
       '@skipped' => $counts['skipped'],
       '@failed' => $counts['failed'],
       '@remaining' => $counts['remaining'],
-    ]));
+    ]);
+    $this->jobLog->finish('drive', $message, $counts);
+    $this->logger()->success($message);
   }
 
   /**
@@ -148,12 +166,30 @@ final class KbChatCommands extends DrushCommands {
   #[CLI\Usage(name: 'drush kb-web --due --time-limit=240', description: 'What Upsun cron runs every 10 minutes.')]
   #[CLI\Usage(name: 'drush kb-web mcc_benefits', description: 'Crawl one website now.')]
   public function webSync(?string $source = NULL, array $options = ['due' => FALSE, 'time-limit' => 0]): void {
-    $results = $this->webSync->sync($source, (bool) $options['due'], fn(string $message) => $this->output()->writeln($message), (int) $options['time-limit']);
+    // One-off crawls of a single website aren't the cron job's runs.
+    $log = $source === NULL;
+    if ($log) {
+      $this->jobLog->start('web');
+    }
+    try {
+      $results = $this->webSync->sync($source, (bool) $options['due'], fn(string $message) => $this->output()->writeln($message), (int) $options['time-limit']);
+    }
+    catch (\Throwable $e) {
+      if ($log) {
+        $this->jobLog->finish('web', $e->getMessage(), [], FALSE);
+      }
+      throw $e;
+    }
     if (!empty($results['running'])) {
+      if ($log) {
+        $this->jobLog->skipped('web');
+      }
       $this->logger()->notice(dt('Another website sync is already running.'));
       return;
     }
+    $summary = [];
     foreach ($results as $key => $counts) {
+      $summary[] = dt('@key: @pages pages, @failed failed', ['@key' => $key, '@pages' => $counts['pages'], '@failed' => $counts['failed']]);
       $this->logger()->success(dt('@key: @pages pages read. @created new, @updated changed, @unchanged unchanged, @deleted removed, @failed failed.', [
         '@key' => $key,
         '@pages' => $counts['pages'],
@@ -163,6 +199,59 @@ final class KbChatCommands extends DrushCommands {
         '@deleted' => $counts['deleted'],
         '@failed' => $counts['failed'],
       ]));
+    }
+    if ($log) {
+      $this->jobLog->finish('web', $summary ? implode('; ', $summary) . '.' : dt('No websites were due.'), $results);
+    }
+  }
+
+  /**
+   * Indexes new and changed kb chat content, in small batches.
+   *
+   * Like search-api:index, but bounded by time and recorded for the status
+   * block.
+   */
+  #[CLI\Command(name: 'kb-chat:index', aliases: ['kb-index'])]
+  #[CLI\Option(name: 'limit', description: 'Most items to index this run.')]
+  #[CLI\Option(name: 'batch-size', description: 'Items per batch.')]
+  #[CLI\Option(name: 'time-limit', description: 'Seconds after which no new batch is started.')]
+  #[CLI\Usage(name: 'drush kb-index --limit=100 --batch-size=25 --time-limit=240', description: 'What Upsun cron runs every 5 minutes.')]
+  public function index(array $options = ['limit' => 100, 'batch-size' => 25, 'time-limit' => 240]): void {
+    if (!$this->lock->acquire('kb_chat.index', 600)) {
+      $this->logger()->notice(dt('Another indexing run is already going.'));
+      return;
+    }
+    $this->jobLog->start('index');
+    $started = time();
+    $indexed = 0;
+    $limit = max(1, (int) $options['limit']);
+    $batch = max(1, (int) $options['batch-size']);
+    try {
+      /** @var \Drupal\search_api\IndexInterface $index */
+      $index = $this->entityTypeManager->getStorage('search_api_index')->load('kb_chat_content');
+      if (!$index || !$index->status()) {
+        throw new \RuntimeException('The kb_chat_content index is missing or disabled.');
+      }
+      while ($indexed < $limit && time() - $started < (int) $options['time-limit']) {
+        $want = min($batch, $limit - $indexed);
+        $count = $index->indexItems($want);
+        $indexed += $count;
+        // Nothing left, or items failed (Search API logs why).
+        if ($count < $want) {
+          break;
+        }
+      }
+      $remaining = $index->getTrackerInstance()->getRemainingItemsCount();
+      $message = dt('Indexed @indexed items. @remaining waiting.', ['@indexed' => $indexed, '@remaining' => $remaining]);
+      $this->jobLog->finish('index', $message, ['indexed' => $indexed, 'remaining' => $remaining]);
+      $this->logger()->success($message);
+    }
+    catch (\Throwable $e) {
+      $this->jobLog->finish('index', $e->getMessage(), ['indexed' => $indexed], FALSE);
+      throw $e;
+    }
+    finally {
+      $this->lock->release('kb_chat.index');
     }
   }
 

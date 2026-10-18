@@ -1,6 +1,6 @@
 view ai costs:
-  title: 'View AI costs'
-  description: 'See the month-to-date cost of the kb chat: kb''s own estimate and the totals billed by Anthropic and Google.'
+  title: 'View KB costs'
+  description: 'See kb''s month-to-date costs: AI (kb''s estimate and the totals billed by Anthropic and Google) and Upsun hosting.'
   restrict access: true
 view kb chat staff documents:
   title: 'View staff documents in the kb chat'
@@ -15,4 +15,8 @@ administer kb chat documents:
 administer kb chat websites:
   title: 'Administer KB chat sources'
   description: 'Manage the trusted websites the kb chat indexes, and what it leaves out of Google Drive.'
+  restrict access: true
+view kb chat status:
+  title: 'View KB chat status'
+  description: 'See the status block: the content index, Google Drive sync, trusted websites and the cron jobs that feed them.'
   restrict access: true

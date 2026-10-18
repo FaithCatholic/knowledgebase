@@ -1,0 +1,34 @@
+/* KB chat status block (KbChatStatusBlock). */
+.kb-status__section {
+  margin-top: 1.25rem;
+}
+.kb-status__heading {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+.kb-status__issues {
+  margin-bottom: 0.5rem;
+}
+.kb-status__state::before {
+  content: "";
+  display: inline-block;
+  width: 0.6em;
+  height: 0.6em;
+  margin-right: 0.45em;
+  border-radius: 50%;
+  vertical-align: 0.05em;
+  background: #8a8a8a;
+}
+.kb-status__state--ok::before {
+  background: #2e8540;
+}
+.kb-status__state--warning::before {
+  background: #e0a100;
+}
+.kb-status__state--error::before {
+  background: #c62828;
+}
+.kb-status table td,
+.kb-status table th {
+  vertical-align: top;
+}

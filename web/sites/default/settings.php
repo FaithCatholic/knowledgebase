@@ -99,6 +99,9 @@ $settings['kb_chat'] = [
   'google_billing_token' => getenv('GOOGLE_BILLING_PUSH_TOKEN'),
   // Seconds between Anthropic cost report refreshes on cron.
   'refresh_interval' => 3600,
+  // Hosting costs in the KB costs block: the FAITH Flex organization's billing
+  // profile (kb is its only project), as collected by upsun_dashboard.
+  'upsun_billing_profile' => '01KMQZTS3V7K3WEKQRRHK87BA4',
   // The data warehouse query tool: BigQuery views curated for the chat. Queries
   // run as the Drive service accounts below, staff or management by the user's
   // permissions; each may only read its datasets.

@@ -312,6 +312,12 @@ class DriveSync {
               foreach ($changes as $field => $value) {
                 $document->set($field, $value);
               }
+              // The tier isn't in the search index: access is checked against
+              // the document when searching. So a sharing change alone
+              // doesn't need the file re-embedded.
+              if (array_keys($changes) === ['tier']) {
+                $document->search_api_skip_tracking = TRUE;
+              }
               $document->save();
               $storage->resetCache([$row['id']]);
               $counts['relabeled']++;
